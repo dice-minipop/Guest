@@ -1,0 +1,252 @@
+@import "tailwindcss";
+@import "./fonts/Pretendard-Variable.css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  /* Safe-Area (기존 유지) */
+  --safe-top-env: env(safe-area-inset-top, 0px);
+  --safe-right-env: env(safe-area-inset-right, 0px);
+  --safe-bottom-env: env(safe-area-inset-bottom, 0px);
+  --safe-left-env: env(safe-area-inset-left, 0px);
+  --safe-top-native: 0px;
+  --safe-right-native: 0px;
+  --safe-bottom-native: 0px;
+  --safe-left-native: 0px;
+  --safe-top: max(var(--safe-top-env), var(--safe-top-native));
+  --safe-right: max(var(--safe-right-env), var(--safe-right-native));
+  --safe-bottom: max(var(--safe-bottom-env), var(--safe-bottom-native));
+  --safe-left: max(var(--safe-left-env), var(--safe-left-native));
+  --bottom-nav-h: 62px;
+
+  /* Primary Color */
+  --dice-black: #000000;
+  --dice-white: #ffffff;
+
+  /* Gray Scale */
+  --gray-dark: #333333;
+  --gray-deep: #666666;
+  --gray-medium: #999999;
+  --gray-semilight: #aaaaaa;
+  --gray-light: #cccccc;
+
+  /* System Color */
+  --system-purple: #5b4ff4;
+  --system-green: #4ff48e;
+  --system-yellow: #ffd90c;
+  --system-red: #ff357f;
+
+  /* Background Color */
+  --bg-white: #ffffff;
+  --bg-light-gray: #f4f4f4;
+
+  /* Stroke Color (1px 사용) */
+  --stroke-eee: #eeeeee;
+  --stroke-light-gray: #cccccc;
+  --stroke-dice-black: #000000;
+
+  /* Dim Color */
+  --dim-basic: rgba(0, 0, 0, 0.5);
+  --dim-light: rgba(0, 0, 0, 0.2);
+
+  /* Drop Shadow: X:0 Y:0 Blur:4px Opacity:8% #000000 */
+  --shadow-drop: 0 0 4px rgba(0, 0, 0, 0.08);
+
+  /* Spacing Scale (px) */
+  --spacing-2: 2px;
+  --spacing-4: 4px;
+  --spacing-6: 6px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-64: 64px;
+  /* 스크롤 끝 간격 / 화면 양옆 간격 */
+  --spacing-scroll-end: 64px;
+  --spacing-screen-x: 20px;
+
+  /* Corner Radius (요소 크기별 적용) */
+  /* X Large: 80×80 이상 → 12px */
+  --radius-x-large: 12px;
+  /* Large: 40×40 ~ 78×78 → 8px */
+  --radius-large: 8px;
+  /* Medium: 24×24 ~ 38×38 → 4px */
+  --radius-medium: 4px;
+  /* Small: 12×12 ~ 22×22 → 2px */
+  --radius-small: 2px;
+  /* X Small: 4×4 ~ 10×10 → 1px */
+  --radius-x-small: 1px;
+
+  /* Font: Pretendard Variable */
+  --font-pretendard:
+    "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+
+  /* Typography Scale (Pretendard-Variable) */
+  /* H1: Bold 24px 120% */
+  --typo-h1-size: 24px;
+  --typo-h1-height: 1.2;
+  --typo-h1-weight: 700;
+  /* H2: Semibold 22px 140% */
+  --typo-h2-size: 22px;
+  --typo-h2-height: 1.4;
+  --typo-h2-weight: 600;
+  /* Subtitle1: Semibold 20px 140% */
+  --typo-subtitle1-size: 20px;
+  --typo-subtitle1-height: 1.4;
+  --typo-subtitle1-weight: 600;
+  /* Subtitle2: Semibold 18px 150% */
+  --typo-subtitle2-size: 18px;
+  --typo-subtitle2-height: 1.5;
+  --typo-subtitle2-weight: 600;
+  /* Subtitle3: Medium 16px 150% */
+  --typo-subtitle3-size: 16px;
+  --typo-subtitle3-height: 1.5;
+  --typo-subtitle3-weight: 500;
+  /* Body1: Medium 15px 160% */
+  --typo-body1-size: 15px;
+  --typo-body1-height: 1.6;
+  --typo-body1-weight: 500;
+  /* Body2: Regular 14px 160% */
+  --typo-body2-size: 14px;
+  --typo-body2-height: 1.6;
+  --typo-body2-weight: 400;
+  /* Caption1: Semibold 13px 150% */
+  --typo-caption1-size: 13px;
+  --typo-caption1-height: 1.5;
+  --typo-caption1-weight: 600;
+  /* Caption2: Bold 12px 150% */
+  --typo-caption2-size: 12px;
+  --typo-caption2-height: 1.5;
+  --typo-caption2-weight: 700;
+  /* Button1: Semibold 14px 150% */
+  --typo-button1-size: 14px;
+  --typo-button1-height: 1.5;
+  --typo-button1-weight: 600;
+  /* Button2: Medium 12px 120% */
+  --typo-button2-size: 12px;
+  --typo-button2-height: 1.2;
+  --typo-button2-weight: 500;
+}
+
+@theme {
+  /* Spacing (p-*, m-*, gap-* 등) */
+  --spacing-2: var(--spacing-2);
+  --spacing-4: var(--spacing-4);
+  --spacing-6: var(--spacing-6);
+  --spacing-8: var(--spacing-8);
+  --spacing-12: var(--spacing-12);
+  --spacing-16: var(--spacing-16);
+  --spacing-24: var(--spacing-24);
+  --spacing-32: var(--spacing-32);
+  --spacing-64: var(--spacing-64);
+
+  /* Corner Radius (rounded-*) */
+  --radius-xs: var(--radius-x-small);
+  --radius-sm: var(--radius-small);
+  --radius-md: var(--radius-medium);
+  --radius-lg: var(--radius-large);
+  --radius-xl: var(--radius-x-large);
+
+  /* Tailwind에서 사용할 색상/유틸리티 */
+  --color-dice-black: var(--dice-black);
+  --color-dice-white: var(--dice-white);
+  --color-gray-dark: var(--gray-dark);
+  --color-gray-deep: var(--gray-deep);
+  --color-gray-medium: var(--gray-medium);
+  --color-gray-semilight: var(--gray-semilight);
+  --color-gray-light: var(--gray-light);
+  --color-system-purple: var(--system-purple);
+  --color-system-green: var(--system-green);
+  --color-system-yellow: var(--system-yellow);
+  --color-system-red: var(--system-red);
+  --color-bg-white: var(--bg-white);
+  --color-bg-light-gray: var(--bg-light-gray);
+  --color-stroke-eee: var(--stroke-eee);
+  --color-stroke-light-gray: var(--stroke-light-gray);
+  --color-stroke-dice-black: var(--stroke-dice-black);
+  --shadow-drop: var(--shadow-drop);
+}
+
+/* Typography utilities (Pretendard-Variable) */
+@utility typo-h1 {
+  font-family: var(--font-pretendard);
+  font-size: var(--typo-h1-size);
+  line-height: var(--typo-h1-height);
+  font-weight: var(--typo-h1-weight);
+}
+@utility typo-h2 {
+  font-family: var(--font-pretendard);
+  font-size: var(--typo-h2-size);
+  line-height: var(--typo-h2-height);
+  font-weight: var(--typo-h2-weight);
+}
+@utility typo-subtitle1 {
+  font-family: var(--font-pretendard);
+  font-size: var(--typo-subtitle1-size);
+  line-height: var(--typo-subtitle1-height);
+  font-weight: var(--typo-subtitle1-weight);
+}
+@utility typo-subtitle2 {
+  font-family: var(--font-pretendard);
+  font-size: var(--typo-subtitle2-size);
+  line-height: var(--typo-subtitle2-height);
+  font-weight: var(--typo-subtitle2-weight);
+}
+@utility typo-subtitle3 {
+  font-family: var(--font-pretendard);
+  font-size: var(--typo-subtitle3-size);
+  line-height: var(--typo-subtitle3-height);
+  font-weight: var(--typo-subtitle3-weight);
+}
+@utility typo-body1 {
+  font-family: var(--font-pretendard);
+  font-size: var(--typo-body1-size);
+  line-height: var(--typo-body1-height);
+  font-weight: var(--typo-body1-weight);
+}
+@utility typo-body2 {
+  font-family: var(--font-pretendard);
+  font-size: var(--typo-body2-size);
+  line-height: var(--typo-body2-height);
+  font-weight: var(--typo-body2-weight);
+}
+@utility typo-caption1 {
+  font-family: var(--font-pretendard);
+  font-size: var(--typo-caption1-size);
+  line-height: var(--typo-caption1-height);
+  font-weight: var(--typo-caption1-weight);
+}
+@utility typo-caption2 {
+  font-family: var(--font-pretendard);
+  font-size: var(--typo-caption2-size);
+  line-height: var(--typo-caption2-height);
+  font-weight: var(--typo-caption2-weight);
+}
+@utility typo-button1 {
+  font-family: var(--font-pretendard);
+  font-size: var(--typo-button1-size);
+  line-height: var(--typo-button1-height);
+  font-weight: var(--typo-button1-weight);
+}
+@utility typo-button2 {
+  font-family: var(--font-pretendard);
+  font-size: var(--typo-button2-size);
+  line-height: var(--typo-button2-height);
+  font-weight: var(--typo-button2-weight);
+}
+
+/* 기본 텍스트에 Pretendard 적용 */
+body {
+  font-family: var(--font-pretendard);
+}
+
+/* 스크롤바 숨김 (가로 스크롤 영역 등) */
+@utility scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
