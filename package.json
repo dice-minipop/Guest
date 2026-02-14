@@ -1,0 +1,25 @@
+{
+  "name": "dice-v2",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "react": "pnpm --filter @dice-v2/react dev",
+    "react:build": "pnpm --filter @dice-v2/react build",
+    "expo": "pnpm --filter @dice-v2/expo start",
+    "expo:ios": "pnpm --filter @dice-v2/expo ios",
+    "expo:android": "pnpm --filter @dice-v2/expo android",
+    "lint": "pnpm -r run lint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "prettier": "^3.4.2"
+  }
+}
