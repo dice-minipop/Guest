@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build
+dist/
+.expo/
+*.tsbuildinfo
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# IDE / OS
+.DS_Store
+*.log
+.idea/
+.vscode/
+
+# Expo
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Debug
+npm-debug.log*
+__generated__/
+
+# ESLint / Prettier
+.eslintcache
+
+# Test / coverage
+coverage/
+
+# Turbo (if used later)
+.turbo
+
+# pnpm
+.pnpm-store/
+.pnpm-debug.log*

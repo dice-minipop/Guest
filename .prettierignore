@@ -1,0 +1,14 @@
+# Dependencies & build
+node_modules
+dist
+.expo
+*.tsbuildinfo
+
+# Generated
+__generated__
+apps/react/src/routeTree.gen.ts
+pnpm-lock.yaml
+
+# Misc
+*.min.js
+coverage
