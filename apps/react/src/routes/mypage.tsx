@@ -8,7 +8,10 @@ const TERMS_URL = "https://juvenile-chess-b24.notion.site/18e7ece7ecb5800e99a0ee
 const PRIVACY_URL = "https://juvenile-chess-b24.notion.site/18e7ece7ecb5806dab25c6fe7c424d7c?pvs=4";
 
 function openExternal(url: string) {
-  if (bridge?.openInAppBrowser) {
+  const useInAppBrowser =
+    typeof bridge?.isNativeMethodAvailable === "function" &&
+    bridge.isNativeMethodAvailable("openInAppBrowser");
+  if (useInAppBrowser && bridge?.openInAppBrowser) {
     bridge.openInAppBrowser(url).catch(() => window.open(url, "_blank"));
   } else {
     window.open(url, "_blank");
