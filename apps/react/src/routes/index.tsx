@@ -70,7 +70,7 @@ function HomePage() {
 
           <div className="text-gray-medium">|</div>
 
-          <Link to="/space" className="typo-button1 text-gray-medium underline px-16 py-[13.5px]">
+          <Link to="/space" replace className="typo-button1 text-gray-medium underline px-16 py-[13.5px]">
             게스트로 둘러보기
           </Link>
         </div>

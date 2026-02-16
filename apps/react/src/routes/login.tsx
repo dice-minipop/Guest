@@ -39,7 +39,7 @@ function LoginPage() {
       if (res.token?.refreshToken) {
         localStorage.setItem(TOKEN_KEYS.refresh, res.token.refreshToken);
       }
-      navigate({ to: "/space" });
+      navigate({ to: "/space", replace: true });
     },
   });
 

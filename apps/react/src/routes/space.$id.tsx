@@ -1,7 +1,8 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, useRouter } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import MessageIcon from "@/assets/icons/Message/message.svg?react";
+import { backWithHistory } from "@/shared/navigation/back";
 import { getSpaceDetailData, queryKeys } from "../api";
 import { getDummySpaceDetail } from "../api/space/dummy";
 import { FacilityInfoRow } from "../components/FacilityInfoRow";
@@ -13,9 +14,18 @@ export const Route = createFileRoute("/space/$id")({
 
 function SpaceDetailPage() {
   const navigate = useNavigate();
+  const router = useRouter();
   const { id } = Route.useParams();
   const spaceId = Number(id);
   const [detailsExpanded, setDetailsExpanded] = useState(false);
+
+  const handleBackToList = () => {
+    if (window.history.length > 1) {
+      backWithHistory(router);
+      return;
+    }
+    navigate({ to: "/space", replace: true, state: { skipTransition: true } });
+  };
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: queryKeys.space.detail(spaceId),
@@ -73,24 +83,25 @@ function SpaceDetailPage() {
 
   return (
     <div
-      className="fixed left-0 right-0 bottom-0 flex flex-col overflow-hidden bg-white dark:bg-neutral-900"
+      className="no-bounce-scroll fixed left-0 right-0 bottom-0 flex flex-col overflow-hidden bg-white dark:bg-neutral-900"
       style={{ top: "env(safe-area-inset-top, 0px)" }}
     >
       {/* 헤더 */}
       <div className="shrink-0 border-b border-stroke-eee bg-white dark:border-neutral-700 dark:bg-neutral-800">
         <div className="flex items-center gap-3 px-4 py-3">
-          <Link
-            to="/space"
+          <button
+            type="button"
+            onClick={handleBackToList}
             className="text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white"
             aria-label="목록으로"
           >
             ← 목록
-          </Link>
+          </button>
         </div>
       </div>
 
       {/* 스크롤 영역 (스크롤바는 이 영역 안에서만, 바텀 바 위에서 끊김) */}
-      <div className="min-h-0 flex-1 overflow-y-auto pb-20">
+      <div className="no-bounce-scroll min-h-0 flex-1 overflow-y-auto pb-20">
         {/* 전체 너비 이미지 캐러셀 */}
         {imageUrls.length > 0 ? (
           <ImageCarousel imageUrls={imageUrls} aspectRatio="1/1" altPrefix="공간 이미지" />

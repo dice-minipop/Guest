@@ -52,7 +52,10 @@ function MypagePage() {
   const hasBrands = brandList.length > 0;
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-(--bg-white)">
+    <div
+      className="h-full overflow-y-auto overflow-x-hidden bg-(--bg-white)"
+      style={{ overscrollBehaviorY: "none" }}
+    >
       <div className="min-w-0 pb-64">
         {/* 내 브랜드 정보: EditIcon + 브랜드 콘텐츠 하나의 섹션 */}
         <section className="mb-6">
@@ -130,73 +133,75 @@ function MypagePage() {
           </div>
         </section>
 
-        <section className="px-(--spacing-screen-x)">
-          {/* 찜한 목록 / 쪽지함 */}
-          <nav className="border-b border-(--stroke-eee) py-24">
-            <Link
-              to="/mypage/liked"
-              className="flex items-center justify-between py-12 typo-subtitle3 text-(--gray-deep) active:opacity-80"
-            >
-              <span>찜한 목록</span>
-            </Link>
-            <Link
-              to="/mypage/messages"
-              className="flex items-center justify-between py-12 typo-subtitle3 text-(--gray-deep) active:opacity-80"
-            >
-              <span>쪽지함</span>
-            </Link>
-          </nav>
+        <div className="bg-(--bg-white)">
+          <section className="px-(--spacing-screen-x)">
+            {/* 찜한 목록 / 쪽지함 */}
+            <nav className="border-b border-(--stroke-eee) py-24">
+              <Link
+                to="/mypage/liked"
+                className="flex items-center justify-between py-12 typo-subtitle3 text-(--gray-deep) active:opacity-80"
+              >
+                <span>찜한 목록</span>
+              </Link>
+              <Link
+                to="/mypage/messages"
+                className="flex items-center justify-between py-12 typo-subtitle3 text-(--gray-deep) active:opacity-80"
+              >
+                <span>쪽지함</span>
+              </Link>
+            </nav>
 
-          {/* 회원 정보 / 이용 약관 / 개인정보 처리방침 */}
-          <nav className="border-b border-(--stroke-eee) py-24">
-            <Link
-              to="/mypage/profile"
-              className="flex items-center justify-between py-12 typo-subtitle3 text-(--gray-deep) active:opacity-80"
-            >
-              <span>회원 정보 관리</span>
-            </Link>
-            <button
-              type="button"
-              onClick={() => openExternal(TERMS_URL)}
-              className="flex items-center justify-between py-12 typo-subtitle3 text-(--gray-deep) active:opacity-80"
-            >
-              <span>이용 약관</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => openExternal(PRIVACY_URL)}
-              className="flex items-center justify-between py-12 typo-subtitle3 text-(--gray-deep) active:opacity-80"
-            >
-              <span>개인정보 처리방침</span>
-            </button>
-          </nav>
+            {/* 회원 정보 / 이용 약관 / 개인정보 처리방침 */}
+            <nav className="border-b border-(--stroke-eee) py-24">
+              <Link
+                to="/mypage/profile"
+                className="flex items-center justify-between py-12 typo-subtitle3 text-(--gray-deep) active:opacity-80"
+              >
+                <span>회원 정보 관리</span>
+              </Link>
+              <button
+                type="button"
+                onClick={() => openExternal(TERMS_URL)}
+                className="flex items-center justify-between py-12 typo-subtitle3 text-(--gray-deep) active:opacity-80"
+              >
+                <span>이용 약관</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => openExternal(PRIVACY_URL)}
+                className="flex items-center justify-between py-12 typo-subtitle3 text-(--gray-deep) active:opacity-80"
+              >
+                <span>개인정보 처리방침</span>
+              </button>
+            </nav>
 
-          {/* 로그아웃 */}
-          <div className="py-24">
-            <button
-              type="button"
-              onClick={() => logoutMutation.mutate()}
-              disabled={logoutMutation.isPending}
-              className="flex items-center justify-between py-4 typo-subtitle3 text-(--gray-deep) active:opacity-80"
-            >
-              {logoutMutation.isPending ? "로그아웃 중..." : "로그아웃"}
-            </button>
-          </div>
-        </section>
+            {/* 로그아웃 */}
+            <div className="py-24">
+              <button
+                type="button"
+                onClick={() => logoutMutation.mutate()}
+                disabled={logoutMutation.isPending}
+                className="flex items-center justify-between py-4 typo-subtitle3 text-(--gray-deep) active:opacity-80"
+              >
+                {logoutMutation.isPending ? "로그아웃 중..." : "로그아웃"}
+              </button>
+            </div>
+          </section>
 
-        <div className="bg-(--bg-light-gray) h-8 mb-24" />
+          <div className="bg-(--bg-light-gray) h-8 mb-24" />
 
-        <section className="px-(--spacing-screen-x) pb-32">
-          {/* 탈퇴하기 */}
-          <div className="mt-4">
-            <Link
-              to="/mypage/withdraw"
-              className="flex items-center justify-between py-4 typo-subtitle3 text-(--gray-deep) active:opacity-80"
-            >
-              탈퇴하기
-            </Link>
-          </div>
-        </section>
+          <section className="px-(--spacing-screen-x) pb-32">
+            {/* 탈퇴하기 */}
+            <div className="mt-4">
+              <Link
+                to="/mypage/withdraw"
+                className="flex items-center justify-between py-4 typo-subtitle3 text-(--gray-deep) active:opacity-80"
+              >
+                탈퇴하기
+              </Link>
+            </div>
+          </section>
+        </div>
       </div>
     </div>
   );

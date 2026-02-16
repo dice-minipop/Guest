@@ -1,5 +1,4 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { useLayoutEffect, useRef, useState } from "react";
 import type { ComponentType, ReactNode } from "react";
 
 import ChatGray from "@/assets/icons/PageHeader/chat-gray.svg?react";
@@ -115,65 +114,48 @@ export function PageHeader({
 }: PageHeaderProps) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const icons = variant ? VARIANT_ICONS[variant] : [];
-  const headerRef = useRef<HTMLElement>(null);
-  const [headerHeight, setHeaderHeight] = useState(0);
-
-  useLayoutEffect(() => {
-    const el = headerRef.current;
-    if (!el) return;
-    const ro = new ResizeObserver(() => {
-      setHeaderHeight(el.offsetHeight);
-    });
-    ro.observe(el);
-    setHeaderHeight(el.offsetHeight);
-    return () => ro.disconnect();
-  }, [title, variant, searchTo, children]);
 
   return (
-    <>
-      <header
-        ref={headerRef}
-        className="fixed top-0 left-0 right-0 z-10 border-b border-neutral-200 bg-black dark:border-neutral-700 dark:bg-neutral-800"
-        style={{
-          paddingTop: "max(var(--spacing-12), env(safe-area-inset-top, 0px))",
-          paddingBottom: "var(--spacing-12)",
-          paddingLeft: "max(var(--spacing-screen-x), env(safe-area-inset-left, 0px))",
-          paddingRight: "max(var(--spacing-screen-x), env(safe-area-inset-right, 0px))",
-        }}
-      >
-        <div className="flex items-center justify-between gap-2 py-4">
-          <h1 className="typo-subtitle1 text-white">{title}</h1>
-          {icons.length > 0 ? (
-            <div className="flex items-center">
-              {icons.map(({ to, ariaLabel, IconGray, IconWhite }) => {
-                const isActive = pathname === to;
-                const Icon = isActive ? IconWhite : IconGray;
-                return (
-                  <Link
-                    key={to}
-                    to={to}
-                    className="rounded-full p-12 transition-opacity hover:opacity-80 active:opacity-70"
-                    aria-label={ariaLabel}
-                  >
-                    <Icon className="h-24 w-24 shrink-0" aria-hidden />
-                  </Link>
-                );
-              })}
-            </div>
-          ) : null}
-        </div>
-        {searchTo != null ? (
-          <Link
-            to={searchTo}
-            className="flex items-center gap-2 rounded-lg border border-neutral-300 bg-neutral-50 p-12 text-sm font-medium text-neutral-500 transition-colors hover:bg-neutral-100 dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-400 dark:hover:bg-neutral-600"
-          >
-            <SearchIcon className="h-5 w-5 shrink-0" aria-hidden />
-            <span>{searchPlaceholder}</span>
-          </Link>
+    <header
+      className="sticky top-0 z-10 border-b border-neutral-200 bg-black dark:border-neutral-700 dark:bg-neutral-800"
+      style={{
+        paddingTop: "max(var(--spacing-12), env(safe-area-inset-top, 0px))",
+        paddingBottom: "var(--spacing-12)",
+        paddingLeft: "max(var(--spacing-screen-x), env(safe-area-inset-left, 0px))",
+        paddingRight: "max(var(--spacing-screen-x), env(safe-area-inset-right, 0px))",
+      }}
+    >
+      <div className="flex items-center justify-between gap-2 py-4">
+        <h1 className="typo-subtitle1 text-white">{title}</h1>
+        {icons.length > 0 ? (
+          <div className="flex items-center">
+            {icons.map(({ to, ariaLabel, IconGray, IconWhite }) => {
+              const isActive = pathname === to;
+              const Icon = isActive ? IconWhite : IconGray;
+              return (
+                <Link
+                  key={to}
+                  to={to}
+                  className="rounded-full p-12 transition-opacity hover:opacity-80 active:opacity-70"
+                  aria-label={ariaLabel}
+                >
+                  <Icon className="h-24 w-24 shrink-0" aria-hidden />
+                </Link>
+              );
+            })}
+          </div>
         ) : null}
-        {children != null ? <div className="mt-3">{children}</div> : null}
-      </header>
-      <div aria-hidden style={{ minHeight: headerHeight || 56 }} />
-    </>
+      </div>
+      {searchTo != null ? (
+        <Link
+          to={searchTo}
+          className="flex items-center gap-2 rounded-lg border border-neutral-300 bg-neutral-50 p-12 text-sm font-medium text-neutral-500 transition-colors hover:bg-neutral-100 dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-400 dark:hover:bg-neutral-600"
+        >
+          <SearchIcon className="h-5 w-5 shrink-0" aria-hidden />
+          <span>{searchPlaceholder}</span>
+        </Link>
+      ) : null}
+      {children != null ? <div className="mt-3">{children}</div> : null}
+    </header>
   );
 }

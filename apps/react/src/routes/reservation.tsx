@@ -82,57 +82,62 @@ function ReservationPage() {
   const content = (data?.pages.flatMap((p) => p.content) ?? []) as ReservationItem[];
 
   return (
-    <div className="min-h-screen bg-white pb-64">
-      <PageHeader variant="reservation" title="예약 관리" />
+    <div
+      className="h-full overflow-y-auto overflow-x-hidden bg-white"
+      style={{ overscrollBehaviorY: "none" }}
+    >
+      <div className="pb-64">
+        <PageHeader variant="reservation" title="예약 관리" />
 
-      <div className="sticky top-[81px] z-10 flex border-b border-neutral-200 bg-bg-light-gray dark:border-neutral-700 dark:bg-neutral-900">
-        {TAB_STATUSES.map(({ key, label }) => (
-          <button
-            key={key}
-            type="button"
-            onClick={() => setActiveStatus(key)}
-            className={`flex-1 py-3 typo-subtitle3 transition-colors ${
-              activeStatus === key
-                ? "border-b-2 border-dice-black text-dice-black"
-                : "text-gray-medium"
-            }`}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
+        <div className="sticky top-[81px] z-10 flex border-b border-neutral-200 bg-bg-light-gray dark:border-neutral-700 dark:bg-neutral-900">
+          {TAB_STATUSES.map(({ key, label }) => (
+            <button
+              key={key}
+              type="button"
+              onClick={() => setActiveStatus(key)}
+              className={`flex-1 py-3 typo-subtitle3 transition-colors ${
+                activeStatus === key
+                  ? "border-b-2 border-dice-black text-dice-black"
+                  : "text-gray-medium"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
 
-      <div className="pt-12 px-(--spacing-screen-x) py-4">
-        {isLoading && (
-          <div className="py-12 text-center text-sm text-neutral-500">목록을 불러오는 중...</div>
-        )}
+        <div className="pt-12 px-(--spacing-screen-x) py-4">
+          {isLoading && (
+            <div className="py-12 text-center text-sm text-neutral-500">목록을 불러오는 중...</div>
+          )}
 
-        {isError && (
-          <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
-            {error instanceof Error ? error.message : "목록을 불러오지 못했습니다."}
-          </div>
-        )}
-
-        {!isLoading && !isError && content.length === 0 && (
-          <div className="py-12 text-center text-sm text-neutral-500 dark:text-neutral-400">
-            해당 상태의 예약이 없습니다.
-          </div>
-        )}
-
-        {!isLoading && !isError && content.length > 0 && (
-          <>
-            <ul className="flex flex-col gap-3">
-              {content.map((item) => (
-                <ReservationCard key={item.reservationId} item={item} />
-              ))}
-            </ul>
-            <div ref={loadMoreRef} className="h-8 py-4" aria-hidden>
-              {isFetchingNextPage && (
-                <p className="text-center text-sm text-neutral-500">더 불러오는 중...</p>
-              )}
+          {isError && (
+            <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
+              {error instanceof Error ? error.message : "목록을 불러오지 못했습니다."}
             </div>
-          </>
-        )}
+          )}
+
+          {!isLoading && !isError && content.length === 0 && (
+            <div className="py-12 text-center text-sm text-neutral-500 dark:text-neutral-400">
+              해당 상태의 예약이 없습니다.
+            </div>
+          )}
+
+          {!isLoading && !isError && content.length > 0 && (
+            <>
+              <ul className="flex flex-col gap-3">
+                {content.map((item) => (
+                  <ReservationCard key={item.reservationId} item={item} />
+                ))}
+              </ul>
+              <div ref={loadMoreRef} className="h-8 py-4" aria-hidden>
+                {isFetchingNextPage && (
+                  <p className="text-center text-sm text-neutral-500">더 불러오는 중...</p>
+                )}
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
