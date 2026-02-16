@@ -15,6 +15,7 @@ import {
   type PopulationFilterState,
 } from "../components/space";
 import { getFilteredSpaceLists, queryKeys } from "../api";
+import { DUMMY_SPACE_LIST } from "../api/space/dummy";
 import type { SpaceItem } from "../types/space";
 
 /** 적용된 지역 필터 (API용). city 없으면 district도 사용 안 함 */
@@ -69,8 +70,23 @@ function SpacePage() {
   const { data, isLoading, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
       queryKey: queryKeys.space.list({ size: PAGE_SIZE }, filterPayload),
-      queryFn: ({ pageParam }) =>
-        getFilteredSpaceLists({ page: pageParam, size: PAGE_SIZE }, filterPayload),
+      queryFn: async ({ pageParam }) => {
+        try {
+          return await getFilteredSpaceLists({ page: pageParam, size: PAGE_SIZE }, filterPayload);
+        } catch {
+          return pageParam === 0
+            ? DUMMY_SPACE_LIST
+            : {
+                content: [],
+                totalPages: 0,
+                totalElements: 0,
+                size: PAGE_SIZE,
+                number: pageParam,
+                first: false,
+                last: true,
+              };
+        }
+      },
       initialPageParam: 0,
       getNextPageParam: (lastPage) => {
         const next = (lastPage.number ?? 0) + 1;
@@ -133,81 +149,87 @@ function SpacePage() {
   );
 
   return (
-    <div className="min-h-screen bg-white dark:bg-neutral-900">
+    <div className="min-h-screen bg-white dark:bg-neutral-900 pb-64">
       <PageHeader
         variant="space"
-        title="팝업공간"
+        title="팝업 공간"
         searchTo="/space/search"
         searchPlaceholder="찾는 지역이나 지하철역으로 검색해보세요"
       />
 
-      <div className="px-(--spacing-screen-x) py-6">
-        <h2 className="typo-subtitle2 mb-16 text-dice-black dark:text-white">
-          다이스 추천 팝업 공간
-        </h2>
-        <SpaceFilterChips filterSummary={filterSummary} onOpenFilter={openFilterSheet} />
+      <div className="py-12">
+        <div className="px-(--spacing-screen-x)">
+          <h2 className="typo-subtitle2 mb-16 text-dice-black dark:text-white">
+            다이스 추천 팝업 공간
+          </h2>
+        </div>
+        <div className="pl-(--spacing-screen-x)">
+          <SpaceFilterChips filterSummary={filterSummary} onOpenFilter={openFilterSheet} />
+        </div>
 
-        {isLoading && (
-          <div className="py-12 text-center text-sm text-neutral-500">목록을 불러오는 중...</div>
-        )}
+        <div className="px-(--spacing-screen-x)">
+          {isLoading && (
+            <div className="py-12 text-center text-sm text-neutral-500">목록을 불러오는 중...</div>
+          )}
 
-        {isError && (
-          <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
-            {error instanceof Error ? error.message : "목록을 불러오지 못했습니다."}
-          </div>
-        )}
-
-        {!isLoading && !isError && content.length === 0 && (
-          <div className="py-12 text-center text-sm text-neutral-500 dark:text-neutral-400">
-            조회된 공간이 없습니다.
-          </div>
-        )}
-
-        {!isLoading && !isError && content.length > 0 && (
-          <div className="py-2">
-            <ul className="flex flex-col gap-16">
-              {content.map((item) => (
-                <SpaceCard key={item.id} item={item} />
-              ))}
-            </ul>
-            <div ref={loadMoreRef} className="h-8 py-4" aria-hidden>
-              {isFetchingNextPage && (
-                <p className="text-center text-sm text-neutral-500">더 불러오는 중...</p>
-              )}
+          {isError && (
+            <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
+              {error instanceof Error ? error.message : "목록을 불러오지 못했습니다."}
             </div>
-          </div>
-        )}
+          )}
 
-        <BottomSheet
-          open={filterSheetOpen}
-          onClose={() => setFilterSheetOpen(false)}
-          dismissible={false}
-          sheetTitle="필터"
-          sheetDescription="필터 옵션 선택"
-          content={
-            <SpaceFilterSheetContent
-              sheetCity={sheetCity}
-              sheetDistrict={sheetDistrict}
-              onCityChange={(city) => {
-                setSheetCity(city);
-                setSheetDistrict("");
-              }}
-              onDistrictChange={setSheetDistrict}
-              sheetSortBy={sheetSortBy}
-              onSortChange={setSheetSortBy}
-              population={sheetPopulation}
-              onPopulationChange={setSheetPopulation}
-              price={sheetPrice}
-              onPriceChange={setSheetPrice}
-              size={sheetSize}
-              onSizeChange={setSheetSize}
-              onApply={applyFilter}
-              onCancel={() => setFilterSheetOpen(false)}
-              onReset={resetSheetFilter}
-              initialScrollSectionKey={initialScrollSectionKey}
-            />
-          }
-        />
+          {!isLoading && !isError && content.length === 0 && (
+            <div className="py-12 text-center text-sm text-neutral-500 dark:text-neutral-400">
+              조회된 공간이 없습니다.
+            </div>
+          )}
+
+          {!isLoading && !isError && content.length > 0 && (
+            <div className="py-2">
+              <ul className="flex flex-col gap-16">
+                {content.map((item) => (
+                  <SpaceCard key={item.id} item={item} />
+                ))}
+              </ul>
+              <div ref={loadMoreRef} className="h-8 py-4" aria-hidden>
+                {isFetchingNextPage && (
+                  <p className="text-center text-sm text-neutral-500">더 불러오는 중...</p>
+                )}
+              </div>
+            </div>
+          )}
+
+          <BottomSheet
+            open={filterSheetOpen}
+            onClose={() => setFilterSheetOpen(false)}
+            dismissible={false}
+            sheetTitle="필터"
+            sheetDescription="필터 옵션 선택"
+            content={
+              <SpaceFilterSheetContent
+                sheetCity={sheetCity}
+                sheetDistrict={sheetDistrict}
+                onCityChange={(city) => {
+                  setSheetCity(city);
+                  setSheetDistrict("");
+                }}
+                onDistrictChange={setSheetDistrict}
+                sheetSortBy={sheetSortBy}
+                onSortChange={setSheetSortBy}
+                population={sheetPopulation}
+                onPopulationChange={setSheetPopulation}
+                price={sheetPrice}
+                onPriceChange={setSheetPrice}
+                size={sheetSize}
+                onSizeChange={setSheetSize}
+                onApply={applyFilter}
+                onCancel={() => setFilterSheetOpen(false)}
+                onReset={resetSheetFilter}
+                initialScrollSectionKey={initialScrollSectionKey}
+              />
+            }
+          />
+        </div>
       </div>
     </div>
   );

@@ -17,6 +17,7 @@ const MY_PAGE_MESSAGES = "/mypage/messages";
 export type PageHeaderVariant = "space" | "announcement" | "reservation";
 
 type HeaderIconItem = {
+  id: "liked" | "notification" | "messages";
   to: string;
   ariaLabel: string;
   IconGray: ComponentType<{ className?: string }>;
@@ -26,18 +27,21 @@ type HeaderIconItem = {
 const VARIANT_ICONS: Record<PageHeaderVariant, HeaderIconItem[]> = {
   space: [
     {
+      id: "liked",
       to: MY_PAGE_LIKED,
       ariaLabel: "좋아요 목록",
       IconGray: HeartGray,
       IconWhite: HeartWhite,
     },
     {
+      id: "notification",
       to: MY_PAGE_NOTIFICATIONS,
       ariaLabel: "알림 목록",
       IconGray: NotificationGray,
       IconWhite: NotificationWhite,
     },
     {
+      id: "messages",
       to: MY_PAGE_MESSAGES,
       ariaLabel: "채팅 목록",
       IconGray: ChatGray,
@@ -46,12 +50,14 @@ const VARIANT_ICONS: Record<PageHeaderVariant, HeaderIconItem[]> = {
   ],
   announcement: [
     {
+      id: "liked",
       to: MY_PAGE_LIKED,
       ariaLabel: "좋아요 목록",
       IconGray: HeartGray,
       IconWhite: HeartWhite,
     },
     {
+      id: "notification",
       to: MY_PAGE_NOTIFICATIONS,
       ariaLabel: "알림 목록",
       IconGray: NotificationGray,
@@ -60,18 +66,21 @@ const VARIANT_ICONS: Record<PageHeaderVariant, HeaderIconItem[]> = {
   ],
   reservation: [
     {
+      id: "liked",
       to: MY_PAGE_LIKED,
       ariaLabel: "좋아요 목록",
       IconGray: HeartGray,
       IconWhite: HeartWhite,
     },
     {
+      id: "notification",
       to: MY_PAGE_NOTIFICATIONS,
       ariaLabel: "알림 목록",
       IconGray: NotificationGray,
       IconWhite: NotificationWhite,
     },
     {
+      id: "messages",
       to: MY_PAGE_MESSAGES,
       ariaLabel: "채팅 목록",
       IconGray: ChatGray,
@@ -132,7 +141,7 @@ export function PageHeader({
           paddingRight: "max(var(--spacing-screen-x), env(safe-area-inset-right, 0px))",
         }}
       >
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center justify-between gap-2 py-4">
           <h1 className="typo-subtitle1 text-white">{title}</h1>
           {icons.length > 0 ? (
             <div className="flex items-center">

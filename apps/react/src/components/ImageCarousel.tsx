@@ -5,7 +5,7 @@ export interface ImageCarouselProps {
   /** 이미지 URL 목록 */
   imageUrls: string[];
   /** 이미지 비율 (기본 1:1) */
-  aspectRatio?: "4/3" | "3/2" | "16/9" | "1/1";
+  aspectRatio?: "4/3" | "3/2" | "16/9" | "1/1" | "375/210";
   /** alt 텍스트 접두사 (예: "공간 이미지" → "공간 이미지 1", "공간 이미지 2") */
   altPrefix?: string;
 }
@@ -15,6 +15,7 @@ const aspectClass = {
   "3/2": "aspect-[3/2]",
   "16/9": "aspect-video",
   "1/1": "aspect-square",
+  "375/210": "aspect-[375/210]",
 } as const;
 
 export function ImageCarousel({

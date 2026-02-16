@@ -1,15 +1,36 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useLayoutEffect, useRef, useState } from "react";
+import { createFileRoute, useNavigate, Outlet, useRouterState } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import ArrowRightIcon from "@/assets/icons/Arrow/right.svg?react";
+import MessageIcon from "@/assets/icons/Message/message.svg?react";
+import { MessageRoomCard } from "@/components/MessageRoomCard";
+import { getMessageLists, queryKeys } from "@/api";
+import { DUMMY_MESSAGE_ROOMS } from "@/api/message/dummy";
 
 export const Route = createFileRoute("/mypage/messages")({
-  component: MypageMessagesPage,
+  component: MypageMessagesLayout,
 });
+
+function MypageMessagesLayout() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isDetailPage = pathname !== "/mypage/messages" && pathname.startsWith("/mypage/messages/");
+
+  if (isDetailPage) return <Outlet />;
+  return <MypageMessagesPage />;
+}
 
 function MypageMessagesPage() {
   const navigate = useNavigate();
-  const headerRef = useRef<HTMLElement>(null);
-  const [headerHeight, setHeaderHeight] = useState(0);
+
+  const { data: rooms, isLoading } = useQuery({
+    queryKey: queryKeys.message.list,
+    queryFn: async () => {
+      try {
+        return await getMessageLists();
+      } catch {
+        return DUMMY_MESSAGE_ROOMS;
+      }
+    },
+  });
 
   const handleBack = () => {
     if (window.history.length > 1) {
@@ -19,25 +40,11 @@ function MypageMessagesPage() {
     }
   };
 
-  useLayoutEffect(() => {
-    const el = headerRef.current;
-    if (!el) return;
-    const ro = new ResizeObserver(() => {
-      setHeaderHeight(el.offsetHeight);
-    });
-    ro.observe(el);
-    setHeaderHeight(el.offsetHeight);
-    return () => ro.disconnect();
-  }, []);
-
   return (
-    <div className="min-h-screen bg-dice-white px-(--spacing-screen-x)">
+    <div className="min-h-screen bg-dice-white">
       <header
-        ref={headerRef}
         className="fixed top-0 left-0 right-0 z-10 bg-dice-white dark:border-neutral-700 dark:bg-neutral-800"
         style={{
-          paddingTop: "max(var(--spacing-12), env(safe-area-inset-top, 0px))",
-          paddingBottom: "var(--spacing-12)",
           paddingLeft: "3px",
           paddingRight: "3px",
         }}
@@ -55,9 +62,25 @@ function MypageMessagesPage() {
           <div className="w-12 shrink-0" aria-hidden />
         </div>
       </header>
-      <div aria-hidden style={{ minHeight: headerHeight || 56 }} />
 
-      <h1 className="typo-h1 text-dice-black mt-24">호스트와의 쪽지함</h1>
+      <h1 className="flex items-center gap-8 typo-h1 text-dice-black px-(--spacing-screen-x) pt-20 pb-24 border-b border-(--stroke-eee)">
+        호스트와의 쪽지함
+        <MessageIcon />
+      </h1>
+
+      <div className="px-(--spacing-screen-x) py-24">
+        {isLoading ? (
+          <p className="typo-body2 text-gray-deep">쪽지 목록을 불러오는 중...</p>
+        ) : !rooms?.length ? (
+          <p className="typo-body2 text-gray-deep">아직 쪽지방이 없습니다.</p>
+        ) : (
+          <ul className="flex flex-col gap-12">
+            {rooms.map((room) => (
+              <MessageRoomCard key={room.id} item={room} />
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 }

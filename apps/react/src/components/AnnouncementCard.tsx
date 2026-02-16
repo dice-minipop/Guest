@@ -1,5 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
+import LikeLightgray from "@/assets/icons/like/like-lightgray.svg?react";
+import LikePurple from "@/assets/icons/like/like-purple.svg?react";
 import type { AnnouncementItem } from "../api";
 
 function formatDate(iso: string): string {
@@ -39,24 +41,29 @@ export function AnnouncementCard({ item }: AnnouncementCardProps) {
   const dday = getDday(item.recruitmentEndAt);
   const ddayBgClass =
     dday.days < 0
-      ? "bg-green-500/15 text-green-600 dark:bg-green-500/25 dark:text-green-400"
+      ? "bg-system-green text-white"
       : dday.days <= 30
-        ? "bg-system-red/15 text-system-red dark:bg-system-red/25"
-        : "bg-green-500/15 text-green-600 dark:bg-green-500/25 dark:text-green-400";
+        ? "bg-system-red text-white"
+        : "bg-system-green text-white";
 
   return (
     <li className="w-full list-none">
       <Link
         to="/announcement/$id"
         params={{ id: String(item.id) }}
-        className="block w-full rounded-xl border border-neutral-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md dark:border-neutral-700 dark:bg-neutral-800"
+        className="block w-full rounded-xl border space-y-8 border-neutral-200 bg-white p-16 shadow-sm transition-shadow hover:shadow-md dark:border-neutral-700 dark:bg-neutral-800"
       >
-        {/* 위치 | 좋아요 */}
-        <div className="flex items-center justify-between">
-          <span className="typo-caption2 truncate text-gray-deep dark:text-gray-semilight">
-            {location}
-          </span>
-          <div className="flex flex-col items-center gap-0.5 shrink-0">
+        {/* 위치·제목 섹션 | 좋아요 버튼 좌우 정렬 */}
+        <div className="flex items-start justify-between gap-3">
+          <section className="min-w-0 flex-1">
+            <span className="typo-caption1 block truncate text-gray-medium dark:text-gray-semilight">
+              {location}
+            </span>
+            <h2 className="mt-1 typo-subtitle1 truncate text-dice-black dark:text-white">
+              {item.title}
+            </h2>
+          </section>
+          <div className="flex shrink-0 flex-col items-center gap-0.5">
             <button
               type="button"
               onClick={(e) => {
@@ -67,39 +74,30 @@ export function AnnouncementCard({ item }: AnnouncementCardProps) {
               className="rounded-full p-1 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-700"
               aria-label={isLiked ? "좋아요 취소" : "좋아요"}
             >
-              <svg
-                className="h-5 w-5"
-                fill={isLiked ? "var(--system-red)" : "none"}
-                stroke={isLiked ? "var(--system-red)" : "var(--gray-medium)"}
-                strokeWidth="1.5"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
-                />
-              </svg>
+              {isLiked ? (
+                <LikePurple className="h-24 w-24" />
+              ) : (
+                <LikeLightgray className="h-24 w-24" />
+              )}
             </button>
-            <span className="typo-caption2 text-gray-deep dark:text-gray-semilight">
+            <span
+              className={
+                isLiked ? "typo-caption2 text-system-purple" : "typo-caption2 text-gray-semilight"
+              }
+            >
               {item.likeCount}
             </span>
           </div>
         </div>
 
-        {/* 이름 */}
-        <h2 className="mt-1 typo-subtitle3 truncate text-gray-dark dark:text-white">
-          {item.title}
-        </h2>
-
         {/* 대상 | 날짜 + D-day 배지 */}
-        <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 typo-body2 text-gray-deep dark:text-gray-semilight">
-          <span>{item.target || "대상 미정"}</span>
-          <span className="text-gray-medium dark:text-gray-deep">|</span>
+        <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 typo-caption2 text-gray-light dark:text-gray-semilight">
+          <span>{item.target || "대상 미정"} 대상</span>
+          <span>|</span>
           <span>{dateRange}</span>
           {dday.label && (
             <span
-              className={`inline-flex shrink-0 rounded px-1.5 py-0.5 typo-caption1 font-medium ${ddayBgClass}`}
+              className={`inline-flex shrink-0 rounded-full px-6 py-2 typo-caption2 ${ddayBgClass}`}
             >
               {dday.label}
             </span>

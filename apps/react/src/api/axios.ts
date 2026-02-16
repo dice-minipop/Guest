@@ -22,8 +22,8 @@ export const apiClient = createBaseClient();
 /** 비인증 요청용 (로그인, 회원가입, 이메일/휴대폰 검증 등) */
 export const guestApiClient = createBaseClient();
 
-// 토큰 헬퍼
-function getAccessToken(): string | null {
+// 토큰 헬퍼 (웹→앱 브릿지 동기화 등에서 사용)
+export function getAccessToken(): string | null {
   return localStorage.getItem(TOKEN_KEYS.access);
 }
 
@@ -40,6 +40,9 @@ function setTokens(accessToken: string, refreshToken: string): void {
 export function clearTokens(): void {
   localStorage.removeItem(TOKEN_KEYS.access);
   localStorage.removeItem(TOKEN_KEYS.refresh);
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new CustomEvent("auth-token-cleared"));
+  }
 }
 
 /** 재발급 API 응답 (서버에 따라 루트 또는 token 래핑) */

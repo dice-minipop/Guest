@@ -4,6 +4,7 @@ import { useState } from "react";
 import { isAxiosError } from "axios";
 import { login } from "../api";
 import type { LoginRequest } from "../api";
+import { bridge } from "@/bridge";
 import XIcon from "@/assets/icons/Onboarding/round-x.svg?react";
 import EyeOpenIcon from "@/assets/icons/Onboarding/eye-open.svg?react";
 import EyeCloseIcon from "@/assets/icons/Onboarding/eye-close.svg?react";
@@ -28,6 +29,12 @@ function LoginPage() {
     onSuccess: (res) => {
       if (res.token?.accessToken) {
         localStorage.setItem(TOKEN_KEYS.access, res.token.accessToken);
+        if (
+          typeof bridge?.isNativeMethodAvailable === "function" &&
+          bridge.isNativeMethodAvailable("setAccessToken")
+        ) {
+          bridge.setAccessToken(res.token.accessToken).catch(() => {});
+        }
       }
       if (res.token?.refreshToken) {
         localStorage.setItem(TOKEN_KEYS.refresh, res.token.refreshToken);

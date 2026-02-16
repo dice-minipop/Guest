@@ -63,6 +63,8 @@ export function SpaceFilterChips({ filterSummary, onOpenFilter }: SpaceFilterChi
             </button>
           );
         })}
+
+        <div className="w-5 h-5" />
       </div>
     </div>
   );
