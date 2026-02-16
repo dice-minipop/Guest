@@ -24,6 +24,7 @@ export function App() {
         if (path === "/login" || path === "/") {
           window.history.replaceState(null, "", "/space");
         }
+        window.dispatchEvent(new CustomEvent("auth-token-synced"));
       }
       console.log("[auth] 앱 로드 인증 준비 완료");
       setAuthReady(true);

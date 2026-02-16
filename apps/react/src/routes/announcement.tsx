@@ -11,6 +11,7 @@ import {
   type AnnouncementFilterChipKey,
 } from "../components/announcement";
 import { getAnnouncementLists, queryKeys } from "../api";
+import { DUMMY_ANNOUNCEMENT_LIST } from "../api/announcement/dummy";
 import type { AnnouncementItem } from "../api";
 
 type RegionFilter = { city: string; district: string };
@@ -61,8 +62,23 @@ function AnnouncementPage() {
   const { data, isLoading, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
       queryKey: queryKeys.announcement.list({ size: PAGE_SIZE }, filterPayload),
-      queryFn: ({ pageParam }) =>
-        getAnnouncementLists({ page: pageParam, size: PAGE_SIZE }, filterPayload),
+      queryFn: async ({ pageParam }) => {
+        try {
+          return await getAnnouncementLists({ page: pageParam, size: PAGE_SIZE }, filterPayload);
+        } catch {
+          return pageParam === 0
+            ? DUMMY_ANNOUNCEMENT_LIST
+            : {
+                content: [],
+                totalPages: 0,
+                totalElements: 0,
+                size: PAGE_SIZE,
+                number: pageParam,
+                first: false,
+                last: true,
+              };
+        }
+      },
       initialPageParam: 0,
       getNextPageParam: (lastPage) => {
         const next = (lastPage.number ?? 0) + 1;
@@ -116,15 +132,15 @@ function AnnouncementPage() {
   const filterSummary = getAnnouncementFilterSummary(regionFilter, target, status, sortBy);
 
   return (
-    <div className="min-h-screen bg-white dark:bg-neutral-900">
+    <div className="min-h-screen bg-white pb-64">
       <PageHeader
         variant="announcement"
-        title="지원공고"
+        title="팝업 지원 공고"
         searchTo="/announcement/search"
         searchPlaceholder="원하시는 지역, 모집처, 지원 내용을 검색해보세요"
       />
 
-      <div className="px-(--spacing-screen-x) py-6">
+      <div className="px-(--spacing-screen-x) py-12">
         <AnnouncementFilterChips filterSummary={filterSummary} onOpenFilter={openFilterSheet} />
 
         {isLoading && (

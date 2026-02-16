@@ -7,6 +7,12 @@ export { SortFilterSection } from "./SortFilterSection";
 export type { SortFilterSectionProps } from "./SortFilterSection";
 export { SpaceFilterSheetContent } from "./SpaceFilterSheet";
 export type { SpaceFilterSheetContentProps } from "./SpaceFilterSheet";
+export { SpaceReservationSheetContent } from "./SpaceReservationSheetContent";
+export type {
+  DateString,
+  ReservedDateRange,
+  SpaceReservationSheetContentProps,
+} from "./SpaceReservationSheetContent";
 export { SpaceFilterChips } from "./SpaceFilterChips";
 export type { SpaceFilterChipsProps } from "./SpaceFilterChips";
 export {

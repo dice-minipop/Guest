@@ -8,7 +8,7 @@ import { getBackGestureEnabled, subscribeBackGestureEnabled } from "../backGestu
 import { getTopSafeAreaColor, subscribeTopSafeAreaColor } from "../topSafeAreaColorStore";
 import type { BridgeWebView } from "@webview-bridge/react-native";
 
-const WEB_URI = "http://192.168.0.8:5173";
+const WEB_URI = __DEV__ ? "http://192.168.0.8:5173" : "https://dice-guest-react.vercel.app";
 
 export default function Index() {
   const insets = useSafeAreaInsets();

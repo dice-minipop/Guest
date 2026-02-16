@@ -35,6 +35,10 @@ __generated__/
 # Test / coverage
 coverage/
 
+# Native (루트에 생성되지 않도록; prebuild는 apps/expo에서 실행)
+/android
+/ios
+
 # Turbo (if used later)
 .turbo
 

@@ -2,14 +2,15 @@ import { useEffect } from "react";
 import { Outlet, createRootRoute, useRouterState } from "@tanstack/react-router";
 import { BottomNav } from "../components/BottomNav";
 import { bridge } from "@/bridge";
+import { getAccessToken } from "@/api/axios";
 
 const BOTTOM_NAV_PATHS = ["/space", "/announcement", "/reservation", "/mypage"];
 
 /** 상단 safe area를 검정으로 할 경로 (해당 경로 및 하위 경로 포함) */
-const TOP_SAFE_AREA_BLACK_PREFIXES = ["/space", "/announcement", "/reservation"];
+const TOP_SAFE_AREA_BLACK_PREFIXES = ["/space", "/announcement"];
 
 /** 상단 safe area를 검정으로 할 경로 (해당 경로만, 하위 경로 제외) */
-const TOP_SAFE_AREA_BLACK_EXACT = ["/mypage"];
+const TOP_SAFE_AREA_BLACK_EXACT = ["/mypage", "/reservation"];
 
 /** 검정 제외 경로 (prefix 매칭 후 여기 있으면 흰색) */
 const TOP_SAFE_AREA_BLACK_EXCLUDE_PREFIXES = ["/space/search", "/announcement/search"];
@@ -43,6 +44,35 @@ function RootComponent() {
       bridge.setTopSafeAreaColor(topSafeAreaColor).catch(() => {});
     }
   }, [topSafeAreaColor]);
+
+  // 앱에 AccessToken 동기화 (FCM 토큰 등록 등에 사용)
+  useEffect(() => {
+    if (
+      typeof bridge?.isNativeMethodAvailable !== "function" ||
+      !bridge.isNativeMethodAvailable("setAccessToken")
+    ) {
+      return;
+    }
+    const sync = () => {
+      const token = getAccessToken();
+      if (token) bridge.setAccessToken(token).catch(() => {});
+    };
+    sync();
+    const clear = () => {
+      if (
+        typeof bridge?.isNativeMethodAvailable === "function" &&
+        bridge.isNativeMethodAvailable("clearAccessToken")
+      ) {
+        bridge.clearAccessToken().catch(() => {});
+      }
+    };
+    window.addEventListener("auth-token-synced", sync);
+    window.addEventListener("auth-token-cleared", clear);
+    return () => {
+      window.removeEventListener("auth-token-synced", sync);
+      window.removeEventListener("auth-token-cleared", clear);
+    };
+  }, []);
 
   // 탭 루트에서는 제스처 뒤로가기 비활성화. 비활성화는 전환 끝난 뒤에 적용해 빈 화면 플래시 방지.
   const isTabRoot = BOTTOM_NAV_PATHS.includes(pathname);

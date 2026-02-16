@@ -5,6 +5,11 @@ import { isAxiosError } from "axios";
 import { createBrand } from "@/api";
 import type { CreateBrandRequest } from "@/api";
 import { uploadImageList } from "@/api/s3";
+import {
+  pickImageFromNativeGallery,
+  pickImageFromNativeCamera,
+  isNativeImagePickerAvailable,
+} from "@/utils/nativeImagePicker";
 import RightArrowIcon from "@/assets/icons/Arrow/right.svg?react";
 import PlusIcon from "@/assets/icons/Plus/plus.svg?react";
 import XIcon from "@/assets/icons/Onboarding/round-x.svg?react";
@@ -60,6 +65,20 @@ function BrandProfilePage() {
     const newUrls = newFiles.map((f) => URL.createObjectURL(f));
     setImagePreviewUrls((prev) => [...prev, ...newUrls].slice(0, 10));
     e.target.value = "";
+  };
+
+  const handleAddImage = async (source: "gallery" | "camera" = "gallery") => {
+    if (imageFiles.length + imagePreviewUrls.length >= 10) return;
+    const fromNative =
+      source === "gallery"
+        ? await pickImageFromNativeGallery()
+        : await pickImageFromNativeCamera();
+    if (fromNative) {
+      setImageFiles((prev) => [...prev, fromNative].slice(0, 10));
+      setImagePreviewUrls((prev) => [...prev, URL.createObjectURL(fromNative)].slice(0, 10));
+      return;
+    }
+    fileInputRef.current?.click();
   };
 
   const removeImage = (index: number) => {
@@ -271,17 +290,31 @@ function BrandProfilePage() {
                   />
                   <div className="flex flex-wrap items-center gap-12">
                     {imagePreviewUrls.length < 10 && (
-                      <button
-                        type="button"
-                        onClick={() => fileInputRef.current?.click()}
-                        className="flex h-20 w-20 shrink-0 flex-col items-center justify-center gap-2 rounded-[12px] border border-(--gray-light) transition-colors hover:border-(--gray-deep)"
-                      >
-                        <PlusIcon className="h-24 w-24 shrink-0" />
-                        <span className="typo-caption2 text-(--gray-medium)">
-                          <span className="text-(--system-purple)">{imagePreviewUrls.length}</span>
-                          {" / 10"}
-                        </span>
-                      </button>
+                      <>
+                        <button
+                          type="button"
+                          onClick={() => handleAddImage("gallery")}
+                          className="flex h-20 w-20 shrink-0 flex-col items-center justify-center gap-2 rounded-[12px] border border-(--gray-light) transition-colors hover:border-(--gray-deep)"
+                        >
+                          <PlusIcon className="h-24 w-24 shrink-0" />
+                          <span className="typo-caption2 text-(--gray-medium)">
+                            <span className="text-(--system-purple)">
+                              {imagePreviewUrls.length}
+                            </span>
+                            {" / 10"}
+                          </span>
+                        </button>
+                        {isNativeImagePickerAvailable() && (
+                          <button
+                            type="button"
+                            onClick={() => handleAddImage("camera")}
+                            className="flex h-20 w-20 shrink-0 flex-col items-center justify-center gap-2 rounded-[12px] border border-(--gray-light) transition-colors hover:border-(--gray-deep)"
+                            aria-label="카메라로 촬영"
+                          >
+                            <span className="typo-caption2 text-(--gray-medium)">카메라</span>
+                          </button>
+                        )}
+                      </>
                     )}
                     {imagePreviewUrls.map((url, index) => (
                       <div
