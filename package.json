@@ -11,9 +11,14 @@
     "expo": "pnpm --filter @dice-v2/expo start",
     "expo:ios": "pnpm --filter @dice-v2/expo ios",
     "expo:android": "pnpm --filter @dice-v2/expo android",
+    "expo:prebuild": "pnpm --filter @dice-v2/expo exec -- npx expo prebuild",
+    "expo:prebuild:clean": "pnpm --filter @dice-v2/expo exec -- npx expo prebuild --clean",
     "lint": "pnpm -r run lint",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "android": "pnpm --filter @dice-v2/expo run android",
+    "ios": "pnpm --filter @dice-v2/expo run ios",
+    "ios:device": "pnpm --filter @dice-v2/expo run ios -- --device"
   },
   "packageManager": "pnpm@9.15.0",
   "engines": {
@@ -21,5 +26,11 @@
   },
   "devDependencies": {
     "prettier": "^3.4.2"
+  },
+  "version": "1.0.0",
+  "dependencies": {
+    "expo": "~54.0.33",
+    "react": "19.1.0",
+    "react-native": "0.81.5"
   }
 }
