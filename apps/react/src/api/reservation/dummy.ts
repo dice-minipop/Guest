@@ -11,7 +11,6 @@ function baseItem(overrides: Partial<ReservationItem> & { status: string }): Res
     startDate: "2025-03-01",
     endDate: "2025-03-03",
     message: "팝업 진행 일정 문의드립니다.",
-    status: overrides.status,
     city: "서울",
     district: "성동구",
     capacity: 30,
