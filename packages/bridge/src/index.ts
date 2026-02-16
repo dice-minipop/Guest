@@ -18,8 +18,6 @@ export interface AppBridgeMethods extends Bridge {
   getBridgeVersion(): Promise<string>;
   /** 웹에서 현재 라우트에 따라 상단 SafeArea 배경색 전달 (#000000 | #FFFFFF) */
   setTopSafeAreaColor(color: string): Promise<void>;
-  /** 웹에서 현재 라우트에 따라 제스처 뒤로가기 허용 (탭 루트에서는 false) */
-  setBackGestureEnabled(enabled: boolean): Promise<void>;
   /** 웹에서 전달한 AccessToken 저장 (FCM 토큰 등록 등에 사용) */
   setAccessToken(accessToken: string): Promise<void>;
   /** AccessToken 삭제 (로그아웃 시 웹에서 호출) */

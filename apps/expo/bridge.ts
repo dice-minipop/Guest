@@ -3,7 +3,6 @@ import * as ImagePicker from "expo-image-picker";
 import * as WebBrowser from "expo-web-browser";
 
 import { setAccessToken as setStoreAccessToken } from "./accessTokenStore";
-import { setBackGestureEnabled as setStoreBackGestureEnabled } from "./backGestureEnabledStore";
 import { setTopSafeAreaColor as setStoreColor } from "./topSafeAreaColorStore";
 import type { PickedImage } from "@dice-v2/bridge";
 
@@ -40,9 +39,6 @@ export const appBridge = bridge({
   },
   async setTopSafeAreaColor(color: string) {
     setStoreColor(color);
-  },
-  async setBackGestureEnabled(enabled: boolean) {
-    setStoreBackGestureEnabled(enabled);
   },
   async setAccessToken(accessToken: string) {
     setStoreAccessToken(accessToken);

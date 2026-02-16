@@ -149,86 +149,91 @@ function SpacePage() {
   );
 
   return (
-    <div className="min-h-screen bg-white dark:bg-neutral-900 pb-64">
-      <PageHeader
-        variant="space"
-        title="팝업 공간"
-        searchTo="/space/search"
-        searchPlaceholder="찾는 지역이나 지하철역으로 검색해보세요"
-      />
+    <div
+      className="h-full overflow-y-auto overflow-x-hidden bg-white dark:bg-neutral-900"
+      style={{ overscrollBehaviorY: "none" }}
+    >
+      <div className="pb-64">
+        <PageHeader
+          variant="space"
+          title="팝업 공간"
+          searchTo="/space/search"
+          searchPlaceholder="찾는 지역이나 지하철역으로 검색해보세요"
+        />
 
-      <div className="py-12">
-        <div className="px-(--spacing-screen-x)">
-          <h2 className="typo-subtitle2 mb-16 text-dice-black dark:text-white">
-            다이스 추천 팝업 공간
-          </h2>
-        </div>
-        <div className="pl-(--spacing-screen-x)">
-          <SpaceFilterChips filterSummary={filterSummary} onOpenFilter={openFilterSheet} />
-        </div>
+        <div className="py-12">
+          <div className="px-(--spacing-screen-x)">
+            <h2 className="typo-subtitle2 mb-16 text-dice-black dark:text-white">
+              다이스 추천 팝업 공간
+            </h2>
+          </div>
+          <div className="pl-(--spacing-screen-x)">
+            <SpaceFilterChips filterSummary={filterSummary} onOpenFilter={openFilterSheet} />
+          </div>
 
-        <div className="px-(--spacing-screen-x)">
-          {isLoading && (
-            <div className="py-12 text-center text-sm text-neutral-500">목록을 불러오는 중...</div>
-          )}
+          <div className="px-(--spacing-screen-x)">
+            {isLoading && (
+              <div className="py-12 text-center text-sm text-neutral-500">목록을 불러오는 중...</div>
+            )}
 
-          {isError && (
-            <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
-              {error instanceof Error ? error.message : "목록을 불러오지 못했습니다."}
-            </div>
-          )}
-
-          {!isLoading && !isError && content.length === 0 && (
-            <div className="py-12 text-center text-sm text-neutral-500 dark:text-neutral-400">
-              조회된 공간이 없습니다.
-            </div>
-          )}
-
-          {!isLoading && !isError && content.length > 0 && (
-            <div className="py-2">
-              <ul className="flex flex-col gap-16">
-                {content.map((item) => (
-                  <SpaceCard key={item.id} item={item} />
-                ))}
-              </ul>
-              <div ref={loadMoreRef} className="h-8 py-4" aria-hidden>
-                {isFetchingNextPage && (
-                  <p className="text-center text-sm text-neutral-500">더 불러오는 중...</p>
-                )}
+            {isError && (
+              <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
+                {error instanceof Error ? error.message : "목록을 불러오지 못했습니다."}
               </div>
-            </div>
-          )}
+            )}
 
-          <BottomSheet
-            open={filterSheetOpen}
-            onClose={() => setFilterSheetOpen(false)}
-            dismissible={false}
-            sheetTitle="필터"
-            sheetDescription="필터 옵션 선택"
-            content={
-              <SpaceFilterSheetContent
-                sheetCity={sheetCity}
-                sheetDistrict={sheetDistrict}
-                onCityChange={(city) => {
-                  setSheetCity(city);
-                  setSheetDistrict("");
-                }}
-                onDistrictChange={setSheetDistrict}
-                sheetSortBy={sheetSortBy}
-                onSortChange={setSheetSortBy}
-                population={sheetPopulation}
-                onPopulationChange={setSheetPopulation}
-                price={sheetPrice}
-                onPriceChange={setSheetPrice}
-                size={sheetSize}
-                onSizeChange={setSheetSize}
-                onApply={applyFilter}
-                onCancel={() => setFilterSheetOpen(false)}
-                onReset={resetSheetFilter}
-                initialScrollSectionKey={initialScrollSectionKey}
-              />
-            }
-          />
+            {!isLoading && !isError && content.length === 0 && (
+              <div className="py-12 text-center text-sm text-neutral-500 dark:text-neutral-400">
+                조회된 공간이 없습니다.
+              </div>
+            )}
+
+            {!isLoading && !isError && content.length > 0 && (
+              <div className="py-2">
+                <ul className="flex flex-col gap-16">
+                  {content.map((item) => (
+                    <SpaceCard key={item.id} item={item} />
+                  ))}
+                </ul>
+                <div ref={loadMoreRef} className="h-8 py-4" aria-hidden>
+                  {isFetchingNextPage && (
+                    <p className="text-center text-sm text-neutral-500">더 불러오는 중...</p>
+                  )}
+                </div>
+              </div>
+            )}
+
+            <BottomSheet
+              open={filterSheetOpen}
+              onClose={() => setFilterSheetOpen(false)}
+              dismissible={false}
+              sheetTitle="필터"
+              sheetDescription="필터 옵션 선택"
+              content={
+                <SpaceFilterSheetContent
+                  sheetCity={sheetCity}
+                  sheetDistrict={sheetDistrict}
+                  onCityChange={(city) => {
+                    setSheetCity(city);
+                    setSheetDistrict("");
+                  }}
+                  onDistrictChange={setSheetDistrict}
+                  sheetSortBy={sheetSortBy}
+                  onSortChange={setSheetSortBy}
+                  population={sheetPopulation}
+                  onPopulationChange={setSheetPopulation}
+                  price={sheetPrice}
+                  onPriceChange={setSheetPrice}
+                  size={sheetSize}
+                  onSizeChange={setSheetSize}
+                  onApply={applyFilter}
+                  onCancel={() => setFilterSheetOpen(false)}
+                  onReset={resetSheetFilter}
+                  initialScrollSectionKey={initialScrollSectionKey}
+                />
+              }
+            />
+          </div>
         </div>
       </div>
     </div>

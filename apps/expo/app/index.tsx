@@ -4,7 +4,6 @@ import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
 import type { WebViewNavigation } from "react-native-webview";
 
 import { WebView } from "@/bridge";
-import { getBackGestureEnabled, subscribeBackGestureEnabled } from "../backGestureEnabledStore";
 import { getTopSafeAreaColor, subscribeTopSafeAreaColor } from "../topSafeAreaColorStore";
 import type { BridgeWebView } from "@webview-bridge/react-native";
 
@@ -20,12 +19,6 @@ export default function Index() {
     getTopSafeAreaColor,
     getTopSafeAreaColor
   );
-  const backGestureEnabled = useSyncExternalStore(
-    subscribeBackGestureEnabled,
-    getBackGestureEnabled,
-    getBackGestureEnabled
-  );
-
   const handleNavigationStateChange = useCallback((navState: WebViewNavigation) => {
     setCanGoBack(navState.canGoBack);
   }, []);
@@ -47,7 +40,7 @@ export default function Index() {
   }, [canGoBack]);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: topColor }}>
       {/* StatusBar 스타일은 _layout.tsx에서 store 구독으로 한 곳에서만 제어 */}
       <View
         style={{
@@ -59,13 +52,17 @@ export default function Index() {
         style={{ flex: 1, backgroundColor: "#FFFFFF" }}
         edges={["left", "right", "bottom"]}
       >
-        <WebView
-          ref={webviewRef}
-          source={{ uri: WEB_URI }}
-          style={{ flex: 1 }}
-          onNavigationStateChange={handleNavigationStateChange}
-          allowsBackForwardNavigationGestures={Platform.OS === "ios" && backGestureEnabled}
-        />
+        <View style={{ flex: 1, backgroundColor: topColor }}>
+          <WebView
+            ref={webviewRef}
+            source={{ uri: WEB_URI }}
+            style={{ flex: 1, backgroundColor: topColor }}
+            onNavigationStateChange={handleNavigationStateChange}
+            allowsBackForwardNavigationGestures={Platform.OS === "ios"}
+            bounces={false}
+            overScrollMode="never"
+          />
+        </View>
       </SafeAreaView>
     </View>
   );

@@ -1,6 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, useRouter } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { backWithHistory } from "@/shared/navigation/back";
 import { getAnnouncementDetailData, queryKeys } from "../api";
 import { getDummyAnnouncementDetail } from "../api/announcement/dummy";
 import { ImageCarousel } from "../components/ImageCarousel";
@@ -71,8 +72,18 @@ function TitleWithLike({ data }: { data: DetailData }) {
 }
 
 function AnnouncementDetailPage() {
+  const navigate = useNavigate();
+  const router = useRouter();
   const { id } = Route.useParams();
   const announcementId = Number(id);
+
+  const handleBackToList = () => {
+    if (window.history.length > 1) {
+      backWithHistory(router);
+      return;
+    }
+    navigate({ to: "/announcement", replace: true, state: { skipTransition: true } });
+  };
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: queryKeys.announcement.detail(announcementId),
@@ -127,11 +138,9 @@ function AnnouncementDetailPage() {
     >
       {/* 헤더 */}
       <div className="shrink-0 bg-dice-black">
-        <Link to="/announcement" aria-label="목록으로">
-          <div className="p-12">
-            <ArrowRightWhiteIcon className="h-24 w-24" aria-hidden />
-          </div>
-        </Link>
+        <button type="button" onClick={handleBackToList} className="p-12" aria-label="목록으로">
+          <ArrowRightWhiteIcon className="h-24 w-24" aria-hidden />
+        </button>
       </div>
 
       {/* 스크롤 영역 */}

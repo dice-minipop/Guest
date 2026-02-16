@@ -132,76 +132,81 @@ function AnnouncementPage() {
   const filterSummary = getAnnouncementFilterSummary(regionFilter, target, status, sortBy);
 
   return (
-    <div className="min-h-screen bg-white pb-64">
-      <PageHeader
-        variant="announcement"
-        title="팝업 지원 공고"
-        searchTo="/announcement/search"
-        searchPlaceholder="원하시는 지역, 모집처, 지원 내용을 검색해보세요"
-      />
-
-      <div className="px-(--spacing-screen-x) py-12">
-        <AnnouncementFilterChips filterSummary={filterSummary} onOpenFilter={openFilterSheet} />
-
-        {isLoading && (
-          <div className="py-12 text-center text-sm text-neutral-500">목록을 불러오는 중...</div>
-        )}
-
-        {isError && (
-          <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
-            {error instanceof Error ? error.message : "목록을 불러오지 못했습니다."}
-          </div>
-        )}
-
-        {!isLoading && !isError && content.length === 0 && (
-          <div className="py-12 text-center text-sm text-neutral-500 dark:text-neutral-400">
-            조회된 공고가 없습니다.
-          </div>
-        )}
-
-        {!isLoading && !isError && content.length > 0 && (
-          <>
-            <ul className="flex flex-col gap-3">
-              {content.map((item) => (
-                <AnnouncementCard key={item.id} item={item} />
-              ))}
-            </ul>
-            <div ref={loadMoreRef} className="h-8 py-4" aria-hidden>
-              {isFetchingNextPage && (
-                <p className="text-center text-sm text-neutral-500">더 불러오는 중...</p>
-              )}
-            </div>
-          </>
-        )}
-
-        <BottomSheet
-          open={filterSheetOpen}
-          onClose={() => setFilterSheetOpen(false)}
-          dismissible={false}
-          sheetTitle="필터"
-          sheetDescription="필터 옵션 선택"
-          content={
-            <AnnouncementFilterSheetContent
-              sheetCity={sheetCity}
-              sheetDistrict={sheetDistrict}
-              onCityChange={(city) => {
-                setSheetCity(city);
-                setSheetDistrict("");
-              }}
-              onDistrictChange={setSheetDistrict}
-              sheetTarget={sheetTarget}
-              onTargetChange={setSheetTarget}
-              sheetStatus={sheetStatus}
-              onStatusChange={setSheetStatus}
-              sheetSortBy={sheetSortBy}
-              onSortChange={setSheetSortBy}
-              onApply={applyFilter}
-              onCancel={() => setFilterSheetOpen(false)}
-              onReset={resetSheetFilter}
-              initialScrollSectionKey={initialScrollSectionKey}
-            />
-          }
+    <div
+      className="h-full overflow-y-auto overflow-x-hidden bg-white"
+      style={{ overscrollBehaviorY: "none" }}
+    >
+      <div className="pb-64">
+        <PageHeader
+          variant="announcement"
+          title="팝업 지원 공고"
+          searchTo="/announcement/search"
+          searchPlaceholder="원하시는 지역, 모집처, 지원 내용을 검색해보세요"
         />
+
+        <div className="px-(--spacing-screen-x) py-12">
+          <AnnouncementFilterChips filterSummary={filterSummary} onOpenFilter={openFilterSheet} />
+
+          {isLoading && (
+            <div className="py-12 text-center text-sm text-neutral-500">목록을 불러오는 중...</div>
+          )}
+
+          {isError && (
+            <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
+              {error instanceof Error ? error.message : "목록을 불러오지 못했습니다."}
+            </div>
+          )}
+
+          {!isLoading && !isError && content.length === 0 && (
+            <div className="py-12 text-center text-sm text-neutral-500 dark:text-neutral-400">
+              조회된 공고가 없습니다.
+            </div>
+          )}
+
+          {!isLoading && !isError && content.length > 0 && (
+            <>
+              <ul className="flex flex-col gap-3">
+                {content.map((item) => (
+                  <AnnouncementCard key={item.id} item={item} />
+                ))}
+              </ul>
+              <div ref={loadMoreRef} className="h-8 py-4" aria-hidden>
+                {isFetchingNextPage && (
+                  <p className="text-center text-sm text-neutral-500">더 불러오는 중...</p>
+                )}
+              </div>
+            </>
+          )}
+
+          <BottomSheet
+            open={filterSheetOpen}
+            onClose={() => setFilterSheetOpen(false)}
+            dismissible={false}
+            sheetTitle="필터"
+            sheetDescription="필터 옵션 선택"
+            content={
+              <AnnouncementFilterSheetContent
+                sheetCity={sheetCity}
+                sheetDistrict={sheetDistrict}
+                onCityChange={(city) => {
+                  setSheetCity(city);
+                  setSheetDistrict("");
+                }}
+                onDistrictChange={setSheetDistrict}
+                sheetTarget={sheetTarget}
+                onTargetChange={setSheetTarget}
+                sheetStatus={sheetStatus}
+                onStatusChange={setSheetStatus}
+                sheetSortBy={sheetSortBy}
+                onSortChange={setSheetSortBy}
+                onApply={applyFilter}
+                onCancel={() => setFilterSheetOpen(false)}
+                onReset={resetSheetFilter}
+                initialScrollSectionKey={initialScrollSectionKey}
+              />
+            }
+          />
+        </div>
       </div>
     </div>
   );

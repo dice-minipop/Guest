@@ -1,8 +1,11 @@
 import { useEffect } from "react";
-import { Outlet, createRootRoute, useRouterState } from "@tanstack/react-router";
+import { createRootRoute, useRouterState } from "@tanstack/react-router";
 import { BottomNav } from "../components/BottomNav";
 import { bridge } from "@/bridge";
 import { getAccessToken } from "@/api/axios";
+import { NavigationTransitionProvider } from "@/shared/navigation/transition";
+import { StackedOutlet } from "@/shared/ui/stacked-outlet";
+import { TransitionViewport } from "@/shared/ui/transition-viewport";
 
 const BOTTOM_NAV_PATHS = ["/space", "/announcement", "/reservation", "/mypage"];
 
@@ -74,24 +77,6 @@ function RootComponent() {
     };
   }, []);
 
-  // 탭 루트에서는 제스처 뒤로가기 비활성화. 비활성화는 전환 끝난 뒤에 적용해 빈 화면 플래시 방지.
-  const isTabRoot = BOTTOM_NAV_PATHS.includes(pathname);
-  useEffect(() => {
-    if (
-      typeof bridge?.isNativeMethodAvailable !== "function" ||
-      !bridge.isNativeMethodAvailable("setBackGestureEnabled")
-    ) {
-      return;
-    }
-    if (isTabRoot) {
-      const t = setTimeout(() => {
-        bridge.setBackGestureEnabled(false).catch(() => {});
-      }, 300);
-      return () => clearTimeout(t);
-    }
-    bridge.setBackGestureEnabled(true).catch(() => {});
-  }, [isTabRoot]);
-
   return (
     <>
       {/* 상단 safe area만 채우는 영역 (페이지별 색상) */}
@@ -103,27 +88,23 @@ function RootComponent() {
           backgroundColor: topSafeAreaColor,
         }}
       />
-      {showBottomNav ? (
-        /* 바텀 네비 있을 때: 스크롤 영역을 네비 높이만큼 띄워 스크롤바가 네비와 겹치지 않음 */
-        <div className="flex h-screen w-full flex-col overflow-hidden">
-          <main className="min-h-0 flex-1 overflow-y-auto w-full">
-            <Outlet />
-          </main>
+      <div className="no-bounce-scroll flex h-screen w-full flex-col overflow-hidden">
+        <main className="no-bounce-scroll relative min-h-0 w-full flex-1 overflow-hidden">
+          <NavigationTransitionProvider>
+            <TransitionViewport>
+              <StackedOutlet />
+            </TransitionViewport>
+          </NavigationTransitionProvider>
+        </main>
+        {showBottomNav && (
           <div
             className="min-h-(--bottom-nav-h) shrink-0"
             style={{ paddingBottom: "max(12px, env(safe-area-inset-bottom))" }}
             aria-hidden
           />
-          <BottomNav />
-        </div>
-      ) : (
-        <main
-          className="min-h-screen w-full"
-          style={pathname === "/" ? { paddingBottom: 0 } : undefined}
-        >
-          <Outlet />
-        </main>
-      )}
+        )}
+        {showBottomNav && <BottomNav />}
+      </div>
     </>
   );
 }
