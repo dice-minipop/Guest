@@ -41,7 +41,7 @@ export function BottomNav() {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-100 flex min-h-(--bottom-nav-h) items-center justify-around gap-1 border-t border-neutral-200 bg-white dark:border-white/10 dark:bg-neutral-900"
+      className="fixed bottom-0 left-1/2 z-100 flex min-h-(--bottom-nav-h) w-full max-w-[512px] -translate-x-1/2 items-center justify-around gap-1 border-t border-neutral-200 bg-white dark:border-white/10 dark:bg-neutral-900"
       style={{ paddingBottom: "max(12px, env(safe-area-inset-bottom))" }}
     >
       {TAB_ROUTES.map(({ to, label, IconActive, IconInactive }) => {

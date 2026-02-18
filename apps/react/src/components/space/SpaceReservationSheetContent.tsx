@@ -51,6 +51,8 @@ function formatDisplayDate(dateStr: DateString): string {
 export interface SpaceReservationSheetContentProps {
   /** 예약 불가 기간 목록 (시작일~종료일) */
   reservedDates?: ReservedDateRange[];
+  /** 1일 대여 금액 */
+  unitPrice?: number;
   onClose: () => void;
   /** 시작일, 종료일 선택 완료 시 호출 */
   onReserve?: (startDate: DateString, endDate: DateString) => void;
@@ -60,6 +62,7 @@ const MONTHS_TO_SHOW = 12;
 
 export function SpaceReservationSheetContent({
   reservedDates = [],
+  unitPrice = 0,
   onClose,
   onReserve,
 }: SpaceReservationSheetContentProps) {
@@ -138,6 +141,20 @@ export function SpaceReservationSheetContent({
       window.alert("종료일을 선택해주세요!");
     }
   };
+
+  const formatPrice = (n: number) => (n > 0 ? `${n.toLocaleString("ko-KR")}원` : "-");
+  const getRentalDays = (startStr: string, endStr: string): number => {
+    try {
+      const start = new Date(startStr);
+      const end = new Date(endStr);
+      const diff = (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24);
+      return Math.max(0, Math.floor(diff) + 1);
+    } catch {
+      return 0;
+    }
+  };
+  const selectedDays = startDate !== "" && endDate !== "" ? getRentalDays(startDate, endDate) : 0;
+  const selectedTotalPrice = selectedDays > 0 ? unitPrice * selectedDays : 0;
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
@@ -252,7 +269,8 @@ export function SpaceReservationSheetContent({
       {startDate !== "" && endDate !== "" && (
         <div className="shrink-0 bg-(--system-purple) px-5 py-12 text-center">
           <p className="typo-subtitle2 text-white">
-            {formatDisplayDate(startDate)} ~ {formatDisplayDate(endDate)}
+            {formatDisplayDate(startDate)} ~ {formatDisplayDate(endDate)} /{" "}
+            {formatPrice(selectedTotalPrice)}
           </p>
         </div>
       )}

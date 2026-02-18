@@ -14,6 +14,7 @@ html,
 body {
   overflow: hidden;
   overscroll-behavior-x: none;
+  background-color: var(--bg-light-gray);
 }
 
 :root {
@@ -31,6 +32,7 @@ body {
   --safe-bottom: max(var(--safe-bottom-env), var(--safe-bottom-native));
   --safe-left: max(var(--safe-left-env), var(--safe-left-native));
   --bottom-nav-h: 62px;
+  --common-max-width: 512px;
 
   /* Primary Color */
   --dice-black: #000000;
