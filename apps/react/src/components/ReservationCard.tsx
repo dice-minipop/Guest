@@ -46,7 +46,7 @@ export function ReservationCard({ item, onCancelSuccess }: ReservationCardProps)
     },
   });
 
-  const address = [item.city, item.district].filter(Boolean).join(" ") || "위치 정보 없음";
+  const address = [item.city, item.district].filter(Boolean).join("") || "위치 정보 없음";
   const dateRange = `${formatDateShort(item.startDate)} ~ ${formatDateShort(item.endDate)}`;
   const days = getRentalDays(item.startDate, item.endDate);
   const formatPrice = (n: number) => (n > 0 ? `${n.toLocaleString("ko-KR")}원` : "-");
@@ -55,22 +55,16 @@ export function ReservationCard({ item, onCancelSuccess }: ReservationCardProps)
 
   return (
     <li className="w-full list-none">
-      <article className="overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm dark:border-neutral-700 dark:bg-neutral-800">
+      <article className="overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm">
         {/* 주소 | 사진, 공간 이름 | 사진, 사이즈 | 사진 */}
         <div className="flex gap-12 p-16">
           <div className="flex min-w-0 flex-1 flex-col gap-4 mt-8">
-            <span className="typo-caption1 truncate text-gray-medium dark:text-gray-semilight">
-              {address}
-            </span>
-            <h2 className="typo-subtitle1 line-clamp-2 text-dice-black dark:text-white">
-              {item.spaceName}
-            </h2>
-            <p className="typo-caption2 text-gray-light dark:text-gray-semilight mt-4">
-              {sizeLabel}
-            </p>
+            <span className="typo-caption1 truncate text-gray-medium">{address}</span>
+            <h2 className="typo-subtitle1 line-clamp-2 text-dice-black">{item.spaceName}</h2>
+            <p className="typo-caption2 text-gray-light mt-4">{sizeLabel}</p>
           </div>
           <div
-            className="relative shrink-0 overflow-hidden rounded-lg bg-neutral-200 dark:bg-neutral-600"
+            className="relative shrink-0 overflow-hidden rounded-lg bg-neutral-200"
             style={{ width: IMAGE_SIZE, height: IMAGE_SIZE }}
           >
             {item.spaceImage ? (
@@ -81,9 +75,7 @@ export function ReservationCard({ item, onCancelSuccess }: ReservationCardProps)
 
         {/* 희망 대여 기간 */}
         <div className="flex items-center justify-between px-16 mb-4">
-          <span className="typo-caption1 text-gray-semilight dark:text-gray-semilight">
-            희망 대여 기간
-          </span>
+          <span className="typo-caption1 text-gray-semilight">희망 대여 기간</span>
           <span className="typo-caption1">
             <span className="text-gray-deep">{dateRange}</span>
             {days > 0 && <span className="text-system-purple"> ({days}일)</span>}
@@ -92,12 +84,8 @@ export function ReservationCard({ item, onCancelSuccess }: ReservationCardProps)
 
         {/* 총 대여 금액 */}
         <div className="flex items-center justify-between px-16">
-          <span className="typo-caption1 text-gray-semilight dark:text-gray-semilight">
-            총 대여 금액
-          </span>
-          <span className="typo-subtitle1 text-dice-black dark:text-white">
-            {formatPrice(item.totalPrice)}
-          </span>
+          <span className="typo-caption1 text-gray-semilight">총 대여 금액</span>
+          <span className="typo-subtitle1 text-dice-black">{formatPrice(item.totalPrice)}</span>
         </div>
 
         {/* 하단 버튼: 상태별 */}
@@ -106,7 +94,7 @@ export function ReservationCard({ item, onCancelSuccess }: ReservationCardProps)
             <button
               type="button"
               disabled
-              className="flex flex-1 items-center justify-center rounded-lg border border-gray-light bg-gray-light py-12 typo-button1 text-white transition-colors hover:bg-neutral-50 disabled:opacity-50 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white dark:hover:bg-neutral-600"
+              className="flex flex-1 items-center justify-center rounded-lg border border-gray-light bg-gray-light py-12 typo-button1 text-white transition-colors hover:bg-neutral-50 disabled:opacity-50"
             >
               예약 신청 취소됨
             </button>
@@ -123,7 +111,7 @@ export function ReservationCard({ item, onCancelSuccess }: ReservationCardProps)
                 type="button"
                 onClick={() => cancelMutation.mutate()}
                 disabled={cancelMutation.isPending}
-                className="flex flex-1 items-center justify-center rounded-lg border border-stroke-eee bg-white py-12 typo-button1 text-gray-medium transition-colors hover:bg-neutral-50 disabled:opacity-50 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white dark:hover:bg-neutral-600"
+                className="flex flex-1 items-center justify-center rounded-lg border border-stroke-eee bg-white py-12 typo-button1 text-gray-medium transition-colors hover:bg-neutral-50 disabled:opacity-50"
               >
                 {cancelMutation.isPending ? "처리 중..." : "예약 신청 취소"}
               </button>

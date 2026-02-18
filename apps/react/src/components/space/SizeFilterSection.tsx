@@ -62,11 +62,11 @@ export function SizeFilterSection({ value, onChange }: SizeFilterSectionProps) {
             step={SIZE_STEP}
             minStepsBetweenThumbs={1}
           >
-            <Slider.Track className="relative h-2 w-full grow rounded-full bg-(--gray-light) dark:bg-neutral-600">
+            <Slider.Track className="relative h-2 w-full grow rounded-full bg-(--gray-light)">
               <Slider.Range className="absolute h-full rounded-full bg-(--dice-black)" />
             </Slider.Track>
-            <Slider.Thumb className="block size-5 rounded-full border-2 border-(--dice-black) bg-white shadow-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-(--system-purple) focus-visible:ring-offset-2 disabled:pointer-events-none dark:bg-neutral-100" />
-            <Slider.Thumb className="block size-5 rounded-full border-2 border-(--dice-black) bg-white shadow-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-(--system-purple) focus-visible:ring-offset-2 disabled:pointer-events-none dark:bg-neutral-100" />
+            <Slider.Thumb className="block size-5 rounded-full border-2 border-(--dice-black) bg-white shadow-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-(--system-purple) focus-visible:ring-offset-2 disabled:pointer-events-none" />
+            <Slider.Thumb className="block size-5 rounded-full border-2 border-(--dice-black) bg-white shadow-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-(--system-purple) focus-visible:ring-offset-2 disabled:pointer-events-none" />
           </Slider.Root>
           {/* 트랙 0% / 50% / 100%에 맞춰 라벨 배치 */}
           <div className="relative mt-12 h-5 w-full typo-caption1 text-(--gray-light)">

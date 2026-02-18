@@ -54,8 +54,8 @@ export function SpaceFilterChips({ filterSummary, onOpenFilter }: SpaceFilterChi
               onClick={() => onOpenFilter(key)}
               className={`flex flex-row items-center gap-2 rounded-full border pl-12 pr-8 py-[5.5px] typo-button1 transition-colors ${
                 isActive
-                  ? "border-transparent bg-dice-black text-dice-white hover:bg-dice-black/90 dark:bg-dice-black dark:text-dice-white dark:hover:bg-dice-black/90"
-                  : "border-(--stroke-eee) bg-bg-light-gray text-(--gray-deep) hover:bg-neutral-50 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700"
+                  ? "border-transparent bg-dice-black text-dice-white hover:bg-dice-black/90"
+                  : "border-(--stroke-eee) bg-bg-light-gray text-(--gray-deep) hover:bg-neutral-50"
               }`}
             >
               {getChipLabel(key, label, filterSummary)}

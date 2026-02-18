@@ -41,7 +41,7 @@ export function BottomNav() {
 
   return (
     <nav
-      className="fixed bottom-0 left-1/2 z-100 flex min-h-(--bottom-nav-h) w-full max-w-(--common-max-width) -translate-x-1/2 items-center justify-around gap-1 border-t border-neutral-200 bg-white dark:border-white/10 dark:bg-neutral-900"
+      className="fixed bottom-0 left-1/2 z-100 flex min-h-(--bottom-nav-h) w-full max-w-(--common-max-width) -translate-x-1/2 items-center justify-around gap-1 border-t border-neutral-200 bg-white"
       style={{ paddingBottom: "max(12px, env(safe-area-inset-bottom))" }}
     >
       {TAB_ROUTES.map(({ to, label, IconActive, IconInactive }) => {
@@ -55,7 +55,7 @@ export function BottomNav() {
             state={{ skipTransition: true }}
             className={`flex flex-1 flex-col items-center justify-center gap-8 py-8 no-underline transition-colors ${
               isActive ? "text-gray-dark" : "text-gray-medium"
-            } hover:text-gray-dark dark:hover:text-gray-dark`}
+            } hover:text-gray-dark`}
           >
             <Icon className="size-24 shrink-0" aria-hidden />
             <span className="typo-button2">{label}</span>

@@ -150,7 +150,7 @@ function SpacePage() {
 
   return (
     <div
-      className="h-full overflow-y-auto overflow-x-hidden bg-white dark:bg-neutral-900"
+      className="h-full overflow-y-auto overflow-x-hidden bg-white"
       style={{ overscrollBehaviorY: "none" }}
     >
       <div className="pb-64">
@@ -163,9 +163,7 @@ function SpacePage() {
 
         <div className="py-12">
           <div className="px-(--spacing-screen-x)">
-            <h2 className="typo-subtitle2 mb-16 text-dice-black dark:text-white">
-              다이스 추천 팝업 공간
-            </h2>
+            <h2 className="typo-subtitle2 mb-16 text-dice-black">다이스 추천 팝업 공간</h2>
           </div>
           <div className="pl-(--spacing-screen-x)">
             <SpaceFilterChips filterSummary={filterSummary} onOpenFilter={openFilterSheet} />
@@ -179,13 +177,13 @@ function SpacePage() {
             )}
 
             {isError && (
-              <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
+              <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
                 {error instanceof Error ? error.message : "목록을 불러오지 못했습니다."}
               </div>
             )}
 
             {!isLoading && !isError && content.length === 0 && (
-              <div className="py-12 text-center text-sm text-neutral-500 dark:text-neutral-400">
+              <div className="py-12 text-center text-sm text-neutral-500">
                 조회된 공간이 없습니다.
               </div>
             )}

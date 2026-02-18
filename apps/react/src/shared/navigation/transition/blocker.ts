@@ -31,7 +31,10 @@ export const createHistoryBlocker =
       // 커밋 직후에 플래그 해제
       setTimeout(() => {
         try {
-          deps.replaceState?.({ to: href, state: { ...metadata.nextState, skipTransition: false } });
+          deps.replaceState?.({
+            to: href,
+            state: { ...metadata.nextState, skipTransition: false },
+          });
         } catch (e) {
           void e;
         }

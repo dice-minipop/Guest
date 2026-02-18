@@ -70,9 +70,7 @@ function BrandProfilePage() {
   const handleAddImage = async (source: "gallery" | "camera" = "gallery") => {
     if (imageFiles.length + imagePreviewUrls.length >= 10) return;
     const fromNative =
-      source === "gallery"
-        ? await pickImageFromNativeGallery()
-        : await pickImageFromNativeCamera();
+      source === "gallery" ? await pickImageFromNativeGallery() : await pickImageFromNativeCamera();
     if (fromNative) {
       setImageFiles((prev) => [...prev, fromNative].slice(0, 10));
       setImagePreviewUrls((prev) => [...prev, URL.createObjectURL(fromNative)].slice(0, 10));
@@ -152,7 +150,7 @@ function BrandProfilePage() {
             <button
               type="button"
               onClick={() => navigate({ to: "/signup" })}
-              className="flex h-[48px] w-[48px] items-center justify-center rounded-full text-(--dice-black) transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-700"
+              className="flex h-[48px] w-[48px] items-center justify-center rounded-full text-(--dice-black) transition-colors hover:bg-neutral-100"
               aria-label="뒤로가기"
             >
               <RightArrowIcon className="h-24 w-24" aria-hidden />
@@ -164,17 +162,15 @@ function BrandProfilePage() {
             <div className="h-10 w-10 shrink-0" aria-hidden />
           </header>
 
-          <div className="flex flex-1 flex-col justify-center bg-white px-5 pt-0 dark:bg-neutral-800">
-            <h2 className="typo-h2 mb-24 text-(--dice-black) dark:text-neutral-300">
-              브랜드 프로필을 등록해주세요
-            </h2>
+          <div className="flex flex-1 flex-col justify-center bg-white px-5 pt-0">
+            <h2 className="typo-h2 mb-24 text-(--dice-black)">브랜드 프로필을 등록해주세요</h2>
 
             <form onSubmit={handleSubmit} className="flex flex-col">
               <div className="mb-24 flex flex-col gap-24">
                 {/* 1. 브랜드 타겟 성별 */}
                 <div className="flex flex-col gap-8">
-                  <label className="typo-caption1 text-(--gray-dark) dark:text-neutral-300">
-                    브랜드 타겟 성별{" "}
+                  <label className="typo-caption1 text-(--gray-dark)">
+                    브랜드 타겟 성별{""}
                     <span className="text-(--gray-semilight)">(중복 선택 가능)</span>
                     <span className="text-(--system-red)">*</span>
                   </label>
@@ -199,8 +195,8 @@ function BrandProfilePage() {
 
                 {/* 2. 브랜드 타겟 연령대 */}
                 <div className="flex flex-col gap-8">
-                  <label className="typo-caption1 text-(--gray-dark) dark:text-neutral-300">
-                    브랜드 타겟 연령대{" "}
+                  <label className="typo-caption1 text-(--gray-dark)">
+                    브랜드 타겟 연령대{""}
                     <span className="text-(--gray-semilight)">(중복 선택 가능)</span>
                     <span className="text-(--system-red)">*</span>
                   </label>
@@ -224,10 +220,7 @@ function BrandProfilePage() {
 
                 {/* 3. 내 브랜드 이름 */}
                 <div className="flex flex-col gap-8">
-                  <label
-                    htmlFor="brand-name"
-                    className="typo-caption1 text-(--gray-dark) dark:text-neutral-300"
-                  >
+                  <label htmlFor="brand-name" className="typo-caption1 text-(--gray-dark)">
                     내 브랜드 이름 <span className="text-(--gray-semilight)">(선택)</span>
                   </label>
                   <div className="relative">
@@ -245,7 +238,7 @@ function BrandProfilePage() {
                       <button
                         type="button"
                         onClick={() => setName("")}
-                        className="absolute right-12 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-neutral-700 dark:hover:text-neutral-200"
+                        className="absolute right-12 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700"
                         aria-label="지우기"
                       >
                         <XIcon className="h-[18px] w-[18px]" />
@@ -256,10 +249,7 @@ function BrandProfilePage() {
 
                 {/* 4. 짧은 브랜드 소개 */}
                 <div className="flex flex-col gap-8">
-                  <label
-                    htmlFor="brand-description"
-                    className="typo-caption1 text-(--gray-dark) dark:text-neutral-300"
-                  >
+                  <label htmlFor="brand-description" className="typo-caption1 text-(--gray-dark)">
                     짧은 브랜드 소개 <span className="text-(--gray-semilight)">(선택)</span>
                   </label>
                   <textarea
@@ -276,8 +266,8 @@ function BrandProfilePage() {
 
                 {/* 5. 브랜드, 상품 관련 이미지 */}
                 <div className="flex flex-col gap-8">
-                  <label className="typo-caption1 text-(--gray-dark) dark:text-neutral-300">
-                    브랜드, 상품 관련 이미지{" "}
+                  <label className="typo-caption1 text-(--gray-dark)">
+                    브랜드, 상품 관련 이미지{""}
                     <span className="text-(--gray-semilight)">(최대 10장/선택)</span>
                   </label>
                   <input
@@ -347,7 +337,7 @@ function BrandProfilePage() {
       </div>
 
       <div
-        className="fixed bottom-0 left-0 right-0 z-10 mx-auto max-w-sm bg-white px-5 pt-4 dark:bg-neutral-800"
+        className="fixed bottom-0 left-0 right-0 z-10 mx-auto max-w-sm bg-white px-5 pt-4"
         style={{
           paddingBottom: "max(20px, env(safe-area-inset-bottom))",
         }}

@@ -260,9 +260,7 @@ const BrandProfileForm = forwardRef<HTMLFormElement, { brand: BrandInfo }>(
                       >
                         <PlusIcon className="h-24 w-24 shrink-0" />
                         <span className="typo-caption2 text-(--gray-medium)">
-                          <span className="text-(--system-purple)">
-                            {allPreviewUrls.length}
-                          </span>
+                          <span className="text-(--system-purple)">{allPreviewUrls.length}</span>
                           {" / 10"}
                         </span>
                       </button>
@@ -392,7 +390,7 @@ function MypageBrandProfilePage() {
         <button
           type="button"
           onClick={handleBack}
-          className="flex h-[48px] w-[48px] items-center justify-center rounded-full text-(--dice-black) transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-700"
+          className="flex h-[48px] w-[48px] items-center justify-center rounded-full text-(--dice-black) transition-colors hover:bg-neutral-100"
           aria-label="뒤로가기"
         >
           <ArrowRightIcon className="h-24 w-24" aria-hidden />

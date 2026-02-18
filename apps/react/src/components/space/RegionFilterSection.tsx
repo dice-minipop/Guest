@@ -5,7 +5,7 @@ const cityChipBaseClass = "rounded-full border px-12 py-[5.5px] typo-button1 tra
 function cityChipClass(selected: boolean) {
   return selected
     ? "border-stroke-dice-black bg-dice-black text-dice-white"
-    : "border-stroke-eee bg-white text-gray-deep hover:border-(--gray-light) hover:bg-neutral-50 dark:border-stroke-eee dark:bg-white dark:text-gray-deep";
+    : "border-stroke-eee bg-white text-gray-deep hover:border-(--gray-light) hover:bg-neutral-50";
 }
 
 const districtChipClass = (selected: boolean) =>

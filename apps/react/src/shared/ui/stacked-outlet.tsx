@@ -4,7 +4,10 @@ import { useContext, useEffect, useMemo, useRef, useState, type ContextType } fr
 
 import { useNavigationTransition } from "@/shared/navigation/transition";
 import { RoutePhaseProvider } from "@/shared/navigation/transition/route-phase-context";
-import { snapshotRouterContext, type RouterLike } from "@/shared/navigation/use-frozen-router-context";
+import {
+  snapshotRouterContext,
+  type RouterLike,
+} from "@/shared/navigation/use-frozen-router-context";
 
 type Direction = "forward" | "back" | "none";
 
@@ -125,7 +128,8 @@ export function StackedOutlet({
       return;
     }
 
-    const shouldSkipBackAnimation = snapshot.direction === "back" && snapshot.initiator === "system";
+    const shouldSkipBackAnimation =
+      snapshot.direction === "back" && snapshot.initiator === "system";
 
     if (shouldSkipBackAnimation) {
       setCurrentDirection("none");

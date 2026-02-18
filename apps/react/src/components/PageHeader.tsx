@@ -117,7 +117,7 @@ export function PageHeader({
 
   return (
     <header
-      className="sticky top-0 z-10 border-b border-neutral-200 bg-black dark:border-neutral-700 dark:bg-neutral-800"
+      className="sticky top-0 z-10 border-b border-neutral-200 bg-black"
       style={{
         paddingTop: "max(var(--spacing-12), env(safe-area-inset-top, 0px))",
         paddingBottom: "var(--spacing-12)",
@@ -149,7 +149,7 @@ export function PageHeader({
       {searchTo != null ? (
         <Link
           to={searchTo}
-          className="flex items-center gap-2 rounded-lg border border-neutral-300 bg-neutral-50 p-12 text-sm font-medium text-neutral-500 transition-colors hover:bg-neutral-100 dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-400 dark:hover:bg-neutral-600"
+          className="flex items-center gap-2 rounded-lg border border-neutral-300 bg-neutral-50 p-12 text-sm font-medium text-neutral-500 transition-colors hover:bg-neutral-100"
         >
           <SearchIcon className="h-5 w-5 shrink-0" aria-hidden />
           <span>{searchPlaceholder}</span>

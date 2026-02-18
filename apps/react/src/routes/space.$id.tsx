@@ -55,7 +55,7 @@ function SpaceTitleWithLike({ data }: { data: SpaceDetailData }) {
               return nextLiked;
             });
           }}
-          className="rounded-full p-1 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-700"
+          className="rounded-full p-1 transition-colors hover:bg-neutral-100"
           aria-label={isLiked ? "좋아요 취소" : "좋아요"}
         >
           {isLiked ? (
@@ -158,7 +158,7 @@ function SpaceDetailPage() {
   if (isError || !data) {
     return (
       <div className="px-4 py-8">
-        <p className="text-red-600 dark:text-red-400">
+        <p className="text-red-600">
           {error instanceof Error ? error.message : "공간 정보를 불러오지 못했습니다."}
         </p>
         <Link to="/space" className="mt-4 inline-block text-indigo-600 hover:underline">
@@ -182,12 +182,12 @@ function SpaceDetailPage() {
 
   return (
     <div
-      className="no-bounce-scroll fixed left-0 right-0 bottom-0 flex flex-col overflow-hidden bg-white dark:bg-neutral-900"
+      className="no-bounce-scroll fixed left-1/2 bottom-0 flex w-full max-w-(--common-max-width) -translate-x-1/2 flex-col overflow-hidden bg-white"
       style={{ top: "env(safe-area-inset-top, 0px)" }}
     >
       {/* 캐러셀 넘긴 뒤 보여줄 48px 상단 바 (레이아웃 영향 없이 fixed) */}
       <div
-        className={`fixed left-0 right-0 z-20 flex h-[48px] items-center bg-dice-black transition-opacity ${
+        className={`fixed top-0 left-1/2 z-20 flex h-[48px] w-full max-w-(--common-max-width) -translate-x-1/2 items-center bg-dice-black transition-opacity ${
           isPastCarousel ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
         style={{ top: "env(safe-area-inset-top, 0px)" }}
@@ -206,7 +206,7 @@ function SpaceDetailPage() {
       <button
         type="button"
         onClick={handleBackToList}
-        className={`fixed z-30 flex items-center justify-center rounded-full bg-(--dim-basic) p-6 transition-opacity ${
+        className={`absolute z-30 flex items-center justify-center rounded-full bg-(--dim-basic) p-6 transition-opacity ${
           isPastCarousel ? "pointer-events-none opacity-0" : "opacity-100"
         }`}
         style={{
@@ -231,7 +231,7 @@ function SpaceDetailPage() {
               className="w-full aspect-square object-cover"
             />
           ) : (
-            <div className="w-full aspect-square bg-bg-light-gray dark:bg-neutral-800" />
+            <div className="w-full aspect-square bg-bg-light-gray" />
           )}
         </div>
 
@@ -241,21 +241,19 @@ function SpaceDetailPage() {
 
             <div className="mt-1 flex flex-col gap-0.5">
               <div className="typo-caption1">
-                <span className="text-gray-dark dark:text-white">1일 대여 </span>
+                <span className="text-gray-dark">1일 대여 </span>
                 {data.discountRate > 0 ? (
-                  <span className="text-gray-semilight dark:text-gray-semilight line-through">
+                  <span className="text-gray-semilight line-through">
                     {formatPrice(data.pricePerDay)}
                   </span>
                 ) : (
-                  <span className="text-gray-semilight dark:text-gray-semilight">
-                    {formatPrice(data.pricePerDay)}
-                  </span>
+                  <span className="text-gray-semilight">{formatPrice(data.pricePerDay)}</span>
                 )}
               </div>
               {data.discountRate > 0 && (
                 <div className="flex items-center gap-1">
                   <span className="typo-subtitle2 text-system-purple">{data.discountRate}%</span>
-                  <span className="typo-subtitle1 text-dice-black dark:text-white">
+                  <span className="typo-subtitle1 text-dice-black">
                     {formatPrice(data.discountPrice)}
                   </span>
                 </div>
@@ -305,7 +303,7 @@ function SpaceDetailPage() {
           <button
             type="button"
             onClick={() => setDetailsExpanded((prev) => !prev)}
-            className="mt-1.5 text-sm font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
+            className="mt-1.5 text-sm font-medium text-indigo-600 hover:text-indigo-500"
           >
             {detailsExpanded ? "간략히 보기" : "자세히 보기"}
           </button>
@@ -349,7 +347,7 @@ function SpaceDetailPage() {
 
       {/* 하단 바 (바텀 네비처럼 레이아웃 흐름에 포함, 스크롤바가 뒤로 감) */}
       <div
-        className="flex shrink-0 items-center gap-3 border-t border-stroke-eee bg-dice-white px-(--spacing-screen-x) dark:border-neutral-700 dark:bg-neutral-800"
+        className="flex shrink-0 items-center gap-3 border-t border-stroke-eee bg-dice-white px-(--spacing-screen-x)"
         style={{
           paddingTop: "var(--spacing-12)",
           paddingBottom: "max(var(--spacing-12), env(safe-area-inset-bottom, 0px))",
@@ -357,7 +355,7 @@ function SpaceDetailPage() {
       >
         <Link
           {...messagesTo}
-          className="flex p-3.5 shrink-0 border border-gray-light rounded-lg text-gray-dark transition-colors hover:bg-bg-light-gray dark:border-neutral-600 dark:text-gray-semilight dark:hover:bg-neutral-700"
+          className="flex p-3.5 shrink-0 border border-gray-light rounded-lg text-gray-dark transition-colors hover:bg-bg-light-gray"
           aria-label="쪽지함"
         >
           <MessageIcon className="size-24" aria-hidden />
@@ -365,7 +363,7 @@ function SpaceDetailPage() {
         <button
           type="button"
           onClick={() => setReservationSheetOpen(true)}
-          className="typo-button1 flex-1 rounded-lg bg-dice-black py-16 text-white transition-opacity hover:opacity-90 dark:bg-neutral-100 dark:text-dice-black"
+          className="typo-button1 flex-1 rounded-lg bg-dice-black py-16 text-white transition-opacity hover:opacity-90"
         >
           공간 예약 신청
         </button>

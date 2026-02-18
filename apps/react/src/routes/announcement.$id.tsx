@@ -47,14 +47,12 @@ function TitleWithLike({ data }: { data: DetailData }) {
   const [isLiked, setIsLiked] = useState(data.isLiked);
   return (
     <div className="flex items-start justify-between gap-5 border-b border-stroke-eee pb-24">
-      <h1 className="typo-h2 min-w-0 flex-1 wrap-break-word text-dice-black dark:text-white">
-        {data.title}
-      </h1>
+      <h1 className="typo-h2 min-w-0 flex-1 wrap-break-word text-dice-black">{data.title}</h1>
       <div className="flex shrink-0 flex-col items-center gap-0.5">
         <button
           type="button"
           onClick={() => setIsLiked((prev) => !prev)}
-          className="rounded-full p-1 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-700"
+          className="rounded-full p-1 transition-colors hover:bg-neutral-100"
           aria-label={isLiked ? "좋아요 취소" : "좋아요"}
         >
           {isLiked ? <LikePurple className="h-24 w-24" /> : <LikeLightgray className="h-24 w-24" />}
@@ -115,7 +113,7 @@ function AnnouncementDetailPage() {
   if (isError || !data) {
     return (
       <div className="px-4 py-8">
-        <p className="text-red-600 dark:text-red-400">
+        <p className="text-red-600">
           {error instanceof Error ? error.message : "공고 정보를 불러오지 못했습니다."}
         </p>
         <Link to="/announcement" className="mt-4 inline-block text-indigo-600 hover:underline">
@@ -128,12 +126,12 @@ function AnnouncementDetailPage() {
   const imageUrls = data.imageUrls ?? [];
   const announcementPageUrl = data.websiteUrl?.trim() || "";
   const hasAnnouncementPage = announcementPageUrl.length > 0;
-  const locationText = [data.city, data.district].filter(Boolean).join(" ") || "-";
+  const locationText = [data.city, data.district].filter(Boolean).join("") || "-";
   const dateRange = `${formatDate(data.recruitmentStartAt)} ~ ${formatDate(data.recruitmentEndAt)}`;
 
   return (
     <div
-      className="fixed inset-x-0 top-0 bottom-0 flex flex-col overflow-hidden bg-white dark:bg-neutral-900"
+      className="fixed top-0 bottom-0 left-1/2 flex w-full max-w-(--common-max-width) -translate-x-1/2 flex-col overflow-hidden bg-white"
       style={{ top: "env(safe-area-inset-top, 0px)" }}
     >
       {/* 헤더 */}
@@ -182,11 +180,9 @@ function AnnouncementDetailPage() {
           <div className="h-8 bg-bg-light-gray my-24" />
 
           {data.details && (
-            <div className="px-(--spacing-screen-x)  mt-6">
-              <h2 className="typo-subtitle2 text-dice-black dark:text-white">지원 공고 소개</h2>
-              <p className="mt-1 whitespace-pre-wrap typo-body1 text-gray-deep dark:text-gray-semilight">
-                {data.details}
-              </p>
+            <div className="px-(--spacing-screen-x) mt-6">
+              <h2 className="typo-subtitle2 text-dice-black">지원 공고 소개</h2>
+              <p className="mt-1 whitespace-pre-wrap typo-body1 text-gray-deep">{data.details}</p>
             </div>
           )}
         </div>
@@ -194,7 +190,7 @@ function AnnouncementDetailPage() {
 
       {/* 하단 고정: 공고 페이지 바로가기 */}
       <div
-        className="shrink-0 border-t border-stroke-eee bg-dice-white px-(--spacing-screen-x) dark:border-neutral-700 dark:bg-neutral-800"
+        className="shrink-0 border-t border-stroke-eee bg-dice-white px-(--spacing-screen-x)"
         style={{
           paddingTop: "var(--spacing-12)",
           paddingBottom: "max(var(--spacing-12), env(safe-area-inset-bottom, 0px))",
@@ -204,7 +200,7 @@ function AnnouncementDetailPage() {
           type="button"
           onClick={() => hasAnnouncementPage && openExternal(announcementPageUrl)}
           disabled={!hasAnnouncementPage}
-          className="typo-button1 w-full flex flex-row justify-center items-center gap-8 rounded-lg bg-dice-black py-3.5 text-white transition-opacity hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-neutral-100 dark:text-dice-black"
+          className="typo-button1 w-full flex flex-row justify-center items-center gap-8 rounded-lg bg-dice-black py-3.5 text-white transition-opacity hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <GlobeIcon className="h-24 w-24" aria-hidden />
           공고 페이지 바로가기

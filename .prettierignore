@@ -8,6 +8,10 @@ dist
 __generated__
 apps/react/src/routeTree.gen.ts
 pnpm-lock.yaml
+apps/expo/ios
+apps/expo/android
+apps/expo/GoogleService-Info.plist
+apps/expo/google-services.json
 
 # Misc
 *.min.js

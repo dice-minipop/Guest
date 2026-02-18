@@ -42,7 +42,7 @@ export function MessageRoomCard({ item }: MessageRoomCardProps) {
         className="flex items-center w-full gap-12 py-8"
       >
         {/* 공간 이미지 */}
-        <div className="relative size-14 shrink-0 overflow-hidden rounded-lg bg-neutral-200 dark:bg-neutral-600">
+        <div className="relative size-14 shrink-0 overflow-hidden rounded-lg bg-neutral-200">
           {item.spaceImage ? (
             <img src={item.spaceImage} alt="" className="size-full object-cover" />
           ) : null}
