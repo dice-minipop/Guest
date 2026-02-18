@@ -163,7 +163,7 @@ function SignupPage() {
             <button
               type="button"
               onClick={() => navigate({ to: "/" })}
-              className="flex h-[48px] w-[48px] items-center justify-center rounded-full text-(--dice-black) transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-700"
+              className="flex h-[48px] w-[48px] items-center justify-center rounded-full text-(--dice-black) transition-colors hover:bg-neutral-100"
               aria-label="뒤로가기"
             >
               <RightArrowIcon className="h-24 w-24" aria-hidden />
@@ -175,18 +175,13 @@ function SignupPage() {
             <div className="h-[48px] w-[48px] shrink-0" aria-hidden />
           </header>
 
-          <div className="flex flex-1 flex-col justify-center bg-white px-5 pt-0 dark:bg-neutral-800">
-            <h2 className="typo-h2 mb-24 text-(--dice-black) dark:text-neutral-300">
-              회원 정보를 입력해주세요
-            </h2>
+          <div className="flex flex-1 flex-col justify-center bg-white px-5 pt-0">
+            <h2 className="typo-h2 mb-24 text-(--dice-black)">회원 정보를 입력해주세요</h2>
 
             <form id="signup-form" onSubmit={handleSubmit} className="flex flex-col">
               <div className="mb-24 flex flex-col gap-24">
                 <div className="flex flex-col gap-8">
-                  <label
-                    htmlFor="signup-name"
-                    className="typo-caption1 text-(--gray-dark) dark:text-neutral-300"
-                  >
+                  <label htmlFor="signup-name" className="typo-caption1 text-(--gray-dark)">
                     이름
                   </label>
                   <div className="relative">
@@ -205,7 +200,7 @@ function SignupPage() {
                       <button
                         type="button"
                         onClick={() => setName("")}
-                        className="absolute right-12 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-neutral-700 dark:hover:text-neutral-200"
+                        className="absolute right-12 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700"
                         aria-label="이름 지우기"
                       >
                         <XIcon className="h-[18px] w-[18px]" />
@@ -215,10 +210,7 @@ function SignupPage() {
                 </div>
 
                 <div className="flex flex-col gap-8">
-                  <label
-                    htmlFor="signup-email"
-                    className="typo-caption1 text-(--gray-dark) dark:text-neutral-300"
-                  >
+                  <label htmlFor="signup-email" className="typo-caption1 text-(--gray-dark)">
                     이메일
                   </label>
                   <div className="relative">
@@ -237,7 +229,7 @@ function SignupPage() {
                       <button
                         type="button"
                         onClick={() => setEmail("")}
-                        className="absolute right-12 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-neutral-700 dark:hover:text-neutral-200"
+                        className="absolute right-12 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700"
                         aria-label="이메일 지우기"
                       >
                         <XIcon className="h-[18px] w-[18px]" />
@@ -250,10 +242,7 @@ function SignupPage() {
                 </div>
 
                 <div className="flex flex-col gap-8">
-                  <label
-                    htmlFor="signup-password"
-                    className="typo-caption1 text-(--gray-dark) dark:text-neutral-300"
-                  >
+                  <label htmlFor="signup-password" className="typo-caption1 text-(--gray-dark)">
                     비밀번호
                   </label>
                   <div className="relative">
@@ -274,7 +263,7 @@ function SignupPage() {
                         <button
                           type="button"
                           onClick={() => setPassword("")}
-                          className="flex h-9 w-9 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-neutral-700 dark:hover:text-neutral-200"
+                          className="flex h-9 w-9 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700"
                           aria-label="비밀번호 지우기"
                         >
                           <XIcon className="h-[18px] w-[18px]" />
@@ -283,7 +272,7 @@ function SignupPage() {
                       <button
                         type="button"
                         onClick={() => setShowPassword((prev) => !prev)}
-                        className="flex h-9 w-9 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-neutral-700 dark:hover:text-neutral-200"
+                        className="flex h-9 w-9 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700"
                         aria-label={showPassword ? "비밀번호 숨기기" : "비밀번호 보기"}
                       >
                         {showPassword ? (
@@ -302,7 +291,7 @@ function SignupPage() {
                 <div className="flex flex-col gap-8">
                   <label
                     htmlFor="signup-password-confirm"
-                    className="typo-caption1 text-(--gray-dark) dark:text-neutral-300"
+                    className="typo-caption1 text-(--gray-dark)"
                   >
                     비밀번호 확인
                   </label>
@@ -323,7 +312,7 @@ function SignupPage() {
                         <button
                           type="button"
                           onClick={() => setPasswordConfirm("")}
-                          className="flex h-9 w-9 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-neutral-700 dark:hover:text-neutral-200"
+                          className="flex h-9 w-9 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700"
                           aria-label="비밀번호 확인 지우기"
                         >
                           <XIcon className="h-[18px] w-[18px]" />
@@ -332,7 +321,7 @@ function SignupPage() {
                       <button
                         type="button"
                         onClick={() => setShowPasswordConfirm((prev) => !prev)}
-                        className="flex h-9 w-9 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-neutral-700 dark:hover:text-neutral-200"
+                        className="flex h-9 w-9 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700"
                         aria-label={showPasswordConfirm ? "비밀번호 숨기기" : "비밀번호 보기"}
                       >
                         {showPasswordConfirm ? (
@@ -351,10 +340,7 @@ function SignupPage() {
                 </div>
 
                 <div className="flex flex-col gap-8">
-                  <label
-                    htmlFor="signup-phone"
-                    className="typo-caption1 text-(--gray-dark) dark:text-neutral-300"
-                  >
+                  <label htmlFor="signup-phone" className="typo-caption1 text-(--gray-dark)">
                     휴대폰
                   </label>
                   <div className="relative">
@@ -373,7 +359,7 @@ function SignupPage() {
                       <button
                         type="button"
                         onClick={() => setPhone("")}
-                        className="absolute right-12 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-neutral-700 dark:hover:text-neutral-200"
+                        className="absolute right-12 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700"
                         aria-label="휴대폰 번호 지우기"
                       >
                         <XIcon className="h-[18px] w-[18px]" />
@@ -386,16 +372,14 @@ function SignupPage() {
                 </div>
               </div>
 
-              {errorMessage && (
-                <p className="mb-4 text-sm text-red-600 dark:text-red-400">{errorMessage}</p>
-              )}
+              {errorMessage && <p className="mb-4 text-sm text-red-600">{errorMessage}</p>}
             </form>
           </div>
         </div>
       </div>
 
       <div
-        className="fixed bottom-0 left-0 right-0 z-10 mx-auto max-w-sm bg-white px-5 pt-4 dark:bg-neutral-800"
+        className="fixed bottom-0 left-0 right-0 z-10 mx-auto max-w-sm bg-white px-5 pt-4"
         style={{ paddingBottom: "max(20px, env(safe-area-inset-bottom))" }}
       >
         <button

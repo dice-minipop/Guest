@@ -87,7 +87,7 @@ export function AnnouncementFilterSheetContent({
   return (
     <div className="flex max-h-[85vh] flex-col overflow-hidden">
       <div ref={scrollContainerRef} className="min-h-0 flex-1 overflow-y-auto">
-        <div className="sticky top-0 z-10 flex items-center gap-2 border-b border-neutral-200 bg-white pl-5 pr-[3px] py-2 dark:border-neutral-700 dark:bg-neutral-900">
+        <div className="sticky top-0 z-10 flex items-center gap-2 border-b border-neutral-200 bg-white pl-5 pr-[3px] py-2">
           <div className="min-w-0 flex-1 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             <div className="flex w-max flex-nowrap gap-4">
               {ANNOUNCEMENT_FILTER_TABS.map((tab, index) => {
@@ -97,10 +97,8 @@ export function AnnouncementFilterSheetContent({
                     key={tab.id}
                     type="button"
                     onClick={() => scrollToSection(index)}
-                    className={`typo-subtitle1 text-left shrink-0 rounded-full pr-8 py-8 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800 ${
-                      isActive
-                        ? "text-(--dice-black) dark:text-white"
-                        : "text-(--gray-light) dark:text-neutral-500"
+                    className={`typo-subtitle1 text-left shrink-0 rounded-full pr-8 py-8 transition-colors hover:bg-neutral-100 ${
+                      isActive ? "text-(--dice-black)" : "text-(--gray-light)"
                     }`}
                   >
                     {tab.label}
@@ -113,7 +111,7 @@ export function AnnouncementFilterSheetContent({
             type="button"
             onClick={onCancel}
             aria-label="필터 닫기"
-            className="flex h-[48px] w-[48px] shrink-0 items-center justify-center rounded-full text-(--gray-deep) transition-colors hover:bg-neutral-100 hover:text-(--dice-black) dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white"
+            className="flex h-[48px] w-[48px] shrink-0 items-center justify-center rounded-full text-(--gray-deep) transition-colors hover:bg-neutral-100 hover:text-(--dice-black)"
           >
             <XIcon className="size-24" aria-hidden />
           </button>
@@ -126,7 +124,7 @@ export function AnnouncementFilterSheetContent({
             }}
             className={SECTION_CLASS}
           >
-            <h3 className="typo-caption1 mb-3 text-gray-dark dark:text-white">지역</h3>
+            <h3 className="typo-caption1 mb-3 text-gray-dark">지역</h3>
             <RegionFilterSection
               sheetCity={sheetCity}
               sheetDistrict={sheetDistrict}
@@ -143,7 +141,7 @@ export function AnnouncementFilterSheetContent({
             }}
             className={SECTION_CLASS}
           >
-            <h3 className="typo-caption1 mb-3 text-gray-dark dark:text-white">지원대상</h3>
+            <h3 className="typo-caption1 mb-3 text-gray-dark">지원대상</h3>
             <OptionListFilterSection
               options={TARGET_OPTIONS}
               value={sheetTarget}
@@ -159,7 +157,7 @@ export function AnnouncementFilterSheetContent({
             }}
             className={SECTION_CLASS}
           >
-            <h3 className="typo-caption1 mb-3 text-gray-dark dark:text-white">모집상태</h3>
+            <h3 className="typo-caption1 mb-3 text-gray-dark">모집상태</h3>
             <OptionListFilterSection
               options={STATUS_OPTIONS}
               value={sheetStatus}
@@ -175,7 +173,7 @@ export function AnnouncementFilterSheetContent({
             }}
             className={SECTION_CLASS}
           >
-            <h3 className="typo-caption1 mb-3 text-gray-dark dark:text-white">정렬</h3>
+            <h3 className="typo-caption1 mb-3 text-gray-dark">정렬</h3>
             <OptionListFilterSection
               options={SORT_OPTIONS}
               value={sheetSortBy}
@@ -187,18 +185,18 @@ export function AnnouncementFilterSheetContent({
         </div>
       </div>
 
-      <div className="flex shrink-0 gap-12 border-t border-neutral-200 px-5 py-16 dark:border-neutral-700">
+      <div className="flex shrink-0 gap-12 border-t border-neutral-200 px-5 py-16">
         <button
           type="button"
           onClick={onReset}
-          className="rounded-lg border border-stroke-eee p-16 typo-button1 text-dice-black dark:border-stroke-eee dark:text-gray-deep"
+          className="rounded-lg border border-stroke-eee p-16 typo-button1 text-dice-black"
         >
           초기화
         </button>
         <button
           type="button"
           onClick={onApply}
-          className="flex-1 rounded-lg bg-dice-black p-16 typo-button1 text-dice-white dark:bg-dice-blue"
+          className="flex-1 rounded-lg bg-dice-black p-16 typo-button1 text-dice-white"
         >
           필터 결과 보기
         </button>

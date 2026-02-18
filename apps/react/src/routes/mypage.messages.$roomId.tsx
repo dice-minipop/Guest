@@ -26,7 +26,7 @@ export const Route = createFileRoute("/mypage/messages/$roomId")({
   component: MypageMessageRoomPage,
 });
 
-/** 메시지 상단 시간 표시: "오전 00:00" / "오후 00:00" */
+/** 메시지 상단 시간 표시:"오전 00:00" /"오후 00:00" */
 function formatTimeAmPm(iso: string): string {
   try {
     const date = new Date(iso);
@@ -40,7 +40,7 @@ function formatTimeAmPm(iso: string): string {
   }
 }
 
-/** 같은 날짜 구분용 날짜 헤더: "2026년 2월 15일" */
+/** 같은 날짜 구분용 날짜 헤더:"2026년 2월 15일" */
 function formatDateHeader(iso: string): string {
   try {
     const date = new Date(iso);
@@ -69,8 +69,8 @@ function MessageBubble({ message }: { message: MessageData }) {
     <div
       className={`typo-body1 max-w-[80%] border py-[8px] px-[12px] ${
         isMine
-          ? "rounded-tl-[8px] rounded-tr-[1px] rounded-br-[8px] rounded-bl-[8px] border-gray-dark bg-gray-dark text-white dark:border-gray-dark dark:bg-gray-dark"
-          : "rounded-tl-[1px] rounded-tr-[8px] rounded-br-[8px] rounded-bl-[8px] border-stroke-eee bg-dice-white text-gray-deep dark:border-neutral-600 dark:bg-neutral-800 dark:text-gray-semilight"
+          ? "rounded-tl-[8px] rounded-tr-[1px] rounded-br-[8px] rounded-bl-[8px] border-gray-dark bg-gray-dark text-white"
+          : "rounded-tl-[1px] rounded-tr-[8px] rounded-br-[8px] rounded-bl-[8px] border-stroke-eee bg-dice-white text-gray-deep"
       }`}
     >
       <p className="whitespace-pre-wrap wrap-break-word">{message.content}</p>
@@ -182,7 +182,7 @@ function MypageMessageRoomPage() {
   return (
     <div className="min-h-screen bg-bg-light-gray pb-[72px]">
       <header
-        className="fixed top-0 left-0 right-0 z-10 bg-dice-white dark:border-neutral-700 dark:bg-neutral-800"
+        className="fixed top-0 left-1/2 z-10 w-full max-w-(--common-max-width) -translate-x-1/2 bg-dice-white"
         style={{
           paddingLeft: "3px",
           paddingRight: "3px",
@@ -199,7 +199,7 @@ function MypageMessageRoomPage() {
           </button>
 
           <p
-            className="min-w-0 flex-1 truncate text-center typo-subtitle3 text-gray-dark dark:text-white"
+            className="min-w-0 flex-1 truncate text-center typo-subtitle3 text-gray-dark"
             aria-label={`${spaceName} 담당자와의 쪽지`}
           >
             {spaceName}
@@ -208,7 +208,7 @@ function MypageMessageRoomPage() {
           <button
             type="button"
             onClick={() => setReportSheetOpen(true)}
-            className="w-[48px] h-[48px] flex shrink-0 items-center justify-center text-gray-dark transition-opacity hover:opacity-80 active:opacity-70 dark:text-gray-semilight"
+            className="w-[48px] h-[48px] flex shrink-0 items-center justify-center text-gray-dark transition-opacity hover:opacity-80 active:opacity-70"
             aria-label="채팅방 신고"
           >
             <SirenIcon className="size-24" aria-hidden />
@@ -226,7 +226,7 @@ function MypageMessageRoomPage() {
         sheetDescription="신고 사유를 선택해 주세요"
         content={
           <div className="overflow-y-auto py-24 px-5 pb-20">
-            <h3 className="typo-caption1 mb-3 text-gray-dark dark:text-white">신고 사유</h3>
+            <h3 className="typo-caption1 mb-3 text-gray-dark">신고 사유</h3>
             <div className="flex flex-col gap-2">
               {REPORT_REASONS.map((reason) => {
                 const selected = selectedReportReason === reason;
@@ -237,8 +237,8 @@ function MypageMessageRoomPage() {
                     onClick={() => setSelectedReportReason(reason)}
                     className={`w-full rounded-lg border p-16 text-left typo-subtitle3 transition-colors ${
                       selected
-                        ? "border-dice-black bg-bg-light-gray text-dice-black dark:border-neutral-400 dark:bg-neutral-800 dark:text-white"
-                        : "border-stroke-eee bg-dice-white text-gray-medium dark:border-neutral-600 dark:bg-neutral-800 dark:text-gray-semilight"
+                        ? "border-dice-black bg-bg-light-gray text-dice-black"
+                        : "border-stroke-eee bg-dice-white text-gray-medium"
                     }`}
                   >
                     {reason}
@@ -250,7 +250,7 @@ function MypageMessageRoomPage() {
               type="button"
               disabled={!selectedReportReason || reporting}
               onClick={handleReportSubmit}
-              className="typo-button1 mt-24 w-full rounded-lg bg-dice-black py-[15.5px] text-white transition-opacity hover:opacity-90 disabled:opacity-40 dark:bg-neutral-100 dark:text-dice-black"
+              className="typo-button1 mt-24 w-full rounded-lg bg-dice-black py-[15.5px] text-white transition-opacity hover:opacity-90 disabled:opacity-40"
             >
               {reporting ? "처리 중..." : "신고하기"}
             </button>
@@ -266,7 +266,7 @@ function MypageMessageRoomPage() {
             "calc(max(var(--spacing-12), env(safe-area-inset-top, 0px)) + 48px + var(--spacing-12) + 12px)",
         }}
       >
-        <p className="typo-caption1 rounded-lg p-16 bg-bg-white mb-24 text-center leading-relaxed text-gray-deep dark:text-gray-semilight">
+        <p className="typo-caption1 rounded-lg p-16 bg-bg-white mb-24 text-center leading-relaxed text-gray-deep">
           &lsquo;{spaceName}&rsquo; 담당자님과의 쪽지가 시작되었습니다. 불필요한 비방과 부적절한
           언행은 제재 대상이 될 수 있습니다.
         </p>
@@ -285,14 +285,14 @@ function MypageMessageRoomPage() {
               return (
                 <div key={msg.id} className="flex flex-col gap-16">
                   {showDateHeader ? (
-                    <p className="typo-caption2 py-8 text-center text-gray-dark dark:text-white">
+                    <p className="typo-caption2 py-8 text-center text-gray-dark">
                       {formatDateHeader(msg.createdAt)}
                     </p>
                   ) : null}
                   <div
                     className={`flex w-full flex-col items-end gap-4 ${msg.isLoginUsersMessage ? "items-end" : "items-start"}`}
                   >
-                    <span className="typo-caption1 text-gray-medium dark:text-gray-semilight">
+                    <span className="typo-caption1 text-gray-medium">
                       {formatTimeAmPm(msg.createdAt)}
                     </span>
                     <MessageBubble message={msg} />
@@ -306,7 +306,7 @@ function MypageMessageRoomPage() {
 
       {/* 하단 고정 메시지 입력 */}
       <div
-        className="fixed bottom-0 left-0 right-0 z-10 border-t border-neutral-200 bg-dice-white dark:border-neutral-700 dark:bg-neutral-800"
+        className="fixed bottom-0 left-1/2 z-10 w-full max-w-(--common-max-width) -translate-x-1/2 border-t border-neutral-200 bg-dice-white"
         style={{
           paddingBottom: "max(var(--spacing-12), env(safe-area-inset-bottom, 0px))",
           paddingLeft: "var(--spacing-screen-x)",
@@ -320,14 +320,14 @@ function MypageMessageRoomPage() {
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder="메시지를 입력하세요"
-            className="typo-body2 min-h-10 flex-1 rounded-lg border border-neutral-200 bg-neutral-100 px-4 py-2 text-dice-black placeholder:text-gray-deep focus:border-dice-black focus:outline-none dark:border-neutral-600 dark:bg-neutral-700 dark:text-dice-white dark:placeholder:text-gray-semilight"
+            className="typo-body2 min-h-10 flex-1 rounded-lg border border-neutral-200 bg-neutral-100 px-4 py-2 text-dice-black placeholder:text-gray-deep focus:border-dice-black focus:outline-none"
             aria-label="메시지 입력"
             disabled={sending}
           />
           <button
             type="submit"
             disabled={sending || !content.trim()}
-            className="typo-subtitle3 h-10 shrink-0 rounded-lg bg-dice-black px-4 text-white transition-opacity hover:opacity-90 disabled:opacity-40 dark:bg-neutral-100 dark:text-dice-black"
+            className="typo-subtitle3 h-10 shrink-0 rounded-lg bg-dice-black px-4 text-white transition-opacity hover:opacity-90 disabled:opacity-40"
           >
             전송
           </button>

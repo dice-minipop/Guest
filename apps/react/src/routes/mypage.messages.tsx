@@ -43,7 +43,7 @@ function MypageMessagesPage() {
   return (
     <div className="min-h-screen bg-dice-white">
       <header
-        className="fixed top-0 left-0 right-0 z-10 bg-dice-white dark:border-neutral-700 dark:bg-neutral-800"
+        className="fixed top-0 left-1/2 z-10 w-full max-w-(--common-max-width) -translate-x-1/2 bg-dice-white"
         style={{
           paddingLeft: "3px",
           paddingRight: "3px",

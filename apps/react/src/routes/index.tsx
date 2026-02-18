@@ -35,15 +35,15 @@ function HomePage() {
       >
         <Lottie animationData={path} loop className="h-full w-full" />
       </div>
-      <h2 className="mt-32 typo-subtitle1 text-dice-black dark:text-white">{title}</h2>
-      <p className="mt-8 whitespace-pre-line text-center typo-subtitle3 text-gray-medium dark:text-gray-semilight">
+      <h2 className="mt-32 typo-subtitle1 text-dice-black">{title}</h2>
+      <p className="mt-8 whitespace-pre-line text-center typo-subtitle3 text-gray-medium">
         {subtitle}
       </p>
     </div>
   ));
 
   return (
-    <div className="flex min-h-screen flex-col bg-white dark:bg-neutral-900">
+    <div className="flex min-h-screen flex-col bg-white">
       <div className="min-h-0 flex-1">
         <Carousel
           slides={slides}
@@ -57,7 +57,7 @@ function HomePage() {
       <div className="shrink-0 px-5 pb-16 pt-4 space-y-12">
         <Link
           to="/login"
-          className="flex items-center justify-center gap-8 w-full rounded-xl border border-stroke-eee py-3.5 text-center typo-button1 text-dice-black transition-opacity hover:opacity-90 active:opacity-80 dark:border-gray-semilight dark:text-white"
+          className="flex items-center justify-center gap-8 w-full rounded-xl border border-stroke-eee py-3.5 text-center typo-button1 text-dice-black transition-opacity hover:opacity-90 active:opacity-80"
         >
           <DiceIcon className="w-24 h-24" />
           <span>다이스 아이디로 로그인</span>

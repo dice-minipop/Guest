@@ -116,7 +116,7 @@ function MypageLikedPage() {
       {/* PageHeader 참고: fixed + 동일 padding/safe-area, 헤더 높이 spacer */}
       <header
         ref={headerRef}
-        className="fixed top-0 left-0 right-0 z-10 bg-dice-white dark:border-neutral-700 dark:bg-neutral-800"
+        className="fixed top-0 left-1/2 z-10 w-full max-w-(--common-max-width) -translate-x-1/2 bg-dice-white"
         style={{
           paddingTop: "max(var(--spacing-12), env(safe-area-inset-top, 0px))",
           paddingBottom: "var(--spacing-12)",
@@ -135,10 +135,10 @@ function MypageLikedPage() {
           </button>
 
           <div className="absolute left-0 right-0 flex justify-center px-[10px] pointer-events-none">
-            <div className="relative flex w-full max-w-[160px] pointer-events-auto rounded-full border border-neutral-600 bg-neutral-800 p-1 dark:border-neutral-600 dark:bg-neutral-700">
+            <div className="relative flex w-full max-w-[160px] pointer-events-auto rounded-full border border-neutral-600 bg-neutral-800 p-1">
               {/* 슬라이딩 인디케이터 */}
               <div
-                className="absolute top-1 bottom-1 w-[calc(50%-4px)] rounded-full bg-white shadow-sm transition-[left] duration-200 ease-out dark:bg-white"
+                className="absolute top-1 bottom-1 w-[calc(50%-4px)] rounded-full bg-white shadow-sm transition-[left] duration-200 ease-out"
                 style={{
                   left: tab === "space" ? "4px" : "calc(50% + 2px)",
                 }}
@@ -148,9 +148,7 @@ function MypageLikedPage() {
                 type="button"
                 onClick={() => setTab("space")}
                 className={`relative z-10 flex flex-1 items-center justify-center rounded-full py-2.5 typo-button1 transition-colors duration-200 ease-out ${
-                  tab === "space"
-                    ? "text-black dark:text-black"
-                    : "text-white dark:text-neutral-400"
+                  tab === "space" ? "text-black" : "text-white"
                 }`}
               >
                 찜한공간
@@ -159,9 +157,7 @@ function MypageLikedPage() {
                 type="button"
                 onClick={() => setTab("announcement")}
                 className={`relative z-10 flex flex-1 items-center justify-center rounded-full py-2.5 typo-button1 transition-colors duration-200 ease-out ${
-                  tab === "announcement"
-                    ? "text-black dark:text-black"
-                    : "text-white dark:text-neutral-400"
+                  tab === "announcement" ? "text-black" : "text-white"
                 }`}
               >
                 찜한공고

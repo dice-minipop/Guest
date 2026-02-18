@@ -20,7 +20,7 @@ function SpaceSearchPage() {
         <button
           type="button"
           onClick={handleBack}
-          className="flex h-[48px] w-[48px] items-center justify-center rounded-full text-(--dice-black) transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-700"
+          className="flex h-[48px] w-[48px] items-center justify-center rounded-full text-(--dice-black) transition-colors hover:bg-neutral-100"
           aria-label="뒤로가기"
         >
           <ArrowRightIcon className="h-24 w-24" aria-hidden />

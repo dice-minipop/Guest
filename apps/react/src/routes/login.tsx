@@ -66,12 +66,12 @@ function LoginPage() {
       <button
         type="button"
         onClick={() => navigate({ to: "/" })}
-        className="absolute left-6 top-12 flex h-10 w-10 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-200"
+        className="absolute left-6 top-12 flex h-10 w-10 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700"
         aria-label="닫기"
       >
         <span className="text-2xl leading-none">×</span>
       </button>
-      <div className="flex flex-1 flex-col justify-center bg-white p-8 dark:bg-neutral-800">
+      <div className="flex flex-1 flex-col justify-center bg-white p-8">
         <h1 className="typo-h1 mb-32 text-(--dice-black)">로그인</h1>
 
         <form onSubmit={handleSubmit} className="flex flex-col">
@@ -96,7 +96,7 @@ function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setEmail("")}
-                  className="absolute right-12 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-neutral-700 dark:hover:text-neutral-200"
+                  className="absolute right-12 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700"
                   aria-label="이메일 지우기"
                 >
                   <XIcon className="h-[18px] w-[18px]" />
@@ -125,7 +125,7 @@ function LoginPage() {
                   <button
                     type="button"
                     onClick={() => setPassword("")}
-                    className="flex h-9 w-9 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-neutral-700 dark:hover:text-neutral-200"
+                    className="flex h-9 w-9 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700"
                     aria-label="비밀번호 지우기"
                   >
                     <XIcon className="h-[18px] w-[18px]" />
@@ -134,7 +134,7 @@ function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword((prev) => !prev)}
-                  className="flex h-9 w-9 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-neutral-700 dark:hover:text-neutral-200"
+                  className="flex h-9 w-9 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700"
                   aria-label={showPassword ? "비밀번호 숨기기" : "비밀번호 보기"}
                 >
                   {showPassword ? (
@@ -147,9 +147,7 @@ function LoginPage() {
             </div>
           </div>
 
-          {errorMessage && (
-            <p className="mb-4 text-sm text-red-600 dark:text-red-400">{errorMessage}</p>
-          )}
+          {errorMessage && <p className="mb-4 text-sm text-red-600">{errorMessage}</p>}
 
           <button
             type="submit"

@@ -3,11 +3,7 @@ import { bridge } from "@/bridge";
 /**
  * base64 데이터를 웹에서 사용할 File 객체로 변환합니다.
  */
-export function base64ToFile(
-  base64: string,
-  mimeType: string,
-  fileName: string
-): File {
+export function base64ToFile(base64: string, mimeType: string, fileName: string): File {
   const binary = atob(base64);
   const bytes = new Uint8Array(binary.length);
   for (let i = 0; i < binary.length; i++) {
@@ -40,11 +36,7 @@ export async function pickImageFromNativeGallery(): Promise<File | null> {
   }
   const result = await bridge.pickImageFromGallery();
   if (!result) return null;
-  return base64ToFile(
-    result.base64,
-    result.mimeType,
-    result.fileName ?? "image.jpg"
-  );
+  return base64ToFile(result.base64, result.mimeType, result.fileName ?? "image.jpg");
 }
 
 /**
@@ -59,21 +51,13 @@ export async function pickImageFromNativeCamera(): Promise<File | null> {
   }
   const result = await bridge.pickImageFromCamera();
   if (!result) return null;
-  return base64ToFile(
-    result.base64,
-    result.mimeType,
-    result.fileName ?? "image.jpg"
-  );
+  return base64ToFile(result.base64, result.mimeType, result.fileName ?? "image.jpg");
 }
 
 /**
  * 앱이면 갤러리 또는 카메라에서 이미지 1장 선택 (소스에 따라).
  * 웹이면 null 반환.
  */
-export async function pickImageFromNative(
-  source: "gallery" | "camera"
-): Promise<File | null> {
-  return source === "gallery"
-    ? pickImageFromNativeGallery()
-    : pickImageFromNativeCamera();
+export async function pickImageFromNative(source: "gallery" | "camera"): Promise<File | null> {
+  return source === "gallery" ? pickImageFromNativeGallery() : pickImageFromNativeCamera();
 }

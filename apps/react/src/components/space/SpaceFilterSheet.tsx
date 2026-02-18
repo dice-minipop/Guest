@@ -90,7 +90,7 @@ export function SpaceFilterSheetContent({
     <div className="flex max-h-[85vh] flex-col overflow-hidden">
       {/* 스크롤 영역: 탭(고정) + 섹션들. 탭은 이 컨테이너 안에서 sticky로 상단 고정 */}
       <div ref={scrollContainerRef} className="min-h-0 flex-1 overflow-y-auto">
-        <div className="sticky top-0 z-10 flex items-center gap-2 border-b border-neutral-200 bg-white pl-5 pr-[3px] py-2 dark:border-neutral-700 dark:bg-neutral-900">
+        <div className="sticky top-0 z-10 flex items-center gap-2 border-b border-neutral-200 bg-white pl-5 pr-[3px] py-2">
           <div className="min-w-0 flex-1 overflow-x-auto scrollbar-none">
             <div className="flex w-max flex-nowrap gap-4">
               {FILTER_TABS.map((tab, index) => {
@@ -100,10 +100,8 @@ export function SpaceFilterSheetContent({
                     key={tab.id}
                     type="button"
                     onClick={() => scrollToSection(index)}
-                    className={`typo-subtitle1 text-left shrink-0 rounded-full pr-8 py-8 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800 ${
-                      isActive
-                        ? "text-(--dice-black) dark:text-white"
-                        : "text-(--gray-light) dark:text-neutral-500"
+                    className={`typo-subtitle1 text-left shrink-0 rounded-full pr-8 py-8 transition-colors hover:bg-neutral-100 ${
+                      isActive ? "text-(--dice-black)" : "text-(--gray-light)"
                     }`}
                   >
                     {tab.label}
@@ -116,7 +114,7 @@ export function SpaceFilterSheetContent({
             type="button"
             onClick={onCancel}
             aria-label="필터 닫기"
-            className="flex h-[48px] w-[48px] shrink-0 items-center justify-center rounded-full text-(--gray-deep) transition-colors hover:bg-neutral-100 hover:text-(--dice-black) dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white"
+            className="flex h-[48px] w-[48px] shrink-0 items-center justify-center rounded-full text-(--gray-deep) transition-colors hover:bg-neutral-100 hover:text-(--dice-black)"
           >
             <XIcon className="size-24" aria-hidden />
           </button>
@@ -129,7 +127,7 @@ export function SpaceFilterSheetContent({
             }}
             className={`${SECTION_CLASS}`}
           >
-            <h3 className="typo-caption1 mb-3 text-gray-dark dark:text-white">지역</h3>
+            <h3 className="typo-caption1 mb-3 text-gray-dark">지역</h3>
             <RegionFilterSection
               sheetCity={sheetCity}
               sheetDistrict={sheetDistrict}
@@ -146,7 +144,7 @@ export function SpaceFilterSheetContent({
             }}
             className={SECTION_CLASS}
           >
-            <h3 className="typo-caption1 mb-3 text-gray-dark dark:text-white">유동인구</h3>
+            <h3 className="typo-caption1 mb-3 text-gray-dark">유동인구</h3>
             <PopulationFilterSection value={population} onChange={onPopulationChange} />
           </section>
 
@@ -158,7 +156,7 @@ export function SpaceFilterSheetContent({
             }}
             className={SECTION_CLASS}
           >
-            <h3 className="typo-caption1 mb-3 text-gray-dark dark:text-white">가격</h3>
+            <h3 className="typo-caption1 mb-3 text-gray-dark">가격</h3>
             <PriceFilterSection value={price} onChange={onPriceChange} />
           </section>
 
@@ -170,7 +168,7 @@ export function SpaceFilterSheetContent({
             }}
             className={SECTION_CLASS}
           >
-            <h3 className="typo-caption1 mb-3 text-gray-dark dark:text-white">공간크기</h3>
+            <h3 className="typo-caption1 mb-3 text-gray-dark">공간크기</h3>
             <SizeFilterSection value={size} onChange={onSizeChange} />
           </section>
 
@@ -182,7 +180,7 @@ export function SpaceFilterSheetContent({
             }}
             className={SECTION_CLASS}
           >
-            <h3 className="typo-caption1 mb-3 text-gray-dark dark:text-white">정렬</h3>
+            <h3 className="typo-caption1 mb-3 text-gray-dark">정렬</h3>
             <SortFilterSection value={sheetSortBy} onChange={onSortChange} />
           </section>
 
@@ -190,18 +188,18 @@ export function SpaceFilterSheetContent({
         </div>
       </div>
 
-      <div className="flex shrink-0 gap-12 border-t border-neutral-200 px-5 py-16 dark:border-neutral-700">
+      <div className="flex shrink-0 gap-12 border-t border-neutral-200 px-5 py-16">
         <button
           type="button"
           onClick={onReset}
-          className="rounded-lg border border-stroke-eee p-16 typo-button1 text-dice-black dark:border-stroke-eee dark:text-gray-deep"
+          className="rounded-lg border border-stroke-eee p-16 typo-button1 text-dice-black"
         >
           초기화
         </button>
         <button
           type="button"
           onClick={onApply}
-          className="flex-1 rounded-lg bg-dice-black p-16 typo-button1 text-white dark:bg-dice-blue"
+          className="flex-1 rounded-lg bg-dice-black p-16 typo-button1 text-white"
         >
           필터 결과 보기
         </button>

@@ -89,7 +89,7 @@ function ReservationPage() {
       <div className="pb-64">
         <PageHeader variant="reservation" title="예약 관리" />
 
-        <div className="sticky top-[81px] z-10 flex border-b border-neutral-200 bg-bg-light-gray dark:border-neutral-700 dark:bg-neutral-900">
+        <div className="sticky top-[81px] z-10 flex border-b border-neutral-200 bg-bg-light-gray">
           {TAB_STATUSES.map(({ key, label }) => (
             <button
               key={key}
@@ -112,13 +112,13 @@ function ReservationPage() {
           )}
 
           {isError && (
-            <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
+            <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
               {error instanceof Error ? error.message : "목록을 불러오지 못했습니다."}
             </div>
           )}
 
           {!isLoading && !isError && content.length === 0 && (
-            <div className="py-12 text-center text-sm text-neutral-500 dark:text-neutral-400">
+            <div className="py-12 text-center text-sm text-neutral-500">
               해당 상태의 예약이 없습니다.
             </div>
           )}
