@@ -173,7 +173,9 @@ function SpacePage() {
 
           <div className="px-(--spacing-screen-x)">
             {isLoading && (
-              <div className="py-12 text-center text-sm text-neutral-500">목록을 불러오는 중...</div>
+              <div className="py-12 text-center text-sm text-neutral-500">
+                목록을 불러오는 중...
+              </div>
             )}
 
             {isError && (

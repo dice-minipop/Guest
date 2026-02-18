@@ -78,7 +78,7 @@ function RootComponent() {
   }, []);
 
   return (
-    <>
+    <div className="min-h-screen w-full bg-bg-light-gray">
       {/* 상단 safe area만 채우는 영역 (페이지별 색상) */}
       <div
         aria-hidden
@@ -88,7 +88,7 @@ function RootComponent() {
           backgroundColor: topSafeAreaColor,
         }}
       />
-      <div className="no-bounce-scroll flex h-screen w-full flex-col overflow-hidden">
+      <div className="no-bounce-scroll mx-auto flex h-screen w-full max-w-[512px] flex-col overflow-hidden bg-white">
         <main className="no-bounce-scroll relative min-h-0 w-full flex-1 overflow-hidden">
           <NavigationTransitionProvider>
             <TransitionViewport>
@@ -105,6 +105,6 @@ function RootComponent() {
         )}
         {showBottomNav && <BottomNav />}
       </div>
-    </>
+    </div>
   );
 }
