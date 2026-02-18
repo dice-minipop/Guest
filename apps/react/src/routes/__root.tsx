@@ -88,7 +88,7 @@ function RootComponent() {
           backgroundColor: topSafeAreaColor,
         }}
       />
-      <div className="no-bounce-scroll mx-auto flex h-screen w-full max-w-[512px] flex-col overflow-hidden bg-white">
+      <div className="no-bounce-scroll mx-auto flex h-screen w-full max-w-(--common-max-width) flex-col overflow-hidden bg-white">
         <main className="no-bounce-scroll relative min-h-0 w-full flex-1 overflow-hidden">
           <NavigationTransitionProvider>
             <TransitionViewport>

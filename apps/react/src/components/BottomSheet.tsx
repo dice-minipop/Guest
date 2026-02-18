@@ -39,7 +39,7 @@ export function BottomSheet({
     >
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 z-100 bg-black/40" />
-        <Drawer.Content className="fixed bottom-0 left-0 right-0 z-100 flex flex-col rounded-t-[10px] bg-white max-h-[85vh] overflow-hidden">
+        <Drawer.Content className="fixed bottom-0 left-1/2 z-100 flex w-full max-w-(--common-max-width) -translate-x-1/2 flex-col overflow-hidden rounded-t-[10px] bg-white max-h-[85vh]">
           <Drawer.Title className="sr-only">{sheetTitle}</Drawer.Title>
           <Drawer.Description className="sr-only">{sheetDescription}</Drawer.Description>
           <div className="mx-auto mt-4 h-1.5 w-12 shrink-0 rounded-full bg-neutral-20" />
