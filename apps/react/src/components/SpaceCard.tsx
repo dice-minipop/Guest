@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import LikeLightgray from "@/assets/icons/like/like-lightgray.svg?react";
 import LikePurple from "@/assets/icons/like/like-purple.svg?react";
+import { canUseMemberOnlyApi } from "@/api/axios";
 import { toggleLikeSpace } from "../api/like";
 import { queryKeys } from "../api/queryKeys";
 import type { SpaceItem } from "../types/space";
@@ -75,6 +76,10 @@ export function SpaceCard({ item }: SpaceCardProps) {
                   e.preventDefault();
                   e.stopPropagation();
                   if (likeMutation.isPending) return;
+                  if (!canUseMemberOnlyApi()) {
+                    alert("회원 전용 기능입니다. 로그인 후 이용해 주세요.");
+                    return;
+                  }
                   likeMutation.mutate();
                 }}
                 className="rounded-full p-1 transition-colors hover:bg-neutral-100 disabled:opacity-50"

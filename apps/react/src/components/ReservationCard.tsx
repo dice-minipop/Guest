@@ -101,7 +101,7 @@ export function ReservationCard({ item, onCancelSuccess }: ReservationCardProps)
           ) : (
             <>
               <Link
-                to="/mypage/messages/$roomId"
+                to="/messages/$roomId"
                 params={{ roomId: String(item.messageRoomId) }}
                 className="flex items-center justify-center rounded-lg border border-stroke-eee bg-white p-3.5"
               >

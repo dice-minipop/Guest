@@ -78,15 +78,17 @@ export function FacilityInfoRow({ item, iconClassName }: FacilityInfoRowProps) {
   return (
     <div className="flex items-start gap-3">
       {icon ? (
-        <span
-          className="flex h-6 w-6 shrink-0 items-center justify-center text-gray-dark"
-          aria-hidden
-        >
-          {icon}
-        </span>
+        <div className="flex items-center justify-center bg-bg-light-gray p-[11px] rounded-lg">
+          <span
+            className="flex h-[30px] w-[30px] shrink-0 items-center justify-center text-gray-dark"
+            aria-hidden
+          >
+            {icon}
+          </span>
+        </div>
       ) : null}
-      <div className="min-w-0 flex-1">
-        <span className="typo-caption1 text-gray-dark">{label}</span>
+      <div className="min-w-0 flex-1 self-center">
+        <span className="typo-body1 text-gray-deep">{label}</span>
         {item.description ? (
           <p className="mt-0.5 typo-caption2 text-gray-semilight">{item.description}</p>
         ) : null}
