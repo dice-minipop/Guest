@@ -37,7 +37,7 @@ export function MessageRoomCard({ item }: MessageRoomCardProps) {
   return (
     <li className="w-full list-none">
       <Link
-        to="/mypage/messages/$roomId"
+        to="/messages/$roomId"
         params={{ roomId: String(item.id) }}
         className="flex items-center w-full gap-12 py-8"
       >

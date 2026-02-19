@@ -1,18 +1,19 @@
 import { createFileRoute, Outlet, useRouterState } from "@tanstack/react-router";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
-import { BottomSheet } from "../components/BottomSheet";
-import { PageHeader } from "../components/PageHeader";
-import { AnnouncementCard } from "../components/AnnouncementCard";
+import { BottomSheet } from "@/components/BottomSheet";
+import { PageHeader } from "@/components/PageHeader";
+import { AnnouncementCard } from "@/components/AnnouncementCard";
 import {
   AnnouncementFilterChips,
   AnnouncementFilterSheetContent,
   getAnnouncementFilterSummary,
   type AnnouncementFilterChipKey,
-} from "../components/announcement";
-import { getAnnouncementLists, queryKeys } from "../api";
-import { DUMMY_ANNOUNCEMENT_LIST } from "../api/announcement/dummy";
-import type { AnnouncementItem } from "../api";
+} from "@/components/announcement";
+import { getAnnouncementLists, queryKeys } from "@/api";
+import { DUMMY_ANNOUNCEMENT_LIST } from "@/api/announcement/dummy";
+import type { AnnouncementItem } from "@/api";
+import type { AnnouncementFilterDTO } from "@/types/announcement";
 
 type RegionFilter = { city: string; district: string };
 
@@ -22,7 +23,7 @@ const DEFAULT_STATUS = "";
 const DEFAULT_SORT = "";
 const PAGE_SIZE = 10;
 
-export const Route = createFileRoute("/announcement")({
+export const Route = createFileRoute("/announcement/")({
   component: AnnouncementLayout,
 });
 
@@ -51,13 +52,15 @@ function AnnouncementPage() {
   const [initialScrollSectionKey, setInitialScrollSectionKey] =
     useState<AnnouncementFilterChipKey | null>(null);
 
-  const filterPayload = {
-    city: regionFilter.city || "",
-    district: regionFilter.district || "",
-    targets: target && target !== "전체" ? [target] : [],
-    status: status || "",
-    sortBy: sortBy || undefined,
-  };
+  const filterPayload: Partial<AnnouncementFilterDTO> | undefined = (() => {
+    const payload: Partial<AnnouncementFilterDTO> = {};
+    if (regionFilter.city) payload.city = regionFilter.city;
+    if (regionFilter.district) payload.district = regionFilter.district;
+    if (target && target !== "전체") payload.targets = [target];
+    if (status) payload.status = status;
+    if (sortBy) payload.sortBy = sortBy;
+    return Object.keys(payload).length > 0 ? payload : undefined;
+  })();
 
   const { data, isLoading, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({

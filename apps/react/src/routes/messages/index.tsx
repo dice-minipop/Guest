@@ -1,25 +1,35 @@
-import { createFileRoute, useNavigate, Outlet, useRouterState } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  useNavigate,
+  Outlet,
+  useRouter,
+  useRouterState,
+} from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import ArrowRightIcon from "@/assets/icons/Arrow/right.svg?react";
 import MessageIcon from "@/assets/icons/Message/message.svg?react";
 import { MessageRoomCard } from "@/components/MessageRoomCard";
 import { getMessageLists, queryKeys } from "@/api";
+import { canUseMemberOnlyApi } from "@/api/axios";
 import { DUMMY_MESSAGE_ROOMS } from "@/api/message/dummy";
+import { backWithHistory } from "@/shared/navigation/back";
 
-export const Route = createFileRoute("/mypage/messages")({
-  component: MypageMessagesLayout,
+export const Route = createFileRoute("/messages/")({
+  component: MessagesLayout,
 });
 
-function MypageMessagesLayout() {
+function MessagesLayout() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const isDetailPage = pathname !== "/mypage/messages" && pathname.startsWith("/mypage/messages/");
+  const isDetailPage = pathname !== "/messages" && pathname.startsWith("/messages/");
 
   if (isDetailPage) return <Outlet />;
-  return <MypageMessagesPage />;
+  return <MessagesPage />;
 }
 
-function MypageMessagesPage() {
+function MessagesPage() {
   const navigate = useNavigate();
+  const router = useRouter();
+  const isMemberOnlyAllowed = canUseMemberOnlyApi();
 
   const { data: rooms, isLoading } = useQuery({
     queryKey: queryKeys.message.list,
@@ -30,11 +40,12 @@ function MypageMessagesPage() {
         return DUMMY_MESSAGE_ROOMS;
       }
     },
+    enabled: isMemberOnlyAllowed,
   });
 
   const handleBack = () => {
     if (window.history.length > 1) {
-      window.history.back();
+      backWithHistory(router);
     } else {
       navigate({ to: "/mypage" });
     }
@@ -69,7 +80,11 @@ function MypageMessagesPage() {
       </h1>
 
       <div className="px-(--spacing-screen-x) py-24">
-        {isLoading ? (
+        {!isMemberOnlyAllowed ? (
+          <p className="typo-body2 text-gray-deep">
+            회원 전용 기능입니다. 로그인 후 이용해 주세요.
+          </p>
+        ) : isLoading ? (
           <p className="typo-body2 text-gray-deep">쪽지 목록을 불러오는 중...</p>
         ) : !rooms?.length ? (
           <p className="typo-body2 text-gray-deep">아직 쪽지방이 없습니다.</p>

@@ -1,9 +1,9 @@
 import { createFileRoute, Outlet, useRouterState } from "@tanstack/react-router";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
-import { BottomSheet } from "../components/BottomSheet";
-import { PageHeader } from "../components/PageHeader";
-import { SpaceCard } from "../components/SpaceCard";
+import { BottomSheet } from "@/components/BottomSheet";
+import { PageHeader } from "@/components/PageHeader";
+import { SpaceCard } from "@/components/SpaceCard";
 import {
   DEFAULT_POPULATION_FILTER,
   getAppliedFilterSummary,
@@ -13,10 +13,10 @@ import {
   SpaceFilterSheetContent,
   type FilterChipKey,
   type PopulationFilterState,
-} from "../components/space";
-import { getFilteredSpaceLists, queryKeys } from "../api";
-import { DUMMY_SPACE_LIST } from "../api/space/dummy";
-import type { SpaceItem } from "../types/space";
+} from "@/components/space";
+import { getFilteredSpaceLists, queryKeys } from "@/api";
+import { DUMMY_SPACE_LIST } from "@/api/space/dummy";
+import type { SpaceItem } from "@/types/space";
 
 /** 적용된 지역 필터 (API용). city 없으면 district도 사용 안 함 */
 type RegionFilter = { city: string; district: string };
@@ -25,7 +25,7 @@ const DEFAULT_REGION: RegionFilter = { city: "", district: "" };
 const DEFAULT_SORT = "";
 const PAGE_SIZE = 10;
 
-export const Route = createFileRoute("/space")({
+export const Route = createFileRoute("/space/")({
   component: SpaceLayout,
 });
 
@@ -62,7 +62,12 @@ function SpacePage() {
 
   const filterPayload = {
     ...(regionFilter.city !== ""
-      ? { city: regionFilter.city, district: regionFilter.district }
+      ? {
+          city: regionFilter.city,
+          ...(regionFilter.district !== "" && regionFilter.district !== "전체"
+            ? { district: regionFilter.district }
+            : {}),
+        }
       : {}),
     sortBy,
   };
@@ -122,7 +127,12 @@ function SpacePage() {
 
   const applyFilter = () => {
     setRegionFilter(
-      sheetCity === "전국" ? DEFAULT_REGION : { city: sheetCity, district: sheetDistrict }
+      sheetCity === "전국"
+        ? DEFAULT_REGION
+        : {
+            city: sheetCity,
+            district: sheetDistrict === "전체" ? "" : sheetDistrict,
+          }
     );
     setSortBy(sheetSortBy);
     setPopulationFilter(sheetPopulation);

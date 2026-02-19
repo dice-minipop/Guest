@@ -7,6 +7,11 @@ const TOKEN_KEYS = {
   refresh: "refreshToken",
 } as const;
 
+const AUTH_MODE_KEY = "authMode";
+const AUTH_MODE = {
+  guest: "guest",
+} as const;
+
 const createBaseClient = () =>
   axios.create({
     baseURL: BASE_URL,
@@ -27,6 +32,24 @@ export function getAccessToken(): string | null {
   return localStorage.getItem(TOKEN_KEYS.access);
 }
 
+export function setGuestMode(): void {
+  localStorage.setItem(AUTH_MODE_KEY, AUTH_MODE.guest);
+}
+
+export function clearGuestMode(): void {
+  if (localStorage.getItem(AUTH_MODE_KEY) === AUTH_MODE.guest) {
+    localStorage.removeItem(AUTH_MODE_KEY);
+  }
+}
+
+export function isGuestMode(): boolean {
+  return localStorage.getItem(AUTH_MODE_KEY) === AUTH_MODE.guest;
+}
+
+export function canUseMemberOnlyApi(): boolean {
+  return !!getAccessToken() && !isGuestMode();
+}
+
 function getRefreshToken(): string | null {
   return localStorage.getItem(TOKEN_KEYS.refresh);
 }
@@ -40,6 +63,7 @@ function setTokens(accessToken: string, refreshToken: string): void {
 export function clearTokens(): void {
   localStorage.removeItem(TOKEN_KEYS.access);
   localStorage.removeItem(TOKEN_KEYS.refresh);
+  clearGuestMode();
   if (typeof window !== "undefined") {
     window.dispatchEvent(new CustomEvent("auth-token-cleared"));
   }
@@ -135,8 +159,7 @@ apiClient.interceptors.response.use(
 
     if (status !== 401 || config._retry) {
       if (status === 401) {
-        console.log("[auth] 401 처리: 재시도 아님 → clearTokens 후 reject");
-        clearTokens();
+        console.log("[auth] 401 처리: 재시도 아님 → 토큰 유지하고 reject");
       }
       return Promise.reject(error);
     }

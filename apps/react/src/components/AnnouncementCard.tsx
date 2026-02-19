@@ -1,7 +1,11 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import LikeLightgray from "@/assets/icons/like/like-lightgray.svg?react";
 import LikePurple from "@/assets/icons/like/like-purple.svg?react";
+import { canUseMemberOnlyApi } from "@/api/axios";
+import { toggleLikeAnnouncement } from "@/api/like";
+import { queryKeys } from "@/api/queryKeys";
 import type { AnnouncementItem } from "../api";
 
 function formatDate(iso: string): string {
@@ -35,7 +39,9 @@ export interface AnnouncementCardProps {
 }
 
 export function AnnouncementCard({ item }: AnnouncementCardProps) {
+  const queryClient = useQueryClient();
   const [isLiked, setIsLiked] = useState(item.isLiked);
+  const [likeCount, setLikeCount] = useState(item.likeCount);
   const location = [item.city, item.district].filter(Boolean).join("") || "위치 정보 없음";
   const dateRange = `${formatDate(item.recruitmentStartAt)} ~ ${formatDate(item.recruitmentEndAt)}`;
   const dday = getDday(item.recruitmentEndAt);
@@ -45,6 +51,20 @@ export function AnnouncementCard({ item }: AnnouncementCardProps) {
       : dday.days <= 30
         ? "bg-system-red text-white"
         : "bg-system-green text-white";
+
+  const likeMutation = useMutation({
+    mutationFn: () => toggleLikeAnnouncement(item.id),
+    onSuccess: (data) => {
+      setIsLiked(data.isLike);
+      setLikeCount((prev) => (data.isLike ? prev + 1 : Math.max(0, prev - 1)));
+      queryClient.invalidateQueries({ queryKey: queryKeys.announcement.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.guest.all });
+    },
+    onError: () => {
+      setIsLiked(item.isLiked);
+      setLikeCount(item.likeCount);
+    },
+  });
 
   return (
     <li className="w-full list-none">
@@ -65,10 +85,16 @@ export function AnnouncementCard({ item }: AnnouncementCardProps) {
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                setIsLiked((prev) => !prev);
+                if (likeMutation.isPending) return;
+                if (!canUseMemberOnlyApi()) {
+                  alert("회원 전용 기능입니다. 로그인 후 이용해 주세요.");
+                  return;
+                }
+                likeMutation.mutate();
               }}
-              className="rounded-full p-1 transition-colors hover:bg-neutral-100"
+              className="rounded-full p-1 transition-colors hover:bg-neutral-100 disabled:opacity-50"
               aria-label={isLiked ? "좋아요 취소" : "좋아요"}
+              disabled={likeMutation.isPending}
             >
               {isLiked ? (
                 <LikePurple className="h-24 w-24" />
@@ -81,7 +107,7 @@ export function AnnouncementCard({ item }: AnnouncementCardProps) {
                 isLiked ? "typo-caption2 text-system-purple" : "typo-caption2 text-gray-semilight"
               }
             >
-              {item.likeCount}
+              {likeCount}
             </span>
           </div>
         </div>

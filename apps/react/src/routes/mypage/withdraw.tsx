@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
 import ArrowRightIcon from "@/assets/icons/Arrow/right.svg?react";
 import ArrowDownIcon from "@/assets/icons/Arrow/down.svg?react";
 import { BottomSheet } from "@/components/BottomSheet";
+import { backWithHistory } from "@/shared/navigation/back";
 
 const WITHDRAWAL_REASONS = [
   "앱 방문을 잘 하지 않아요",
@@ -19,12 +20,13 @@ export const Route = createFileRoute("/mypage/withdraw")({
 
 function MypageWithdrawPage() {
   const navigate = useNavigate();
+  const router = useRouter();
   const [reasonSheetOpen, setReasonSheetOpen] = useState(false);
   const [selectedReason, setSelectedReason] = useState<string | null>(null);
 
   const handleBack = () => {
     if (window.history.length > 1) {
-      window.history.back();
+      backWithHistory(router);
     } else {
       navigate({ to: "/mypage" });
     }

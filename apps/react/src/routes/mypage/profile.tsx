@@ -1,6 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { getGuestInfo, queryKeys } from "@/api";
+import { backWithHistory } from "@/shared/navigation/back";
 
 export const Route = createFileRoute("/mypage/profile")({
   component: MypageProfilePage,
@@ -10,17 +11,31 @@ const inputBase =
   "typo-body2 w-full appearance-none rounded-lg border border-(--gray-light) bg-(--gray-light) px-16 py-3 text-[16px] text-(--gray-dark) cursor-not-allowed";
 
 function MypageProfilePage() {
+  const navigate = useNavigate();
+  const router = useRouter();
   const { data, isLoading } = useQuery({
     queryKey: queryKeys.guest.info,
     queryFn: getGuestInfo,
   });
 
+  const handleBack = () => {
+    if (window.history.length > 1) {
+      backWithHistory(router);
+    } else {
+      navigate({ to: "/mypage" });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-dice-white px-(--spacing-screen-x)">
       <div className="mb-4 flex items-center gap-2">
-        <Link to="/mypage" className="typo-body2 text-(--gray-deep) active:opacity-80">
+        <button
+          type="button"
+          onClick={handleBack}
+          className="typo-body2 text-(--gray-deep) active:opacity-80"
+        >
           ‹ 마이페이지
-        </Link>
+        </button>
       </div>
       <h1 className="typo-h1 text-(--dice-black)">회원 정보 관리</h1>
 

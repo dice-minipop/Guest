@@ -1,9 +1,15 @@
-import { createFileRoute, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Outlet,
+  useNavigate,
+  useRouter,
+  useRouterState,
+} from "@tanstack/react-router";
 import { useMutation } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { isAxiosError } from "axios";
-import { signUp } from "../api";
-import type { SignUpRequest } from "../api";
+import { signUp } from "@/api";
+import type { SignUpRequest } from "@/api";
 import RightArrowIcon from "@/assets/icons/Arrow/right.svg?react";
 import XIcon from "@/assets/icons/Onboarding/round-x.svg?react";
 import EyeOpenIcon from "@/assets/icons/Onboarding/eye-open.svg?react";
@@ -14,8 +20,9 @@ import {
   validatePasswordCheck,
   validatePhone,
 } from "@/lib/signupValidation";
+import { backWithHistory } from "@/shared/navigation/back";
 
-export const Route = createFileRoute("/signup")({
+export const Route = createFileRoute("/signup/")({
   component: SignupLayout,
 });
 
@@ -33,6 +40,7 @@ type MessageColor = "text-gray-deep" | "text-system-green" | "text-system-red";
 
 function SignupPage() {
   const navigate = useNavigate();
+  const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -106,6 +114,14 @@ function SignupPage() {
   const isFormValid =
     name.trim() && isEmailValid && isPasswordValid && isPasswordCheckValid && isPhoneValid;
 
+  const handleBack = () => {
+    if (window.history.length > 1) {
+      backWithHistory(router);
+    } else {
+      navigate({ to: "/" });
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!isFormValid || mutation.isPending) return;
@@ -156,13 +172,13 @@ function SignupPage() {
     `${inputBase} pr-36 ${getBorderByMessageColor(messageColor)}`;
 
   return (
-    <div className="relative mx-auto max-w-sm">
+    <div className="relative w-full">
       <div className="h-screen overflow-y-auto">
         <div className="flex min-h-screen flex-col pb-[72px]">
           <header className="relative flex shrink-0 items-center justify-between py-12">
             <button
               type="button"
-              onClick={() => navigate({ to: "/" })}
+              onClick={handleBack}
               className="flex h-[48px] w-[48px] items-center justify-center rounded-full text-(--dice-black) transition-colors hover:bg-neutral-100"
               aria-label="뒤로가기"
             >
@@ -175,7 +191,7 @@ function SignupPage() {
             <div className="h-[48px] w-[48px] shrink-0" aria-hidden />
           </header>
 
-          <div className="flex flex-1 flex-col justify-center bg-white px-5 pt-0">
+          <div className="flex flex-1 flex-col bg-white px-5 pt-32">
             <h2 className="typo-h2 mb-24 text-(--dice-black)">회원 정보를 입력해주세요</h2>
 
             <form id="signup-form" onSubmit={handleSubmit} className="flex flex-col">
@@ -379,7 +395,7 @@ function SignupPage() {
       </div>
 
       <div
-        className="fixed bottom-0 left-0 right-0 z-10 mx-auto max-w-sm bg-white px-5 pt-4"
+        className="fixed bottom-0 left-0 right-0 z-10 mx-auto w-full max-w-(--common-max-width) bg-white px-5 pt-4"
         style={{ paddingBottom: "max(20px, env(safe-area-inset-bottom))" }}
       >
         <button

@@ -1,32 +1,36 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import ArrowRightIcon from "@/assets/icons/Arrow/right.svg?react";
 import { getLikedSpaceLists, getLikedAnnouncementLists, queryKeys } from "@/api";
+import { canUseMemberOnlyApi } from "@/api/axios";
 import type { AnnouncementItem, LikedAnnouncement } from "@/api";
 import { SpaceCard } from "@/components/SpaceCard";
 import { AnnouncementCard } from "@/components/AnnouncementCard";
 import type { SpaceItem } from "@/types/space";
+import { backWithHistory } from "@/shared/navigation/back";
 
 const PAGE_SIZE = 10;
 
 type Tab = "space" | "announcement";
 
-export const Route = createFileRoute("/mypage/liked")({
-  component: MypageLikedPage,
+export const Route = createFileRoute("/liked/")({
+  component: LikedPage,
 });
 
-function MypageLikedPage() {
+function LikedPage() {
   const navigate = useNavigate();
+  const router = useRouter();
   const [tab, setTab] = useState<Tab>("space");
   const loadMoreSpaceRef = useRef<HTMLDivElement>(null);
   const loadMoreAnnouncementRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLElement>(null);
   const [headerHeight, setHeaderHeight] = useState(0);
+  const isMemberOnlyAllowed = canUseMemberOnlyApi();
 
   const handleBack = () => {
     if (window.history.length > 1) {
-      window.history.back();
+      backWithHistory(router);
     } else {
       navigate({ to: "/mypage" });
     }
@@ -51,6 +55,7 @@ function MypageLikedPage() {
       const next = (lastPage.number ?? 0) + 1;
       return next < (lastPage.totalPages ?? 0) ? next : undefined;
     },
+    enabled: isMemberOnlyAllowed,
   });
 
   const likedAnnouncements = useInfiniteQuery({
@@ -61,6 +66,7 @@ function MypageLikedPage() {
       const next = (lastPage.number ?? 0) + 1;
       return next < (lastPage.totalPages ?? 0) ? next : undefined;
     },
+    enabled: isMemberOnlyAllowed,
   });
 
   const spaceContent = (likedSpaces.data?.pages.flatMap((p) => p.content) ?? []) as SpaceItem[];
@@ -113,7 +119,6 @@ function MypageLikedPage() {
 
   return (
     <div className="min-h-screen bg-dice-white">
-      {/* PageHeader 참고: fixed + 동일 padding/safe-area, 헤더 높이 spacer */}
       <header
         ref={headerRef}
         className="fixed top-0 left-1/2 z-10 w-full max-w-(--common-max-width) -translate-x-1/2 bg-dice-white"
@@ -136,7 +141,6 @@ function MypageLikedPage() {
 
           <div className="absolute left-0 right-0 flex justify-center px-[10px] pointer-events-none">
             <div className="relative flex w-full max-w-[160px] pointer-events-auto rounded-full border border-neutral-600 bg-neutral-800 p-1">
-              {/* 슬라이딩 인디케이터 */}
               <div
                 className="absolute top-1 bottom-1 w-[calc(50%-4px)] rounded-full bg-white shadow-sm transition-[left] duration-200 ease-out"
                 style={{
@@ -176,6 +180,11 @@ function MypageLikedPage() {
       >
         {tab === "space" && (
           <>
+            {!isMemberOnlyAllowed && (
+              <div className="py-12 text-center typo-body2 text-(--gray-deep)">
+                회원 전용 기능입니다. 로그인 후 이용해 주세요.
+              </div>
+            )}
             {isSpaceLoading && (
               <div className="py-12 text-center typo-body2 text-(--gray-deep)">
                 목록을 불러오는 중...
@@ -188,19 +197,22 @@ function MypageLikedPage() {
                   : "찜한 공간 목록을 불러오지 못했습니다."}
               </div>
             )}
-            {!isSpaceLoading && !isSpaceError && spaceContent.length === 0 && (
-              <div className="py-12 text-center typo-body2 text-(--gray-deep)">
-                찜한 공간이 없습니다.
-              </div>
-            )}
-            {!isSpaceLoading && !isSpaceError && spaceContent.length > 0 && (
+            {isMemberOnlyAllowed &&
+              !isSpaceLoading &&
+              !isSpaceError &&
+              spaceContent.length === 0 && (
+                <div className="py-12 text-center typo-body2 text-(--gray-deep)">
+                  찜한 공간이 없습니다.
+                </div>
+              )}
+            {isMemberOnlyAllowed && !isSpaceLoading && !isSpaceError && spaceContent.length > 0 && (
               <ul className="flex flex-col gap-4">
                 {spaceContent.map((item) => (
                   <SpaceCard key={item.id} item={item} />
                 ))}
               </ul>
             )}
-            {tab === "space" && spaceContent.length > 0 && (
+            {isMemberOnlyAllowed && tab === "space" && spaceContent.length > 0 && (
               <div ref={loadMoreSpaceRef} className="h-8 py-4" aria-hidden>
                 {isFetchingNextSpaces && (
                   <p className="text-center typo-body2 text-(--gray-deep)">더 불러오는 중...</p>
@@ -212,6 +224,11 @@ function MypageLikedPage() {
 
         {tab === "announcement" && (
           <>
+            {!isMemberOnlyAllowed && (
+              <div className="py-12 text-center typo-body2 text-(--gray-deep)">
+                회원 전용 기능입니다. 로그인 후 이용해 주세요.
+              </div>
+            )}
             {isAnnouncementLoading && (
               <div className="py-12 text-center typo-body2 text-(--gray-deep)">
                 목록을 불러오는 중...
@@ -224,19 +241,25 @@ function MypageLikedPage() {
                   : "찜한 공고 목록을 불러오지 못했습니다."}
               </div>
             )}
-            {!isAnnouncementLoading && !isAnnouncementError && announcementContent.length === 0 && (
-              <div className="py-12 text-center typo-body2 text-(--gray-deep)">
-                찜한 공고가 없습니다.
-              </div>
-            )}
-            {!isAnnouncementLoading && !isAnnouncementError && announcementContent.length > 0 && (
-              <ul className="flex flex-col gap-3">
-                {announcementContent.map((item) => (
-                  <AnnouncementCard key={item.id} item={item as AnnouncementItem} />
-                ))}
-              </ul>
-            )}
-            {tab === "announcement" && announcementContent.length > 0 && (
+            {isMemberOnlyAllowed &&
+              !isAnnouncementLoading &&
+              !isAnnouncementError &&
+              announcementContent.length === 0 && (
+                <div className="py-12 text-center typo-body2 text-(--gray-deep)">
+                  찜한 공고가 없습니다.
+                </div>
+              )}
+            {isMemberOnlyAllowed &&
+              !isAnnouncementLoading &&
+              !isAnnouncementError &&
+              announcementContent.length > 0 && (
+                <ul className="flex flex-col gap-3">
+                  {announcementContent.map((item) => (
+                    <AnnouncementCard key={item.id} item={item as AnnouncementItem} />
+                  ))}
+                </ul>
+              )}
+            {isMemberOnlyAllowed && tab === "announcement" && announcementContent.length > 0 && (
               <div ref={loadMoreAnnouncementRef} className="h-8 py-4" aria-hidden>
                 {isFetchingNextAnnouncements && (
                   <p className="text-center typo-body2 text-(--gray-deep)">더 불러오는 중...</p>

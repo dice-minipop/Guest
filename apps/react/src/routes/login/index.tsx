@@ -1,15 +1,17 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, useRouter } from "@tanstack/react-router";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { isAxiosError } from "axios";
-import { login } from "../api";
-import type { LoginRequest } from "../api";
+import { login } from "@/api";
+import type { LoginRequest } from "@/api";
+import { clearGuestMode } from "@/api/axios";
 import { bridge } from "@/bridge";
 import XIcon from "@/assets/icons/Onboarding/round-x.svg?react";
 import EyeOpenIcon from "@/assets/icons/Onboarding/eye-open.svg?react";
 import EyeCloseIcon from "@/assets/icons/Onboarding/eye-close.svg?react";
+import { backWithHistory } from "@/shared/navigation/back";
 
-export const Route = createFileRoute("/login")({
+export const Route = createFileRoute("/login/")({
   component: LoginPage,
 });
 
@@ -20,13 +22,23 @@ const TOKEN_KEYS = {
 
 function LoginPage() {
   const navigate = useNavigate();
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
+  const handleBack = () => {
+    if (window.history.length > 1) {
+      backWithHistory(router);
+    } else {
+      navigate({ to: "/" });
+    }
+  };
+
   const mutation = useMutation({
     mutationFn: (data: LoginRequest) => login(data),
     onSuccess: (res) => {
+      clearGuestMode();
       if (res.token?.accessToken) {
         localStorage.setItem(TOKEN_KEYS.access, res.token.accessToken);
         if (
@@ -62,10 +74,10 @@ function LoginPage() {
   })();
 
   return (
-    <div className="relative mx-auto flex min-h-screen max-w-sm flex-col px-6 py-12">
+    <div className="relative flex min-h-screen w-full flex-col px-6 py-12">
       <button
         type="button"
-        onClick={() => navigate({ to: "/" })}
+        onClick={handleBack}
         className="absolute left-6 top-12 flex h-10 w-10 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700"
         aria-label="닫기"
       >
