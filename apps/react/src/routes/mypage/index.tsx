@@ -1,8 +1,10 @@
 import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import { getMyBrandInfo, logout, queryKeys } from "@/api";
-import { clearTokens } from "@/api/axios";
+import { canUseMemberOnlyApi, clearTokens, isGuestMode } from "@/api/axios";
 import { bridge } from "@/bridge";
+import { LoginRequiredModal } from "@/components/LoginRequiredModal";
 import EditIcon from "@/assets/icons/Brand/edit.svg?react";
 
 const TERMS_URL = "https://juvenile-chess-b24.notion.site/18e7ece7ecb5800e99a0eedd7976c022?pvs=4";
@@ -19,7 +21,7 @@ function openExternal(url: string) {
   }
 }
 
-export const Route = createFileRoute("/mypage")({
+export const Route = createFileRoute("/mypage/")({
   component: MypageLayout,
 });
 
@@ -33,6 +35,8 @@ function MypageLayout() {
 function MypagePage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const isGuest = isGuestMode();
 
   const { data: brands } = useQuery({
     queryKey: queryKeys.brand.myInfo,
@@ -50,6 +54,24 @@ function MypagePage() {
 
   const brandList = Array.isArray(brands) ? brands : [];
   const hasBrands = brandList.length > 0;
+  const primaryBrand = hasBrands ? brandList[0] : null;
+
+  const handleMemberOnlyButtonClick = (e: React.MouseEvent) => {
+    if (canUseMemberOnlyApi()) return;
+    e.preventDefault();
+    setIsLoginModalOpen(true);
+  };
+
+  const handleLogoutClick = () => {
+    if (isGuest) {
+      clearTokens();
+      queryClient.clear();
+      // 라우터 스택 상태를 초기화하기 위해 전체 replace 이동
+      window.location.replace("/");
+      return;
+    }
+    logoutMutation.mutate();
+  };
 
   return (
     <div
@@ -63,37 +85,39 @@ function MypagePage() {
             <Link to="/mypage/brand-profile" className="flex justify-end bg-dice-black p-12">
               <EditIcon className="size-24" aria-hidden />
             </Link>
-            {hasBrands ? (
-              <ul className="flex flex-col gap-4 px-(--spacing-screen-x)">
-                {brandList.map((b) => {
-                  const bgImage = b.logoUrl || (Array.isArray(b.imageUrls) && b.imageUrls[0]) || "";
-                  const itemImages = Array.isArray(b.imageUrls) ? b.imageUrls : [];
+            {primaryBrand ? (
+              <ul className="flex flex-col gap-4">
+                {(() => {
+                  const bgImage =
+                    primaryBrand.logoUrl ||
+                    (Array.isArray(primaryBrand.imageUrls) && primaryBrand.imageUrls[0]) ||
+                    "";
+                  const itemImages = Array.isArray(primaryBrand.imageUrls)
+                    ? primaryBrand.imageUrls
+                    : [];
+
                   return (
-                    <li key={b.id} className="relative overflow-hidden bg-(--gray-light)">
-                      {/* 배경 이미지 */}
+                    <li key={primaryBrand.id} className="relative overflow-hidden bg-(--gray-light)">
                       <div
                         className="absolute inset-0 bg-cover bg-center"
                         style={bgImage ? { backgroundImage: `url(${bgImage})` } : undefined}
                       />
-                      {/* Dim: 배경 이미지가 있을 때만 */}
                       {bgImage ? <div className="absolute inset-0 bg-(--dim-basic)" /> : null}
-                      {/* 콘텐츠 */}
                       <div className="relative flex flex-col gap-3 p-4">
                         <div>
-                          <p className="typo-h1 text-white">{b.name}</p>
-                          {b.description ? (
+                          <p className="typo-h1 text-white">{primaryBrand.name}</p>
+                          {primaryBrand.description ? (
                             <p className="typo-body2 text-gray-light line-clamp-2">
-                              {b.description}
+                              {primaryBrand.description}
                             </p>
                           ) : null}
                         </div>
-                        {/* 브랜드 아이템 사진 목록 (가로 스크롤) */}
                         {itemImages.length > 0 ? (
                           <div className="-mx-4 overflow-x-auto px-4 scrollbar-none">
                             <ul className="flex gap-2">
                               {itemImages.map((url, i) => (
                                 <li
-                                  key={`${b.id}-${i}`}
+                                  key={`${primaryBrand.id}-${i}`}
                                   className="h-20 w-20 shrink-0 overflow-hidden"
                                 >
                                   <img src={url} alt="" className="h-full w-full object-cover" />
@@ -105,7 +129,7 @@ function MypagePage() {
                       </div>
                     </li>
                   );
-                })}
+                })()}
               </ul>
             ) : (
               // <Link
@@ -138,13 +162,15 @@ function MypagePage() {
             {/* 찜한 목록 / 쪽지함 */}
             <nav className="border-b border-(--stroke-eee) py-24">
               <Link
-                to="/mypage/liked"
+                to="/liked"
+                onClick={handleMemberOnlyButtonClick}
                 className="flex items-center justify-between py-12 typo-subtitle3 text-(--gray-deep) active:opacity-80"
               >
                 <span>찜한 목록</span>
               </Link>
               <Link
-                to="/mypage/messages"
+                to="/messages"
+                onClick={handleMemberOnlyButtonClick}
                 className="flex items-center justify-between py-12 typo-subtitle3 text-(--gray-deep) active:opacity-80"
               >
                 <span>쪽지함</span>
@@ -179,11 +205,15 @@ function MypagePage() {
             <div className="py-24">
               <button
                 type="button"
-                onClick={() => logoutMutation.mutate()}
-                disabled={logoutMutation.isPending}
+                onClick={handleLogoutClick}
+                disabled={!isGuest && logoutMutation.isPending}
                 className="flex items-center justify-between py-4 typo-subtitle3 text-(--gray-deep) active:opacity-80"
               >
-                {logoutMutation.isPending ? "로그아웃 중..." : "로그아웃"}
+                {isGuest
+                  ? "게스트로 둘러보기 종료"
+                  : logoutMutation.isPending
+                    ? "로그아웃 중..."
+                    : "로그아웃"}
               </button>
             </div>
           </section>
@@ -203,6 +233,14 @@ function MypagePage() {
           </section>
         </div>
       </div>
+      <LoginRequiredModal
+        open={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
+        onLogin={() => {
+          setIsLoginModalOpen(false);
+          navigate({ to: "/login" });
+        }}
+      />
     </div>
   );
 }

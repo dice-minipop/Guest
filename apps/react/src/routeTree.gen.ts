@@ -9,318 +9,301 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SpaceRouteImport } from './routes/space'
-import { Route as SignupRouteImport } from './routes/signup'
-import { Route as ReservationRouteImport } from './routes/reservation'
-import { Route as MypageRouteImport } from './routes/mypage'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as AnnouncementRouteImport } from './routes/announcement'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as SpaceSearchRouteImport } from './routes/space.search'
-import { Route as SpaceIdRouteImport } from './routes/space.$id'
-import { Route as SignupBrandProfileRouteImport } from './routes/signup.brand-profile'
-import { Route as ReservationApplyRouteImport } from './routes/reservation.apply'
-import { Route as MypageWithdrawRouteImport } from './routes/mypage.withdraw'
-import { Route as MypageProfileRouteImport } from './routes/mypage.profile'
-import { Route as MypageMessagesRouteImport } from './routes/mypage.messages'
-import { Route as MypageLikedRouteImport } from './routes/mypage.liked'
-import { Route as MypageBrandProfileRouteImport } from './routes/mypage.brand-profile'
-import { Route as AnnouncementSearchRouteImport } from './routes/announcement.search'
-import { Route as AnnouncementIdRouteImport } from './routes/announcement.$id'
-import { Route as ReservationApplyInfoRouteImport } from './routes/reservation.apply.info'
-import { Route as MypageMessagesRoomIdRouteImport } from './routes/mypage.messages.$roomId'
+import { Route as SpaceIndexRouteImport } from './routes/space/index'
+import { Route as SignupIndexRouteImport } from './routes/signup/index'
+import { Route as ReservationIndexRouteImport } from './routes/reservation/index'
+import { Route as NotificationsIndexRouteImport } from './routes/notifications/index'
+import { Route as MypageIndexRouteImport } from './routes/mypage/index'
+import { Route as MessagesIndexRouteImport } from './routes/messages/index'
+import { Route as LoginIndexRouteImport } from './routes/login/index'
+import { Route as LikedIndexRouteImport } from './routes/liked/index'
+import { Route as AnnouncementIndexRouteImport } from './routes/announcement/index'
+import { Route as SpaceSearchRouteImport } from './routes/space/search'
+import { Route as SpaceIdRouteImport } from './routes/space/$id'
+import { Route as SignupBrandProfileRouteImport } from './routes/signup/brand-profile'
+import { Route as ReservationApplyRouteImport } from './routes/reservation/apply'
+import { Route as MypageWithdrawRouteImport } from './routes/mypage/withdraw'
+import { Route as MypageProfileRouteImport } from './routes/mypage/profile'
+import { Route as MypageBrandProfileRouteImport } from './routes/mypage/brand-profile'
+import { Route as MessagesRoomIdRouteImport } from './routes/messages/$roomId'
+import { Route as AnnouncementSearchRouteImport } from './routes/announcement/search'
+import { Route as AnnouncementIdRouteImport } from './routes/announcement/$id'
+import { Route as ReservationApplyInfoRouteImport } from './routes/reservation/apply.info'
 
-const SpaceRoute = SpaceRouteImport.update({
-  id: '/space',
-  path: '/space',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SignupRoute = SignupRouteImport.update({
-  id: '/signup',
-  path: '/signup',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ReservationRoute = ReservationRouteImport.update({
-  id: '/reservation',
-  path: '/reservation',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MypageRoute = MypageRouteImport.update({
-  id: '/mypage',
-  path: '/mypage',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AnnouncementRoute = AnnouncementRouteImport.update({
-  id: '/announcement',
-  path: '/announcement',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SpaceIndexRoute = SpaceIndexRouteImport.update({
+  id: '/space/',
+  path: '/space/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignupIndexRoute = SignupIndexRouteImport.update({
+  id: '/signup/',
+  path: '/signup/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReservationIndexRoute = ReservationIndexRouteImport.update({
+  id: '/reservation/',
+  path: '/reservation/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotificationsIndexRoute = NotificationsIndexRouteImport.update({
+  id: '/notifications/',
+  path: '/notifications/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MypageIndexRoute = MypageIndexRouteImport.update({
+  id: '/mypage/',
+  path: '/mypage/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MessagesIndexRoute = MessagesIndexRouteImport.update({
+  id: '/messages/',
+  path: '/messages/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginIndexRoute = LoginIndexRouteImport.update({
+  id: '/login/',
+  path: '/login/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LikedIndexRoute = LikedIndexRouteImport.update({
+  id: '/liked/',
+  path: '/liked/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnnouncementIndexRoute = AnnouncementIndexRouteImport.update({
+  id: '/announcement/',
+  path: '/announcement/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SpaceSearchRoute = SpaceSearchRouteImport.update({
-  id: '/search',
-  path: '/search',
-  getParentRoute: () => SpaceRoute,
+  id: '/space/search',
+  path: '/space/search',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const SpaceIdRoute = SpaceIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => SpaceRoute,
+  id: '/space/$id',
+  path: '/space/$id',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const SignupBrandProfileRoute = SignupBrandProfileRouteImport.update({
-  id: '/brand-profile',
-  path: '/brand-profile',
-  getParentRoute: () => SignupRoute,
+  id: '/signup/brand-profile',
+  path: '/signup/brand-profile',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ReservationApplyRoute = ReservationApplyRouteImport.update({
-  id: '/apply',
-  path: '/apply',
-  getParentRoute: () => ReservationRoute,
+  id: '/reservation/apply',
+  path: '/reservation/apply',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const MypageWithdrawRoute = MypageWithdrawRouteImport.update({
-  id: '/withdraw',
-  path: '/withdraw',
-  getParentRoute: () => MypageRoute,
+  id: '/mypage/withdraw',
+  path: '/mypage/withdraw',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const MypageProfileRoute = MypageProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => MypageRoute,
-} as any)
-const MypageMessagesRoute = MypageMessagesRouteImport.update({
-  id: '/messages',
-  path: '/messages',
-  getParentRoute: () => MypageRoute,
-} as any)
-const MypageLikedRoute = MypageLikedRouteImport.update({
-  id: '/liked',
-  path: '/liked',
-  getParentRoute: () => MypageRoute,
+  id: '/mypage/profile',
+  path: '/mypage/profile',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const MypageBrandProfileRoute = MypageBrandProfileRouteImport.update({
-  id: '/brand-profile',
-  path: '/brand-profile',
-  getParentRoute: () => MypageRoute,
+  id: '/mypage/brand-profile',
+  path: '/mypage/brand-profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MessagesRoomIdRoute = MessagesRoomIdRouteImport.update({
+  id: '/messages/$roomId',
+  path: '/messages/$roomId',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AnnouncementSearchRoute = AnnouncementSearchRouteImport.update({
-  id: '/search',
-  path: '/search',
-  getParentRoute: () => AnnouncementRoute,
+  id: '/announcement/search',
+  path: '/announcement/search',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AnnouncementIdRoute = AnnouncementIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => AnnouncementRoute,
+  id: '/announcement/$id',
+  path: '/announcement/$id',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ReservationApplyInfoRoute = ReservationApplyInfoRouteImport.update({
   id: '/info',
   path: '/info',
   getParentRoute: () => ReservationApplyRoute,
 } as any)
-const MypageMessagesRoomIdRoute = MypageMessagesRoomIdRouteImport.update({
-  id: '/$roomId',
-  path: '/$roomId',
-  getParentRoute: () => MypageMessagesRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/announcement': typeof AnnouncementRouteWithChildren
-  '/login': typeof LoginRoute
-  '/mypage': typeof MypageRouteWithChildren
-  '/reservation': typeof ReservationRouteWithChildren
-  '/signup': typeof SignupRouteWithChildren
-  '/space': typeof SpaceRouteWithChildren
   '/announcement/$id': typeof AnnouncementIdRoute
   '/announcement/search': typeof AnnouncementSearchRoute
+  '/messages/$roomId': typeof MessagesRoomIdRoute
   '/mypage/brand-profile': typeof MypageBrandProfileRoute
-  '/mypage/liked': typeof MypageLikedRoute
-  '/mypage/messages': typeof MypageMessagesRouteWithChildren
   '/mypage/profile': typeof MypageProfileRoute
   '/mypage/withdraw': typeof MypageWithdrawRoute
   '/reservation/apply': typeof ReservationApplyRouteWithChildren
   '/signup/brand-profile': typeof SignupBrandProfileRoute
   '/space/$id': typeof SpaceIdRoute
   '/space/search': typeof SpaceSearchRoute
-  '/mypage/messages/$roomId': typeof MypageMessagesRoomIdRoute
+  '/announcement/': typeof AnnouncementIndexRoute
+  '/liked/': typeof LikedIndexRoute
+  '/login/': typeof LoginIndexRoute
+  '/messages/': typeof MessagesIndexRoute
+  '/mypage/': typeof MypageIndexRoute
+  '/notifications/': typeof NotificationsIndexRoute
+  '/reservation/': typeof ReservationIndexRoute
+  '/signup/': typeof SignupIndexRoute
+  '/space/': typeof SpaceIndexRoute
   '/reservation/apply/info': typeof ReservationApplyInfoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/announcement': typeof AnnouncementRouteWithChildren
-  '/login': typeof LoginRoute
-  '/mypage': typeof MypageRouteWithChildren
-  '/reservation': typeof ReservationRouteWithChildren
-  '/signup': typeof SignupRouteWithChildren
-  '/space': typeof SpaceRouteWithChildren
   '/announcement/$id': typeof AnnouncementIdRoute
   '/announcement/search': typeof AnnouncementSearchRoute
+  '/messages/$roomId': typeof MessagesRoomIdRoute
   '/mypage/brand-profile': typeof MypageBrandProfileRoute
-  '/mypage/liked': typeof MypageLikedRoute
-  '/mypage/messages': typeof MypageMessagesRouteWithChildren
   '/mypage/profile': typeof MypageProfileRoute
   '/mypage/withdraw': typeof MypageWithdrawRoute
   '/reservation/apply': typeof ReservationApplyRouteWithChildren
   '/signup/brand-profile': typeof SignupBrandProfileRoute
   '/space/$id': typeof SpaceIdRoute
   '/space/search': typeof SpaceSearchRoute
-  '/mypage/messages/$roomId': typeof MypageMessagesRoomIdRoute
+  '/announcement': typeof AnnouncementIndexRoute
+  '/liked': typeof LikedIndexRoute
+  '/login': typeof LoginIndexRoute
+  '/messages': typeof MessagesIndexRoute
+  '/mypage': typeof MypageIndexRoute
+  '/notifications': typeof NotificationsIndexRoute
+  '/reservation': typeof ReservationIndexRoute
+  '/signup': typeof SignupIndexRoute
+  '/space': typeof SpaceIndexRoute
   '/reservation/apply/info': typeof ReservationApplyInfoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/announcement': typeof AnnouncementRouteWithChildren
-  '/login': typeof LoginRoute
-  '/mypage': typeof MypageRouteWithChildren
-  '/reservation': typeof ReservationRouteWithChildren
-  '/signup': typeof SignupRouteWithChildren
-  '/space': typeof SpaceRouteWithChildren
   '/announcement/$id': typeof AnnouncementIdRoute
   '/announcement/search': typeof AnnouncementSearchRoute
+  '/messages/$roomId': typeof MessagesRoomIdRoute
   '/mypage/brand-profile': typeof MypageBrandProfileRoute
-  '/mypage/liked': typeof MypageLikedRoute
-  '/mypage/messages': typeof MypageMessagesRouteWithChildren
   '/mypage/profile': typeof MypageProfileRoute
   '/mypage/withdraw': typeof MypageWithdrawRoute
   '/reservation/apply': typeof ReservationApplyRouteWithChildren
   '/signup/brand-profile': typeof SignupBrandProfileRoute
   '/space/$id': typeof SpaceIdRoute
   '/space/search': typeof SpaceSearchRoute
-  '/mypage/messages/$roomId': typeof MypageMessagesRoomIdRoute
+  '/announcement/': typeof AnnouncementIndexRoute
+  '/liked/': typeof LikedIndexRoute
+  '/login/': typeof LoginIndexRoute
+  '/messages/': typeof MessagesIndexRoute
+  '/mypage/': typeof MypageIndexRoute
+  '/notifications/': typeof NotificationsIndexRoute
+  '/reservation/': typeof ReservationIndexRoute
+  '/signup/': typeof SignupIndexRoute
+  '/space/': typeof SpaceIndexRoute
   '/reservation/apply/info': typeof ReservationApplyInfoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/announcement'
-    | '/login'
-    | '/mypage'
-    | '/reservation'
-    | '/signup'
-    | '/space'
     | '/announcement/$id'
     | '/announcement/search'
+    | '/messages/$roomId'
     | '/mypage/brand-profile'
-    | '/mypage/liked'
-    | '/mypage/messages'
     | '/mypage/profile'
     | '/mypage/withdraw'
     | '/reservation/apply'
     | '/signup/brand-profile'
     | '/space/$id'
     | '/space/search'
-    | '/mypage/messages/$roomId'
+    | '/announcement/'
+    | '/liked/'
+    | '/login/'
+    | '/messages/'
+    | '/mypage/'
+    | '/notifications/'
+    | '/reservation/'
+    | '/signup/'
+    | '/space/'
     | '/reservation/apply/info'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/announcement'
-    | '/login'
-    | '/mypage'
-    | '/reservation'
-    | '/signup'
-    | '/space'
     | '/announcement/$id'
     | '/announcement/search'
+    | '/messages/$roomId'
     | '/mypage/brand-profile'
-    | '/mypage/liked'
-    | '/mypage/messages'
     | '/mypage/profile'
     | '/mypage/withdraw'
     | '/reservation/apply'
     | '/signup/brand-profile'
     | '/space/$id'
     | '/space/search'
-    | '/mypage/messages/$roomId'
+    | '/announcement'
+    | '/liked'
+    | '/login'
+    | '/messages'
+    | '/mypage'
+    | '/notifications'
+    | '/reservation'
+    | '/signup'
+    | '/space'
     | '/reservation/apply/info'
   id:
     | '__root__'
     | '/'
-    | '/announcement'
-    | '/login'
-    | '/mypage'
-    | '/reservation'
-    | '/signup'
-    | '/space'
     | '/announcement/$id'
     | '/announcement/search'
+    | '/messages/$roomId'
     | '/mypage/brand-profile'
-    | '/mypage/liked'
-    | '/mypage/messages'
     | '/mypage/profile'
     | '/mypage/withdraw'
     | '/reservation/apply'
     | '/signup/brand-profile'
     | '/space/$id'
     | '/space/search'
-    | '/mypage/messages/$roomId'
+    | '/announcement/'
+    | '/liked/'
+    | '/login/'
+    | '/messages/'
+    | '/mypage/'
+    | '/notifications/'
+    | '/reservation/'
+    | '/signup/'
+    | '/space/'
     | '/reservation/apply/info'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AnnouncementRoute: typeof AnnouncementRouteWithChildren
-  LoginRoute: typeof LoginRoute
-  MypageRoute: typeof MypageRouteWithChildren
-  ReservationRoute: typeof ReservationRouteWithChildren
-  SignupRoute: typeof SignupRouteWithChildren
-  SpaceRoute: typeof SpaceRouteWithChildren
+  AnnouncementIdRoute: typeof AnnouncementIdRoute
+  AnnouncementSearchRoute: typeof AnnouncementSearchRoute
+  MessagesRoomIdRoute: typeof MessagesRoomIdRoute
+  MypageBrandProfileRoute: typeof MypageBrandProfileRoute
+  MypageProfileRoute: typeof MypageProfileRoute
+  MypageWithdrawRoute: typeof MypageWithdrawRoute
+  ReservationApplyRoute: typeof ReservationApplyRouteWithChildren
+  SignupBrandProfileRoute: typeof SignupBrandProfileRoute
+  SpaceIdRoute: typeof SpaceIdRoute
+  SpaceSearchRoute: typeof SpaceSearchRoute
+  AnnouncementIndexRoute: typeof AnnouncementIndexRoute
+  LikedIndexRoute: typeof LikedIndexRoute
+  LoginIndexRoute: typeof LoginIndexRoute
+  MessagesIndexRoute: typeof MessagesIndexRoute
+  MypageIndexRoute: typeof MypageIndexRoute
+  NotificationsIndexRoute: typeof NotificationsIndexRoute
+  ReservationIndexRoute: typeof ReservationIndexRoute
+  SignupIndexRoute: typeof SignupIndexRoute
+  SpaceIndexRoute: typeof SpaceIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/space': {
-      id: '/space'
-      path: '/space'
-      fullPath: '/space'
-      preLoaderRoute: typeof SpaceRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/signup': {
-      id: '/signup'
-      path: '/signup'
-      fullPath: '/signup'
-      preLoaderRoute: typeof SignupRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reservation': {
-      id: '/reservation'
-      path: '/reservation'
-      fullPath: '/reservation'
-      preLoaderRoute: typeof ReservationRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/mypage': {
-      id: '/mypage'
-      path: '/mypage'
-      fullPath: '/mypage'
-      preLoaderRoute: typeof MypageRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/announcement': {
-      id: '/announcement'
-      path: '/announcement'
-      fullPath: '/announcement'
-      preLoaderRoute: typeof AnnouncementRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -328,82 +311,138 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/space/': {
+      id: '/space/'
+      path: '/space'
+      fullPath: '/space/'
+      preLoaderRoute: typeof SpaceIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signup/': {
+      id: '/signup/'
+      path: '/signup'
+      fullPath: '/signup/'
+      preLoaderRoute: typeof SignupIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reservation/': {
+      id: '/reservation/'
+      path: '/reservation'
+      fullPath: '/reservation/'
+      preLoaderRoute: typeof ReservationIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notifications/': {
+      id: '/notifications/'
+      path: '/notifications'
+      fullPath: '/notifications/'
+      preLoaderRoute: typeof NotificationsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mypage/': {
+      id: '/mypage/'
+      path: '/mypage'
+      fullPath: '/mypage/'
+      preLoaderRoute: typeof MypageIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/messages/': {
+      id: '/messages/'
+      path: '/messages'
+      fullPath: '/messages/'
+      preLoaderRoute: typeof MessagesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login/': {
+      id: '/login/'
+      path: '/login'
+      fullPath: '/login/'
+      preLoaderRoute: typeof LoginIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/liked/': {
+      id: '/liked/'
+      path: '/liked'
+      fullPath: '/liked/'
+      preLoaderRoute: typeof LikedIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/announcement/': {
+      id: '/announcement/'
+      path: '/announcement'
+      fullPath: '/announcement/'
+      preLoaderRoute: typeof AnnouncementIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/space/search': {
       id: '/space/search'
-      path: '/search'
+      path: '/space/search'
       fullPath: '/space/search'
       preLoaderRoute: typeof SpaceSearchRouteImport
-      parentRoute: typeof SpaceRoute
+      parentRoute: typeof rootRouteImport
     }
     '/space/$id': {
       id: '/space/$id'
-      path: '/$id'
+      path: '/space/$id'
       fullPath: '/space/$id'
       preLoaderRoute: typeof SpaceIdRouteImport
-      parentRoute: typeof SpaceRoute
+      parentRoute: typeof rootRouteImport
     }
     '/signup/brand-profile': {
       id: '/signup/brand-profile'
-      path: '/brand-profile'
+      path: '/signup/brand-profile'
       fullPath: '/signup/brand-profile'
       preLoaderRoute: typeof SignupBrandProfileRouteImport
-      parentRoute: typeof SignupRoute
+      parentRoute: typeof rootRouteImport
     }
     '/reservation/apply': {
       id: '/reservation/apply'
-      path: '/apply'
+      path: '/reservation/apply'
       fullPath: '/reservation/apply'
       preLoaderRoute: typeof ReservationApplyRouteImport
-      parentRoute: typeof ReservationRoute
+      parentRoute: typeof rootRouteImport
     }
     '/mypage/withdraw': {
       id: '/mypage/withdraw'
-      path: '/withdraw'
+      path: '/mypage/withdraw'
       fullPath: '/mypage/withdraw'
       preLoaderRoute: typeof MypageWithdrawRouteImport
-      parentRoute: typeof MypageRoute
+      parentRoute: typeof rootRouteImport
     }
     '/mypage/profile': {
       id: '/mypage/profile'
-      path: '/profile'
+      path: '/mypage/profile'
       fullPath: '/mypage/profile'
       preLoaderRoute: typeof MypageProfileRouteImport
-      parentRoute: typeof MypageRoute
-    }
-    '/mypage/messages': {
-      id: '/mypage/messages'
-      path: '/messages'
-      fullPath: '/mypage/messages'
-      preLoaderRoute: typeof MypageMessagesRouteImport
-      parentRoute: typeof MypageRoute
-    }
-    '/mypage/liked': {
-      id: '/mypage/liked'
-      path: '/liked'
-      fullPath: '/mypage/liked'
-      preLoaderRoute: typeof MypageLikedRouteImport
-      parentRoute: typeof MypageRoute
+      parentRoute: typeof rootRouteImport
     }
     '/mypage/brand-profile': {
       id: '/mypage/brand-profile'
-      path: '/brand-profile'
+      path: '/mypage/brand-profile'
       fullPath: '/mypage/brand-profile'
       preLoaderRoute: typeof MypageBrandProfileRouteImport
-      parentRoute: typeof MypageRoute
+      parentRoute: typeof rootRouteImport
+    }
+    '/messages/$roomId': {
+      id: '/messages/$roomId'
+      path: '/messages/$roomId'
+      fullPath: '/messages/$roomId'
+      preLoaderRoute: typeof MessagesRoomIdRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/announcement/search': {
       id: '/announcement/search'
-      path: '/search'
+      path: '/announcement/search'
       fullPath: '/announcement/search'
       preLoaderRoute: typeof AnnouncementSearchRouteImport
-      parentRoute: typeof AnnouncementRoute
+      parentRoute: typeof rootRouteImport
     }
     '/announcement/$id': {
       id: '/announcement/$id'
-      path: '/$id'
+      path: '/announcement/$id'
       fullPath: '/announcement/$id'
       preLoaderRoute: typeof AnnouncementIdRouteImport
-      parentRoute: typeof AnnouncementRoute
+      parentRoute: typeof rootRouteImport
     }
     '/reservation/apply/info': {
       id: '/reservation/apply/info'
@@ -412,60 +451,8 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReservationApplyInfoRouteImport
       parentRoute: typeof ReservationApplyRoute
     }
-    '/mypage/messages/$roomId': {
-      id: '/mypage/messages/$roomId'
-      path: '/$roomId'
-      fullPath: '/mypage/messages/$roomId'
-      preLoaderRoute: typeof MypageMessagesRoomIdRouteImport
-      parentRoute: typeof MypageMessagesRoute
-    }
   }
 }
-
-interface AnnouncementRouteChildren {
-  AnnouncementIdRoute: typeof AnnouncementIdRoute
-  AnnouncementSearchRoute: typeof AnnouncementSearchRoute
-}
-
-const AnnouncementRouteChildren: AnnouncementRouteChildren = {
-  AnnouncementIdRoute: AnnouncementIdRoute,
-  AnnouncementSearchRoute: AnnouncementSearchRoute,
-}
-
-const AnnouncementRouteWithChildren = AnnouncementRoute._addFileChildren(
-  AnnouncementRouteChildren,
-)
-
-interface MypageMessagesRouteChildren {
-  MypageMessagesRoomIdRoute: typeof MypageMessagesRoomIdRoute
-}
-
-const MypageMessagesRouteChildren: MypageMessagesRouteChildren = {
-  MypageMessagesRoomIdRoute: MypageMessagesRoomIdRoute,
-}
-
-const MypageMessagesRouteWithChildren = MypageMessagesRoute._addFileChildren(
-  MypageMessagesRouteChildren,
-)
-
-interface MypageRouteChildren {
-  MypageBrandProfileRoute: typeof MypageBrandProfileRoute
-  MypageLikedRoute: typeof MypageLikedRoute
-  MypageMessagesRoute: typeof MypageMessagesRouteWithChildren
-  MypageProfileRoute: typeof MypageProfileRoute
-  MypageWithdrawRoute: typeof MypageWithdrawRoute
-}
-
-const MypageRouteChildren: MypageRouteChildren = {
-  MypageBrandProfileRoute: MypageBrandProfileRoute,
-  MypageLikedRoute: MypageLikedRoute,
-  MypageMessagesRoute: MypageMessagesRouteWithChildren,
-  MypageProfileRoute: MypageProfileRoute,
-  MypageWithdrawRoute: MypageWithdrawRoute,
-}
-
-const MypageRouteWithChildren =
-  MypageRoute._addFileChildren(MypageRouteChildren)
 
 interface ReservationApplyRouteChildren {
   ReservationApplyInfoRoute: typeof ReservationApplyInfoRoute
@@ -478,49 +465,27 @@ const ReservationApplyRouteChildren: ReservationApplyRouteChildren = {
 const ReservationApplyRouteWithChildren =
   ReservationApplyRoute._addFileChildren(ReservationApplyRouteChildren)
 
-interface ReservationRouteChildren {
-  ReservationApplyRoute: typeof ReservationApplyRouteWithChildren
-}
-
-const ReservationRouteChildren: ReservationRouteChildren = {
-  ReservationApplyRoute: ReservationApplyRouteWithChildren,
-}
-
-const ReservationRouteWithChildren = ReservationRoute._addFileChildren(
-  ReservationRouteChildren,
-)
-
-interface SignupRouteChildren {
-  SignupBrandProfileRoute: typeof SignupBrandProfileRoute
-}
-
-const SignupRouteChildren: SignupRouteChildren = {
-  SignupBrandProfileRoute: SignupBrandProfileRoute,
-}
-
-const SignupRouteWithChildren =
-  SignupRoute._addFileChildren(SignupRouteChildren)
-
-interface SpaceRouteChildren {
-  SpaceIdRoute: typeof SpaceIdRoute
-  SpaceSearchRoute: typeof SpaceSearchRoute
-}
-
-const SpaceRouteChildren: SpaceRouteChildren = {
-  SpaceIdRoute: SpaceIdRoute,
-  SpaceSearchRoute: SpaceSearchRoute,
-}
-
-const SpaceRouteWithChildren = SpaceRoute._addFileChildren(SpaceRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AnnouncementRoute: AnnouncementRouteWithChildren,
-  LoginRoute: LoginRoute,
-  MypageRoute: MypageRouteWithChildren,
-  ReservationRoute: ReservationRouteWithChildren,
-  SignupRoute: SignupRouteWithChildren,
-  SpaceRoute: SpaceRouteWithChildren,
+  AnnouncementIdRoute: AnnouncementIdRoute,
+  AnnouncementSearchRoute: AnnouncementSearchRoute,
+  MessagesRoomIdRoute: MessagesRoomIdRoute,
+  MypageBrandProfileRoute: MypageBrandProfileRoute,
+  MypageProfileRoute: MypageProfileRoute,
+  MypageWithdrawRoute: MypageWithdrawRoute,
+  ReservationApplyRoute: ReservationApplyRouteWithChildren,
+  SignupBrandProfileRoute: SignupBrandProfileRoute,
+  SpaceIdRoute: SpaceIdRoute,
+  SpaceSearchRoute: SpaceSearchRoute,
+  AnnouncementIndexRoute: AnnouncementIndexRoute,
+  LikedIndexRoute: LikedIndexRoute,
+  LoginIndexRoute: LoginIndexRoute,
+  MessagesIndexRoute: MessagesIndexRoute,
+  MypageIndexRoute: MypageIndexRoute,
+  NotificationsIndexRoute: NotificationsIndexRoute,
+  ReservationIndexRoute: ReservationIndexRoute,
+  SignupIndexRoute: SignupIndexRoute,
+  SpaceIndexRoute: SpaceIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -6,13 +6,13 @@ import RightWhiteIcon from "@/assets/icons/Arrow/right-white.svg?react";
 import LikeLightgray from "@/assets/icons/like/like-lightgray.svg?react";
 import LikePurple from "@/assets/icons/like/like-purple.svg?react";
 import { backWithHistory } from "@/shared/navigation/back";
-import { getSpaceDetailData, queryKeys } from "../api";
-import { getDummySpaceDetail } from "../api/space/dummy";
-import { BottomSheet } from "../components/BottomSheet";
-import { FacilityInfoRow } from "../components/FacilityInfoRow";
-import { ImageCarousel } from "../components/ImageCarousel";
-import { SpaceReservationSheetContent } from "../components/space";
-import { m2ToPyeong } from "../utils/sizeConversion";
+import { getSpaceDetailData, queryKeys } from "@/api";
+import { getDummySpaceDetail } from "@/api/space/dummy";
+import { BottomSheet } from "@/components/BottomSheet";
+import { FacilityInfoRow } from "@/components/FacilityInfoRow";
+import { ImageCarousel } from "@/components/ImageCarousel";
+import { SpaceReservationSheetContent } from "@/components/space";
+import { m2ToPyeong } from "@/utils/sizeConversion";
 
 export const Route = createFileRoute("/space/$id")({
   component: SpaceDetailPage,
@@ -177,8 +177,8 @@ function SpaceDetailPage() {
   const messageRoomId = data.messageRoomId;
   const reservationUnitPrice = data.discountRate > 0 ? data.discountPrice : data.pricePerDay;
   const messagesTo = messageRoomId
-    ? { to: "/mypage/messages/$roomId" as const, params: { roomId: String(messageRoomId) } }
-    : { to: "/mypage/messages" as const };
+    ? { to: "/messages/$roomId" as const, params: { roomId: String(messageRoomId) } }
+    : { to: "/messages" as const };
 
   return (
     <div
@@ -280,11 +280,19 @@ function SpaceDetailPage() {
           </dl>
 
           {tags.length > 0 && (
-            <div>
-              <h3>동네 해시태그</h3>
-              {tags.map((tag) => (
-                <span key={tag}>{tag}</span>
-              ))}
+            <div className="px-(--spacing-screen-x) space-y-[5px]">
+              <h3 className="typo-caption1 text-dice-black">동네 해시태그</h3>
+              <div className="flex flex-wrap gap-4">
+                {tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="typo-caption1 text-gray-deep px-2.5 py-4 rounded-full border border-stroke-eee"
+                  >
+                    <span className="text-gray-light mr-0.5">#</span>
+                    {tag}
+                  </span>
+                ))}
+              </div>
             </div>
           )}
         </section>

@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import ArrowRightIcon from "@/assets/icons/Arrow/right.svg?react";
@@ -11,8 +11,10 @@ import {
   sendMessage as sendMessageApi,
   queryKeys,
 } from "@/api";
+import { canUseMemberOnlyApi } from "@/api/axios";
 import { getDummyMessageDetail, DUMMY_MESSAGE_ROOMS } from "@/api/message/dummy";
 import type { MessageData } from "@/api";
+import { backWithHistory } from "@/shared/navigation/back";
 
 const REPORT_REASONS = [
   "스팸/광고",
@@ -22,11 +24,10 @@ const REPORT_REASONS = [
   "기타",
 ] as const;
 
-export const Route = createFileRoute("/mypage/messages/$roomId")({
-  component: MypageMessageRoomPage,
+export const Route = createFileRoute("/messages/$roomId")({
+  component: MessageRoomPage,
 });
 
-/** 메시지 상단 시간 표시:"오전 00:00" /"오후 00:00" */
 function formatTimeAmPm(iso: string): string {
   try {
     const date = new Date(iso);
@@ -40,7 +41,6 @@ function formatTimeAmPm(iso: string): string {
   }
 }
 
-/** 같은 날짜 구분용 날짜 헤더:"2026년 2월 15일" */
 function formatDateHeader(iso: string): string {
   try {
     const date = new Date(iso);
@@ -78,11 +78,13 @@ function MessageBubble({ message }: { message: MessageData }) {
   );
 }
 
-function MypageMessageRoomPage() {
+function MessageRoomPage() {
   const navigate = useNavigate();
+  const router = useRouter();
   const queryClient = useQueryClient();
   const { roomId } = Route.useParams();
   const roomIdNum = Number(roomId);
+  const isMemberOnlyAllowed = canUseMemberOnlyApi();
   const [content, setContent] = useState("");
   const [sending, setSending] = useState(false);
   const [reportSheetOpen, setReportSheetOpen] = useState(false);
@@ -98,6 +100,7 @@ function MypageMessageRoomPage() {
         return DUMMY_MESSAGE_ROOMS;
       }
     },
+    enabled: isMemberOnlyAllowed,
   });
 
   const currentRoom = rooms?.find((r) => r.id === roomIdNum);
@@ -112,16 +115,16 @@ function MypageMessageRoomPage() {
         return getDummyMessageDetail(roomIdNum);
       }
     },
-    enabled: Number.isInteger(roomIdNum) && roomIdNum > 0,
+    enabled: isMemberOnlyAllowed && Number.isInteger(roomIdNum) && roomIdNum > 0,
   });
 
   const messages = messageData?.content ?? [];
 
   const handleBack = () => {
     if (window.history.length > 1) {
-      window.history.back();
+      backWithHistory(router);
     } else {
-      navigate({ to: "/mypage/messages" });
+      navigate({ to: "/messages" });
     }
   };
 
@@ -152,7 +155,6 @@ function MypageMessageRoomPage() {
       await queryClient.invalidateQueries({ queryKey: queryKeys.message.detail(roomIdNum) });
       await queryClient.invalidateQueries({ queryKey: queryKeys.message.list });
     } catch {
-      // 백엔드 미연동 시 더미로 보이는 경우: 로컬에 메시지 추가
       queryClient.setQueryData(
         queryKeys.message.detail(roomIdNum, { page: 0, size: 50 }),
         (prev: typeof messageData) => {
@@ -258,7 +260,6 @@ function MypageMessageRoomPage() {
         }
       />
 
-      {/* 메시지 목록 - 상단 패딩으로 fixed 헤더 높이만큼 확보 */}
       <div
         className="px-(--spacing-screen-x) pb-4"
         style={{
@@ -271,7 +272,11 @@ function MypageMessageRoomPage() {
           언행은 제재 대상이 될 수 있습니다.
         </p>
 
-        {isLoading ? (
+        {!isMemberOnlyAllowed ? (
+          <p className="typo-body2 text-gray-deep py-4">
+            회원 전용 기능입니다. 로그인 후 이용해 주세요.
+          </p>
+        ) : isLoading ? (
           <p className="typo-body2 text-gray-deep py-4">메시지를 불러오는 중...</p>
         ) : messages.length === 0 ? (
           <p className="typo-body2 text-gray-deep py-4">아직 메시지가 없습니다.</p>
@@ -304,7 +309,6 @@ function MypageMessageRoomPage() {
         )}
       </div>
 
-      {/* 하단 고정 메시지 입력 */}
       <div
         className="fixed bottom-0 left-1/2 z-10 w-full max-w-(--common-max-width) -translate-x-1/2 border-t border-neutral-200 bg-dice-white"
         style={{

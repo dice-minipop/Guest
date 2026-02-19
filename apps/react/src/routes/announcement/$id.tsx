@@ -2,9 +2,9 @@ import { createFileRoute, Link, useNavigate, useRouter } from "@tanstack/react-r
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { backWithHistory } from "@/shared/navigation/back";
-import { getAnnouncementDetailData, queryKeys } from "../api";
-import { getDummyAnnouncementDetail } from "../api/announcement/dummy";
-import { ImageCarousel } from "../components/ImageCarousel";
+import { getAnnouncementDetailData, queryKeys } from "@/api";
+import { getDummyAnnouncementDetail } from "@/api/announcement/dummy";
+import { ImageCarousel } from "@/components/ImageCarousel";
 import { bridge } from "@/bridge";
 import ArrowRightWhiteIcon from "@/assets/icons/Arrow/right-white.svg?react";
 import LikeLightgray from "@/assets/icons/like/like-lightgray.svg?react";

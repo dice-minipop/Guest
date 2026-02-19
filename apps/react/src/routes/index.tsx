@@ -1,13 +1,28 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { isAxiosError } from "axios";
 import Lottie from "lottie-react";
 import { Carousel } from "../components/Carousel";
 import { LottieItems } from "../data/lottieItems";
+import { login } from "@/api";
+import { clearTokens, setGuestMode } from "@/api/axios";
+import { bridge } from "@/bridge";
 import DiceIcon from "@/assets/icons/dice.svg?react";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
 });
+
+const TOKEN_KEYS = {
+  access: "accessToken",
+  refresh: "refreshToken",
+} as const;
+
+const GUEST_CREDENTIALS = {
+  email: "guest",
+  password: "guest123",
+} as const;
 
 function useScreenWidth() {
   const [screenWidth, setScreenWidth] = useState(
@@ -22,10 +37,47 @@ function useScreenWidth() {
 }
 
 function HomePage() {
+  const navigate = useNavigate();
   const screenWidth = useScreenWidth();
   const lottieWidth = Math.min(screenWidth, 500);
   const calculatedHeight = (screenWidth * 378) / 375;
   const lottieHeight = Math.min(calculatedHeight, 500);
+  const [guestLoginError, setGuestLoginError] = useState<string | null>(null);
+
+  const guestLoginMutation = useMutation({
+    mutationFn: () => login(GUEST_CREDENTIALS),
+    onSuccess: (res) => {
+      clearTokens();
+      if (res.token?.accessToken) {
+        localStorage.setItem(TOKEN_KEYS.access, res.token.accessToken);
+        if (
+          typeof bridge?.isNativeMethodAvailable === "function" &&
+          bridge.isNativeMethodAvailable("setAccessToken")
+        ) {
+          bridge.setAccessToken(res.token.accessToken).catch(() => {});
+        }
+      }
+      if (res.token?.refreshToken) {
+        localStorage.setItem(TOKEN_KEYS.refresh, res.token.refreshToken);
+      }
+      setGuestMode();
+      setGuestLoginError(null);
+      navigate({ to: "/space", replace: true });
+    },
+    onError: (error) => {
+      if (isAxiosError(error)) {
+        const msg = (error.response?.data as { message?: string })?.message ?? error.message;
+        setGuestLoginError(msg || "게스트 로그인에 실패했습니다.");
+        return;
+      }
+      setGuestLoginError(error instanceof Error ? error.message : "게스트 로그인에 실패했습니다.");
+    },
+  });
+
+  const handleGuestBrowseClick = () => {
+    setGuestLoginError(null);
+    guestLoginMutation.mutate();
+  };
 
   const slides = LottieItems.map(({ path, title, subtitle }) => (
     <div className="flex flex-col items-center">
@@ -70,14 +122,16 @@ function HomePage() {
 
           <div className="text-gray-medium">|</div>
 
-          <Link
-            to="/space"
-            replace
+          <button
+            type="button"
+            onClick={handleGuestBrowseClick}
+            disabled={guestLoginMutation.isPending}
             className="typo-button1 text-gray-medium underline px-16 py-[13.5px]"
           >
-            게스트로 둘러보기
-          </Link>
+            {guestLoginMutation.isPending ? "게스트 로그인 중..." : "게스트로 둘러보기"}
+          </button>
         </div>
+        {guestLoginError && <p className="text-center text-sm text-red-600">{guestLoginError}</p>}
       </div>
     </div>
   );

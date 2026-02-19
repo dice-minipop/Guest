@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { forwardRef, useRef, useState } from "react";
 import { getMyBrandInfo, updateBrand, queryKeys } from "@/api";
@@ -15,6 +15,7 @@ import PlusIcon from "@/assets/icons/Plus/plus.svg?react";
 import XIcon from "@/assets/icons/Onboarding/round-x.svg?react";
 import FemaleIcon from "@/assets/icons/Target/female.svg?react";
 import MaleIcon from "@/assets/icons/Target/male.svg?react";
+import { backWithHistory } from "@/shared/navigation/back";
 
 export const Route = createFileRoute("/mypage/brand-profile")({
   component: MypageBrandProfilePage,
@@ -353,6 +354,7 @@ const BrandProfileForm = forwardRef<HTMLFormElement, { brand: BrandInfo }>(
 
 function MypageBrandProfilePage() {
   const navigate = useNavigate();
+  const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
 
   const { data: brands, isLoading: brandsLoading } = useQuery({
@@ -366,7 +368,7 @@ function MypageBrandProfilePage() {
 
   const handleBack = () => {
     if (window.history.length > 1) {
-      window.history.back();
+      backWithHistory(router);
     } else {
       navigate({ to: "/mypage" });
     }
