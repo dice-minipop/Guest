@@ -1,290 +1,91 @@
-import { Outlet, getRouterContext, useRouterState } from "@tanstack/react-router";
-import { motion, useReducedMotion } from "motion/react";
-import { useContext, useEffect, useMemo, useRef, useState, type ContextType } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Outlet, useRouter, useRouterState } from "@tanstack/react-router";
 
-import { useNavigationTransition } from "@/shared/navigation/transition";
-import { RoutePhaseProvider } from "@/shared/navigation/transition/route-phase-context";
-import {
-  snapshotRouterContext,
-  type RouterLike,
-} from "@/shared/navigation/use-frozen-router-context";
+import { TRANSITION_DIRECTION_KEY } from "@/shared/navigation/constants";
+import { StackedBackContext } from "@/shared/ui/use-stacked-back";
 
-type Direction = "forward" | "back" | "none";
-
-type FrozenEntry = {
-  id: string;
-  pathname: string;
-  context: unknown;
-  direction: Direction;
-};
-
-type RouterStateFallback = {
-  state?: {
-    location?: {
-      href?: string;
-      pathname?: string;
-    };
-    status?: string;
-  };
-};
-
-const DEFAULT_EASE: [number, number, number, number] = [0, 0, 0.58, 1];
-const EXIT_TRANSLATE = 100;
-const toPercent = (value: number) => `${value}%`;
 const TAB_ROOT_PATHS = new Set(["/space", "/announcement", "/reservation", "/mypage"]);
-const isTabRootPath = (path: string) => TAB_ROOT_PATHS.has(path);
 
-export function NavigationOutlet() {
-  const RouterContext = getRouterContext();
-  const liveRouter = useContext(RouterContext);
-  useRouterState();
-
-  const { snapshot, clear } = useNavigationTransition();
-  const lastHandledSnapshotRef = useRef<number | null>(null);
-
-  useEffect(() => {
-    if (!snapshot) return;
-    if (snapshot.id === lastHandledSnapshotRef.current) {
-      return;
-    }
-
-    lastHandledSnapshotRef.current = snapshot.id;
-
-    snapshot.proceed();
-    clear();
-  }, [snapshot, clear]);
-
-  return (
-    <RoutePhaseProvider value="live">
-      <div className="no-bounce-scroll relative h-full w-full overflow-hidden">
-        <RouterContext.Provider value={liveRouter}>
-          <Outlet />
-        </RouterContext.Provider>
-      </div>
-    </RoutePhaseProvider>
-  );
+function isTabRootPath(path: string) {
+  return TAB_ROOT_PATHS.has(path);
 }
 
-export function StackedOutlet({
-  duration = 0.28,
-  ease = DEFAULT_EASE,
-  keep = 1,
-}: {
-  duration?: number;
-  ease?: [number, number, number, number];
-  keep?: number;
-}) {
-  const RouterContext = getRouterContext();
-  const liveRouter = useContext(RouterContext);
-  const liveRouterFallback = liveRouter as RouterStateFallback;
-  const prefersReducedMotion = useReducedMotion() ?? false;
-  const { snapshot, clear } = useNavigationTransition();
+export function StackedOutlet() {
+  const router = useRouter();
+  const location = useRouterState({ select: (state) => state.location });
+  const pathname = location.pathname;
+  const locationState = location.state as { transitionDirection?: "forward" | "back" } | undefined;
+  const [isExiting, setIsExiting] = useState(false);
 
-  const routerState = useRouterState();
-  const location = routerState?.location ?? liveRouterFallback.state?.location;
-  const routerStatus = routerState?.status ?? liveRouterFallback.state?.status ?? "idle";
-  const href = location?.href ?? location?.pathname ?? "";
-
-  const [frozenStack, setFrozenStack] = useState<FrozenEntry[]>([]);
-  const [currentDirection, setCurrentDirection] = useState<Direction>("none");
-  const [showLivePlaceholder, setShowLivePlaceholder] = useState(false);
-  const lastHandledSnapshotRef = useRef<number | null>(null);
-
-  const animationDuration = prefersReducedMotion ? 0 : duration;
+  const rawSession =
+    typeof window !== "undefined" ? sessionStorage.getItem(TRANSITION_DIRECTION_KEY) : null;
+  const sessionValue = rawSession === "forward" || rawSession === "back" ? rawSession : null;
+  const lastClearedPathRef = useRef<string | null>(null);
 
   useEffect(() => {
-    if (!snapshot) return;
-    if (snapshot.id === lastHandledSnapshotRef.current) {
-      return;
+    if (sessionValue && lastClearedPathRef.current !== pathname) {
+      lastClearedPathRef.current = pathname;
+      sessionStorage.removeItem(TRANSITION_DIRECTION_KEY);
     }
-    lastHandledSnapshotRef.current = snapshot.id;
+  }, [pathname, sessionValue]);
 
-    const toPath = snapshot.toEntry?.location.pathname ?? "";
-    const fromPath = snapshot.fromEntry?.location.pathname ?? "";
-    const goingToLoading = toPath.startsWith("/chat/loading");
-    const isTabToTabSwitch =
-      isTabRootPath(fromPath) && isTabRootPath(toPath) && fromPath !== toPath;
-
-    if (snapshot.direction === "forward" && goingToLoading) {
-      setFrozenStack([]);
-      setCurrentDirection("forward");
-      snapshot.proceed();
-      clear();
-      return;
+  const requestBack = useCallback(() => {
+    if (window.history.length <= 1) return;
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem(TRANSITION_DIRECTION_KEY, "back");
     }
+    setIsExiting(true);
+  }, []);
 
-    if (isTabToTabSwitch) {
-      setCurrentDirection("none");
-      snapshot.proceed();
-      clear();
-      setFrozenStack([]);
-      return;
-    }
-
-    if (snapshot.skip) {
-      snapshot.proceed();
-      clear();
-      setCurrentDirection("none");
-      return;
-    }
-
-    const shouldSkipBackAnimation =
-      snapshot.direction === "back" && snapshot.initiator === "system";
-
-    if (shouldSkipBackAnimation) {
-      setCurrentDirection("none");
-      snapshot.proceed();
-      clear();
-      setFrozenStack([]);
-      return;
-    }
-
-    setCurrentDirection(snapshot.direction);
-
-    if (snapshot.direction === "back" || snapshot.direction === "forward") {
-      const frozenContext = snapshotRouterContext(liveRouter as RouterLike, {
-        location: snapshot.fromEntry?.location,
-      });
-      const entry: FrozenEntry = {
-        id: `${snapshot.id}-${snapshot.fromEntry?.key ?? snapshot.fromEntry?.location.pathname ?? "unknown"}`,
-        pathname: snapshot.fromEntry?.location.pathname ?? "",
-        context: frozenContext,
-        direction: snapshot.direction,
-      };
-
-      setFrozenStack((prev) => {
-        const next = [...prev, entry];
-        while (next.length > keep) {
-          next.shift();
-        }
-        return next;
-      });
-    } else {
-      setFrozenStack([]);
-    }
-
-    snapshot.proceed();
-    clear();
-  }, [snapshot, liveRouter, keep, clear]);
+  const exitHandledRef = useRef(false);
+  const handleExitAnimationEnd = useCallback(() => {
+    if (exitHandledRef.current) return;
+    exitHandledRef.current = true;
+    setIsExiting(false);
+    router.history.back();
+  }, [router]);
 
   useEffect(() => {
-    setShowLivePlaceholder(routerStatus === "pending");
-  }, [routerStatus]);
+    if (!isExiting) return;
+    exitHandledRef.current = false;
+    const id = setTimeout(handleExitAnimationEnd, 300);
+    return () => clearTimeout(id);
+  }, [isExiting, handleExitAnimationEnd]);
 
-  const handleFrozenExit = (id: string) => {
-    setFrozenStack((prev) => prev.filter((entry) => entry.id !== id));
-  };
+  const effectiveTransitionDirection = isExiting ? undefined : (sessionValue ?? locationState?.transitionDirection);
+  const isBackFromStackedBack = sessionValue === "back";
 
-  const handleLiveComplete = () => {
-    setCurrentDirection("none");
-  };
-
-  const liveInitialStyle = useMemo(() => {
-    if (prefersReducedMotion || currentDirection === "none") {
-      return { x: 0 };
-    }
-    if (currentDirection === "back") {
-      return { x: 0 };
-    }
-    if (currentDirection === "forward") {
-      return { x: toPercent(EXIT_TRANSLATE) };
-    }
-    return { x: 0 };
-  }, [prefersReducedMotion, currentDirection]);
-
-  const liveAnimationTarget = { x: 0 };
-  const liveTransition = { duration: animationDuration, ease };
-
-  const liveZ = currentDirection === "back" ? "z-0" : "z-10";
-  const shouldShowPendingMask = showLivePlaceholder && currentDirection !== "none";
+  const animationClass = isExiting
+    ? "route-exit-forward exiting"
+    : isBackFromStackedBack
+      ? "route-enter-none"
+      : effectiveTransitionDirection === "back"
+        ? "route-enter-back"
+        : effectiveTransitionDirection === "forward"
+        ? "route-enter-forward"
+        : isTabRootPath(pathname)
+          ? "route-enter-none"
+          : "route-enter-forward";
 
   return (
-    <div className="no-bounce-scroll relative h-full w-full overflow-hidden">
-      {frozenStack.map((entry) => (
-        <RoutePhaseProvider key={entry.id} value="frozen">
-          <FrozenScreen
-            entry={entry}
-            prefersReducedMotion={prefersReducedMotion}
-            duration={animationDuration}
-            ease={ease}
-            onExitComplete={handleFrozenExit}
-          />
-        </RoutePhaseProvider>
-      ))}
-
-      <RoutePhaseProvider value="live">
-        <motion.div
-          key={href}
-          className={`no-bounce-scroll relative ${liveZ} h-full w-full overflow-hidden`}
-          initial={liveInitialStyle}
-          animate={liveAnimationTarget}
-          transition={liveTransition}
-          onAnimationComplete={handleLiveComplete}
+    <StackedBackContext.Provider value={{ requestBack }}>
+      <div className="route-stack-viewport relative h-full w-full overflow-hidden">
+        <div
+          key={location.href}
+          className={`route-stack-view ${animationClass}`}
+          onAnimationEnd={
+            isExiting
+              ? (e) => {
+                  if (e.target === e.currentTarget && e.animationName) {
+                    handleExitAnimationEnd();
+                  }
+                }
+              : undefined
+          }
         >
-          <RouterContext.Provider value={liveRouter}>
-            {shouldShowPendingMask && <div className="absolute inset-0 z-9999 bg-white" />}
-            <Outlet />
-          </RouterContext.Provider>
-        </motion.div>
-      </RoutePhaseProvider>
-    </div>
-  );
-}
-
-function FrozenScreen({
-  entry,
-  prefersReducedMotion,
-  duration,
-  ease,
-  onExitComplete,
-}: {
-  entry: FrozenEntry;
-  prefersReducedMotion: boolean;
-  duration: number;
-  ease: [number, number, number, number];
-  onExitComplete: (id: string) => void;
-}) {
-  const RouterContext = getRouterContext();
-  const transition = prefersReducedMotion ? { duration: 0 } : { duration, ease };
-  const target = entry.direction === "back" ? { x: toPercent(EXIT_TRANSLATE) } : { x: 0 };
-
-  useEffect(() => {
-    if (entry.direction !== "forward") return;
-
-    if (prefersReducedMotion || duration === 0) {
-      onExitComplete(entry.id);
-      return;
-    }
-
-    if (typeof window === "undefined") {
-      onExitComplete(entry.id);
-      return;
-    }
-
-    const timeout = window.setTimeout(() => onExitComplete(entry.id), duration * 1000);
-
-    return () => {
-      window.clearTimeout(timeout);
-    };
-  }, [entry.direction, prefersReducedMotion, duration, entry.id, onExitComplete]);
-
-  const handleAnimationComplete = () => {
-    if (entry.direction === "back") {
-      onExitComplete(entry.id);
-    }
-  };
-
-  return (
-    <motion.div
-      className={`no-bounce-scroll pointer-events-none absolute inset-0 ${entry.direction === "back" ? "z-20" : "z-0"} h-full w-full overflow-hidden`}
-      initial={{ x: 0 }}
-      animate={prefersReducedMotion ? { x: 0 } : target}
-      transition={transition}
-      onAnimationComplete={handleAnimationComplete}
-    >
-      <RouterContext.Provider value={entry.context as ContextType<typeof RouterContext>}>
-        <Outlet />
-      </RouterContext.Provider>
-    </motion.div>
+          <Outlet />
+        </div>
+      </div>
+    </StackedBackContext.Provider>
   );
 }

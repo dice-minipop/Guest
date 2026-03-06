@@ -3,7 +3,6 @@ import { createRootRoute, useRouterState } from "@tanstack/react-router";
 import { BottomNav } from "../components/BottomNav";
 import { bridge } from "@/bridge";
 import { getAccessToken } from "@/api/axios";
-import { NavigationTransitionProvider } from "@/shared/navigation/transition";
 import { StackedOutlet } from "@/shared/ui/stacked-outlet";
 import { TransitionViewport } from "@/shared/ui/transition-viewport";
 
@@ -90,11 +89,9 @@ function RootComponent() {
       />
       <div className="no-bounce-scroll mx-auto flex h-screen w-full max-w-(--common-max-width) flex-col overflow-hidden bg-white">
         <main className="no-bounce-scroll relative min-h-0 w-full flex-1 overflow-hidden">
-          <NavigationTransitionProvider>
-            <TransitionViewport>
-              <StackedOutlet />
-            </TransitionViewport>
-          </NavigationTransitionProvider>
+          <TransitionViewport>
+            <StackedOutlet />
+          </TransitionViewport>
         </main>
         {showBottomNav && (
           <div
