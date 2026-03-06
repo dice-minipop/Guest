@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import LikeLightgray from "@/assets/icons/like/like-lightgray.svg?react";
 import LikePurple from "@/assets/icons/like/like-purple.svg?react";
+import { SpaceImage } from "@/shared/ui/space-image-fallback";
 import { canUseMemberOnlyApi } from "@/api/axios";
 import { toggleLikeSpace } from "../api/like";
 import { queryKeys } from "../api/queryKeys";
@@ -43,6 +44,7 @@ export function SpaceCard({ item }: SpaceCardProps) {
       <Link
         to="/space/$id"
         params={{ id: String(item.id) }}
+        state={{ transitionDirection: "forward" }}
         className="block w-full overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm transition-shadow hover:shadow-md"
       >
         {/* 335*188 비율 이미지 */}
@@ -50,11 +52,7 @@ export function SpaceCard({ item }: SpaceCardProps) {
           className="relative w-full overflow-hidden bg-neutral-200"
           style={{ aspectRatio: IMAGE_ASPECT }}
         >
-          {imageUrl ? (
-            <img src={imageUrl} alt="" className="h-full w-full object-cover" />
-          ) : (
-            <div className="h-full w-full" />
-          )}
+          <SpaceImage src={imageUrl} alt="" className="h-full w-full object-cover" />
         </div>
 
         <div className="flex flex-col gap-1 p-16">

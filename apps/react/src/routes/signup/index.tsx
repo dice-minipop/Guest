@@ -62,7 +62,7 @@ function SignupPage() {
   const mutation = useMutation({
     mutationFn: (data: SignUpRequest) => signUp(data),
     onSuccess: () => {
-      navigate({ to: "/signup/brand-profile" });
+      navigate({ to: "/signup/brand-profile", state: { transitionDirection: "forward" } });
     },
   });
 
@@ -118,7 +118,7 @@ function SignupPage() {
     if (window.history.length > 1) {
       backWithHistory(router);
     } else {
-      navigate({ to: "/" });
+      navigate({ to: "/", state: { transitionDirection: "back" } });
     }
   };
 

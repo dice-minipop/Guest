@@ -144,7 +144,7 @@ const BrandProfileForm = forwardRef<HTMLFormElement, { brand: BrandInfo }>(
       },
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: queryKeys.brand.myInfo });
-        navigate({ to: "/mypage" });
+        navigate({ to: "/mypage", state: { transitionDirection: "back" } });
       },
     });
 
@@ -153,7 +153,7 @@ const BrandProfileForm = forwardRef<HTMLFormElement, { brand: BrandInfo }>(
       if (!brand || mutation.isPending || !isFormValid) return;
 
       if (isDummy) {
-        navigate({ to: "/mypage" });
+        navigate({ to: "/mypage", state: { transitionDirection: "back" } });
         return;
       }
 
@@ -370,7 +370,7 @@ function MypageBrandProfilePage() {
     if (window.history.length > 1) {
       backWithHistory(router);
     } else {
-      navigate({ to: "/mypage" });
+      navigate({ to: "/mypage", state: { transitionDirection: "back" } });
     }
   };
 

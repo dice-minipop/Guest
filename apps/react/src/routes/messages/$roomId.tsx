@@ -124,7 +124,7 @@ function MessageRoomPage() {
     if (window.history.length > 1) {
       backWithHistory(router);
     } else {
-      navigate({ to: "/messages" });
+      navigate({ to: "/messages", state: { transitionDirection: "back" } });
     }
   };
 

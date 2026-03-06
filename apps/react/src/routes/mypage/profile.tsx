@@ -22,7 +22,7 @@ function MypageProfilePage() {
     if (window.history.length > 1) {
       backWithHistory(router);
     } else {
-      navigate({ to: "/mypage" });
+      navigate({ to: "/mypage", state: { transitionDirection: "back" } });
     }
   };
 

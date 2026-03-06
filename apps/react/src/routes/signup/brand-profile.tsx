@@ -149,7 +149,7 @@ function BrandProfilePage() {
           <header className="relative flex shrink-0 items-center justify-between py-12">
             <button
               type="button"
-              onClick={() => navigate({ to: "/signup" })}
+              onClick={() => navigate({ to: "/signup", state: { transitionDirection: "back" } })}
               className="flex h-[48px] w-[48px] items-center justify-center rounded-full text-(--dice-black) transition-colors hover:bg-neutral-100"
               aria-label="뒤로가기"
             >

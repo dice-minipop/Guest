@@ -1,6 +1,8 @@
 import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { useTabScrollStorage } from "@/hooks/useTabScrollStorage";
+import { clearScrollStorage, MYPAGE_SCROLL_STORAGE_KEY } from "@/lib/scrollStorage";
 import { getMyBrandInfo, logout, queryKeys } from "@/api";
 import { canUseMemberOnlyApi, clearTokens, isGuestMode } from "@/api/axios";
 import { bridge } from "@/bridge";
@@ -35,18 +37,26 @@ function MypageLayout() {
 function MypagePage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const isGuest = isGuestMode();
 
-  const { data: brands } = useQuery({
+  const { data: brands, isFetched } = useQuery({
     queryKey: queryKeys.brand.myInfo,
     queryFn: getMyBrandInfo,
+  });
+
+  useTabScrollStorage({
+    storageKey: MYPAGE_SCROLL_STORAGE_KEY,
+    scrollContainerRef,
+    restoreDeps: [isFetched],
   });
 
   const logoutMutation = useMutation({
     mutationFn: logout,
     onSuccess: () => {
       clearTokens();
+      clearScrollStorage();
       queryClient.clear();
       navigate({ to: "/login" });
     },
@@ -65,6 +75,7 @@ function MypagePage() {
   const handleLogoutClick = () => {
     if (isGuest) {
       clearTokens();
+      clearScrollStorage();
       queryClient.clear();
       // 라우터 스택 상태를 초기화하기 위해 전체 replace 이동
       window.location.replace("/");
@@ -75,6 +86,7 @@ function MypagePage() {
 
   return (
     <div
+      ref={scrollContainerRef}
       className="h-full overflow-y-auto overflow-x-hidden bg-(--bg-white)"
       style={{ overscrollBehaviorY: "none" }}
     >
@@ -82,7 +94,11 @@ function MypagePage() {
         {/* 내 브랜드 정보: EditIcon + 브랜드 콘텐츠 하나의 섹션 */}
         <section className="mb-6">
           <div className="flex flex-col">
-            <Link to="/mypage/brand-profile" className="flex justify-end bg-dice-black p-12">
+            <Link
+              to="/mypage/brand-profile"
+              state={{ transitionDirection: "forward" }}
+              className="flex justify-end bg-dice-black p-12"
+            >
               <EditIcon className="size-24" aria-hidden />
             </Link>
             {primaryBrand ? (
@@ -97,7 +113,10 @@ function MypagePage() {
                     : [];
 
                   return (
-                    <li key={primaryBrand.id} className="relative overflow-hidden bg-(--gray-light)">
+                    <li
+                      key={primaryBrand.id}
+                      className="relative overflow-hidden bg-(--gray-light)"
+                    >
                       <div
                         className="absolute inset-0 bg-cover bg-center"
                         style={bgImage ? { backgroundImage: `url(${bgImage})` } : undefined}
@@ -163,6 +182,7 @@ function MypagePage() {
             <nav className="border-b border-(--stroke-eee) py-24">
               <Link
                 to="/liked"
+                state={{ transitionDirection: "forward" }}
                 onClick={handleMemberOnlyButtonClick}
                 className="flex items-center justify-between py-12 typo-subtitle3 text-(--gray-deep) active:opacity-80"
               >
@@ -170,6 +190,7 @@ function MypagePage() {
               </Link>
               <Link
                 to="/messages"
+                state={{ transitionDirection: "forward" }}
                 onClick={handleMemberOnlyButtonClick}
                 className="flex items-center justify-between py-12 typo-subtitle3 text-(--gray-deep) active:opacity-80"
               >
@@ -181,6 +202,7 @@ function MypagePage() {
             <nav className="border-b border-(--stroke-eee) py-24">
               <Link
                 to="/mypage/profile"
+                state={{ transitionDirection: "forward" }}
                 className="flex items-center justify-between py-12 typo-subtitle3 text-(--gray-deep) active:opacity-80"
               >
                 <span>회원 정보 관리</span>
@@ -225,6 +247,7 @@ function MypagePage() {
             <div className="mt-4">
               <Link
                 to="/mypage/withdraw"
+                state={{ transitionDirection: "forward" }}
                 className="flex items-center justify-between py-4 typo-subtitle3 text-(--gray-deep) active:opacity-80"
               >
                 탈퇴하기

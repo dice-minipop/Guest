@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import type { MessageRoom } from "@/api";
+import { SpaceImage } from "@/shared/ui/space-image-fallback";
 
 function formatMessageTime(iso: string | null): string {
   if (!iso) return "";
@@ -39,13 +40,16 @@ export function MessageRoomCard({ item }: MessageRoomCardProps) {
       <Link
         to="/messages/$roomId"
         params={{ roomId: String(item.id) }}
+        state={{ transitionDirection: "forward" }}
         className="flex items-center w-full gap-12 py-8"
       >
         {/* 공간 이미지 */}
         <div className="relative size-14 shrink-0 overflow-hidden rounded-lg bg-neutral-200">
-          {item.spaceImage ? (
-            <img src={item.spaceImage} alt="" className="size-full object-cover" />
-          ) : null}
+          <SpaceImage
+            src={item.spaceImage}
+            alt=""
+            className="size-full object-cover"
+          />
         </div>
 
         {/* 공간명+마지막 메시지 | 시간+안읽은 개수 (간격 4px) */}

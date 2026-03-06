@@ -80,7 +80,7 @@ function AnnouncementDetailPage() {
       backWithHistory(router);
       return;
     }
-    navigate({ to: "/announcement", replace: true, state: { skipTransition: true } });
+    navigate({ to: "/announcement", replace: true, state: { transitionDirection: "back" } });
   };
 
   const { data, isLoading, isError, error } = useQuery({
@@ -99,7 +99,11 @@ function AnnouncementDetailPage() {
     return (
       <div className="px-4 py-8">
         <p className="text-neutral-500">잘못된 공고 ID입니다.</p>
-        <Link to="/announcement" className="mt-4 inline-block text-indigo-600 hover:underline">
+        <Link
+          to="/announcement"
+          state={{ transitionDirection: "back" }}
+          className="mt-4 inline-block text-indigo-600 hover:underline"
+        >
           목록으로
         </Link>
       </div>
@@ -116,7 +120,11 @@ function AnnouncementDetailPage() {
         <p className="text-red-600">
           {error instanceof Error ? error.message : "공고 정보를 불러오지 못했습니다."}
         </p>
-        <Link to="/announcement" className="mt-4 inline-block text-indigo-600 hover:underline">
+        <Link
+          to="/announcement"
+          state={{ transitionDirection: "back" }}
+          className="mt-4 inline-block text-indigo-600 hover:underline"
+        >
           목록으로
         </Link>
       </div>
