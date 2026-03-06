@@ -292,15 +292,6 @@ body {
   }
 }
 
-@keyframes route-exit-forward {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-  to {
-    transform: translate3d(100%, 0, 0);
-  }
-}
-
 .route-enter-forward {
   animation: route-enter-forward 320ms cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -309,18 +300,13 @@ body {
   animation: route-enter-back 280ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.route-exit-forward {
-  animation: route-exit-forward 280ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
 .route-enter-none {
   animation: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .route-enter-forward,
-  .route-enter-back,
-  .route-exit-forward {
+  .route-enter-back {
     animation: none;
   }
 }
