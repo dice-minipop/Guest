@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { SpaceImage } from "@/shared/ui/space-image-fallback";
 import { Carousel } from "./Carousel";
 
 export interface ImageCarouselProps {
@@ -8,6 +9,8 @@ export interface ImageCarouselProps {
   aspectRatio?: "4/3" | "3/2" | "16/9" | "1/1" | "375/210";
   /** alt 텍스트 접두사 (예: "공간 이미지" → "공간 이미지 1", "공간 이미지 2") */
   altPrefix?: string;
+  /** 이미지 로드 실패 시 dice fallback 표시 (공간 이미지용) */
+  fallbackOnError?: boolean;
 }
 
 const aspectClass = {
@@ -22,20 +25,32 @@ export function ImageCarousel({
   imageUrls,
   aspectRatio = "1/1",
   altPrefix = "이미지",
+  fallbackOnError = false,
 }: ImageCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   if (imageUrls.length === 0) return null;
 
-  const slides = imageUrls.map((url, i) => (
-    <img
-      key={i}
-      src={url}
-      alt={`${altPrefix} ${i + 1}`}
-      className={`w-full ${aspectClass[aspectRatio]} object-cover`}
-      loading={i === 0 ? "eager" : "lazy"}
-    />
-  ));
+  const slideClassName = `w-full ${aspectClass[aspectRatio]} object-cover`;
+
+  const slides = imageUrls.map((url, i) =>
+    fallbackOnError ? (
+      <SpaceImage
+        key={i}
+        src={url}
+        alt={`${altPrefix} ${i + 1}`}
+        className={slideClassName}
+      />
+    ) : (
+      <img
+        key={i}
+        src={url}
+        alt={`${altPrefix} ${i + 1}`}
+        className={slideClassName}
+        loading={i === 0 ? "eager" : "lazy"}
+      />
+    )
+  );
 
   return (
     <div className="relative w-full">

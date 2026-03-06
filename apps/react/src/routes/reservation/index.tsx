@@ -1,6 +1,8 @@
 import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
+import { useTabScrollStorage } from "@/hooks/useTabScrollStorage";
+import { getReservationScrollKey } from "@/lib/scrollStorage";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { PageHeader } from "@/components/PageHeader";
 import { ReservationCard } from "@/components/ReservationCard";
@@ -40,6 +42,7 @@ function ReservationLayout() {
 }
 
 function ReservationPage() {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const [activeStatus, setActiveStatus] = useState<ReservationStatus>("PENDING");
   const isMemberOnlyAllowed = canUseMemberOnlyApi();
@@ -47,34 +50,48 @@ function ReservationPage() {
 
   const params = { status: activeStatus, size: PAGE_SIZE };
 
-  const { data, isLoading, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteQuery({
-      queryKey: queryKeys.reservation.list(params),
-      queryFn: async ({ pageParam }) => {
-        try {
-          return await getReservationLists(activeStatus, undefined, pageParam, PAGE_SIZE);
-        } catch {
-          if (pageParam === 0) {
-            return getDummyReservationList(activeStatus);
-          }
-          return {
-            content: [],
-            totalPages: 0,
-            totalElements: 0,
-            size: PAGE_SIZE,
-            number: pageParam,
-            first: false,
-            last: true,
-          };
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isFetched,
+  } = useInfiniteQuery({
+    queryKey: queryKeys.reservation.list(params),
+    queryFn: async ({ pageParam }) => {
+      try {
+        return await getReservationLists(activeStatus, undefined, pageParam, PAGE_SIZE);
+      } catch {
+        if (pageParam === 0) {
+          return getDummyReservationList(activeStatus);
         }
-      },
-      initialPageParam: 0,
-      getNextPageParam: (lastPage) => {
-        const next = (lastPage.number ?? 0) + 1;
-        return next < (lastPage.totalPages ?? 0) ? next : undefined;
-      },
-      enabled: isMemberOnlyAllowed,
-    });
+        return {
+          content: [],
+          totalPages: 0,
+          totalElements: 0,
+          size: PAGE_SIZE,
+          number: pageParam,
+          first: false,
+          last: true,
+        };
+      }
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => {
+      const next = (lastPage.number ?? 0) + 1;
+      return next < (lastPage.totalPages ?? 0) ? next : undefined;
+    },
+    enabled: isMemberOnlyAllowed,
+  });
+
+  useTabScrollStorage({
+    storageKey: getReservationScrollKey(activeStatus),
+    scrollContainerRef,
+    restoreDeps: [isFetched, activeStatus],
+  });
 
   useEffect(() => {
     const el = loadMoreRef.current;
@@ -94,6 +111,7 @@ function ReservationPage() {
 
   return (
     <div
+      ref={scrollContainerRef}
       className="h-full overflow-y-auto overflow-x-hidden bg-white"
       style={{ overscrollBehaviorY: "none" }}
     >
@@ -168,9 +186,7 @@ function ReservationPage() {
                       </ul>
                       <div ref={loadMoreRef} className="h-8 py-4" aria-hidden>
                         {isFetchingNextPage && (
-                          <p className="text-center text-sm text-neutral-500">
-                            더 불러오는 중...
-                          </p>
+                          <p className="text-center text-sm text-neutral-500">더 불러오는 중...</p>
                         )}
                       </div>
                     </>

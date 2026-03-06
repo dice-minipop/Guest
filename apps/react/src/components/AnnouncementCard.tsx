@@ -71,6 +71,7 @@ export function AnnouncementCard({ item }: AnnouncementCardProps) {
       <Link
         to="/announcement/$id"
         params={{ id: String(item.id) }}
+        state={{ transitionDirection: "forward" }}
         className="block w-full rounded-xl border space-y-8 border-neutral-200 bg-white p-16 shadow-sm transition-shadow hover:shadow-md"
       >
         {/* 위치·제목 섹션 | 좋아요 버튼 좌우 정렬 */}

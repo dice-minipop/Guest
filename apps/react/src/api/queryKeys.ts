@@ -4,6 +4,10 @@
  */
 export const queryKeys = {
   all: ["api"] as const,
+  alarm: {
+    all: ["api", "alarm"] as const,
+    list: ["api", "alarm", "list"] as const,
+  },
   announcement: {
     all: ["api", "announcement"] as const,
     list: (params?: unknown, filter?: unknown) =>

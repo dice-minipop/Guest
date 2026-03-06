@@ -13,13 +13,13 @@ import { canUseMemberOnlyApi } from "@/api/axios";
 import { LoginRequiredModal } from "@/components/LoginRequiredModal";
 
 const MY_PAGE_LIKED = "/liked";
-const MY_PAGE_NOTIFICATIONS = "/notifications";
+const MY_PAGE_ALARMS = "/alarms";
 const MY_PAGE_MESSAGES = "/messages";
 
 export type PageHeaderVariant = "space" | "announcement" | "reservation";
 
 type HeaderIconItem = {
-  id: "liked" | "notification" | "messages";
+  id: "liked" | "alarm" | "messages";
   to: string;
   ariaLabel: string;
   IconGray: ComponentType<{ className?: string }>;
@@ -36,8 +36,8 @@ const VARIANT_ICONS: Record<PageHeaderVariant, HeaderIconItem[]> = {
       IconWhite: HeartWhite,
     },
     {
-      id: "notification",
-      to: MY_PAGE_NOTIFICATIONS,
+      id: "alarm",
+      to: MY_PAGE_ALARMS,
       ariaLabel: "알림 목록",
       IconGray: NotificationGray,
       IconWhite: NotificationWhite,
@@ -59,8 +59,8 @@ const VARIANT_ICONS: Record<PageHeaderVariant, HeaderIconItem[]> = {
       IconWhite: HeartWhite,
     },
     {
-      id: "notification",
-      to: MY_PAGE_NOTIFICATIONS,
+      id: "alarm",
+      to: MY_PAGE_ALARMS,
       ariaLabel: "알림 목록",
       IconGray: NotificationGray,
       IconWhite: NotificationWhite,
@@ -75,8 +75,8 @@ const VARIANT_ICONS: Record<PageHeaderVariant, HeaderIconItem[]> = {
       IconWhite: HeartWhite,
     },
     {
-      id: "notification",
-      to: MY_PAGE_NOTIFICATIONS,
+      id: "alarm",
+      to: MY_PAGE_ALARMS,
       ariaLabel: "알림 목록",
       IconGray: NotificationGray,
       IconWhite: NotificationWhite,
@@ -120,7 +120,7 @@ export function PageHeader({
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   const handleMemberOnlyIconClick = (e: React.MouseEvent, to: string) => {
-    const memberOnlyTargets = [MY_PAGE_LIKED, MY_PAGE_NOTIFICATIONS, MY_PAGE_MESSAGES];
+    const memberOnlyTargets = [MY_PAGE_LIKED, MY_PAGE_ALARMS, MY_PAGE_MESSAGES];
     if (!memberOnlyTargets.includes(to)) return;
     if (canUseMemberOnlyApi()) return;
 
@@ -150,7 +150,10 @@ export function PageHeader({
                   <Link
                     key={to}
                     to={to}
-                    onClick={(e) => handleMemberOnlyIconClick(e, to)}
+                    state={{ transitionDirection: "forward" }}
+                    onClick={(e: React.MouseEvent<HTMLAnchorElement>) =>
+                      handleMemberOnlyIconClick(e, to)
+                    }
                     className="rounded-full p-12 transition-opacity hover:opacity-80 active:opacity-70"
                     aria-label={ariaLabel}
                   >
@@ -164,6 +167,7 @@ export function PageHeader({
         {searchTo != null ? (
           <Link
             to={searchTo}
+            state={{ transitionDirection: "forward" }}
             className="flex items-center gap-2 rounded-lg border border-neutral-300 bg-neutral-50 p-12 text-sm font-medium text-neutral-500 transition-colors hover:bg-neutral-100"
           >
             <SearchIcon className="h-5 w-5 shrink-0" aria-hidden />

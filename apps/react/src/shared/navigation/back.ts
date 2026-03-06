@@ -27,6 +27,8 @@ export function consumeManualBack() {
   return current;
 }
 
+import { TRANSITION_DIRECTION_KEY } from "./constants";
+
 type RouterLike = {
   history: {
     back: () => void;
@@ -35,5 +37,8 @@ type RouterLike = {
 
 export function backWithHistory(router: RouterLike) {
   markManualBack();
+  if (typeof window !== "undefined") {
+    sessionStorage.setItem(TRANSITION_DIRECTION_KEY, "back");
+  }
   router.history.back();
 }

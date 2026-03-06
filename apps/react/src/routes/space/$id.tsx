@@ -1,4 +1,11 @@
-import { createFileRoute, Link, useNavigate, useRouter } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Link,
+  Outlet,
+  useNavigate,
+  useRouter,
+  useRouterState,
+} from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import MessageIcon from "@/assets/icons/Message/message.svg?react";
@@ -11,12 +18,27 @@ import { getDummySpaceDetail } from "@/api/space/dummy";
 import { BottomSheet } from "@/components/BottomSheet";
 import { FacilityInfoRow } from "@/components/FacilityInfoRow";
 import { ImageCarousel } from "@/components/ImageCarousel";
+import { SpaceImage } from "@/shared/ui/space-image-fallback";
+import { NaverMap } from "@/components/NaverMap";
 import { SpaceReservationSheetContent } from "@/components/space";
+import { getSpaceDetailScrollKey } from "@/lib/scrollStorage";
+import { useTabScrollStorage } from "@/hooks/useTabScrollStorage";
 import { m2ToPyeong } from "@/utils/sizeConversion";
 
 export const Route = createFileRoute("/space/$id")({
-  component: SpaceDetailPage,
+  component: SpaceLayout,
 });
+
+function SpaceLayout() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isMapPage = pathname.endsWith("/map");
+
+  if (isMapPage) {
+    return <Outlet />;
+  }
+
+  return <SpaceDetailPage />;
+}
 
 type SpaceDetailData = NonNullable<
   Awaited<ReturnType<typeof getSpaceDetailData>> | ReturnType<typeof getDummySpaceDetail>
@@ -91,9 +113,13 @@ function SpaceDetailPage() {
     queryKey: queryKeys.space.detail(spaceId),
     queryFn: async () => {
       try {
-        return await getSpaceDetailData(spaceId);
+        const result = await getSpaceDetailData(spaceId);
+        console.log("[space] 공간 상세 조회:", result);
+        return result;
       } catch {
-        return getDummySpaceDetail(spaceId);
+        const fallback = getDummySpaceDetail(spaceId);
+        console.log("[space] 공간 상세 조회 (dummy):", fallback);
+        return fallback;
       }
     },
     enabled: Number.isInteger(spaceId) && spaceId > 0,
@@ -104,8 +130,14 @@ function SpaceDetailPage() {
       backWithHistory(router);
       return;
     }
-    navigate({ to: "/space", replace: true, state: { skipTransition: true } });
+    navigate({ to: "/space", replace: true, state: { transitionDirection: "back" } });
   };
+
+  useTabScrollStorage({
+    storageKey: getSpaceDetailScrollKey(spaceId),
+    scrollContainerRef: scrollRef,
+    restoreDeps: [data],
+  });
 
   // 캐러셀을 스크롤로 넘겼는지 감지 (48px 바 스타일 전환용)
   useEffect(() => {
@@ -144,7 +176,11 @@ function SpaceDetailPage() {
     return (
       <div className="px-4 py-8">
         <p className="text-neutral-500">잘못된 공간 ID입니다.</p>
-        <Link to="/space" className="mt-4 inline-block text-indigo-600 hover:underline">
+        <Link
+          to="/space"
+          state={{ transitionDirection: "back" }}
+          className="mt-4 inline-block text-indigo-600 hover:underline"
+        >
           목록으로
         </Link>
       </div>
@@ -161,7 +197,11 @@ function SpaceDetailPage() {
         <p className="text-red-600">
           {error instanceof Error ? error.message : "공간 정보를 불러오지 못했습니다."}
         </p>
-        <Link to="/space" className="mt-4 inline-block text-indigo-600 hover:underline">
+        <Link
+          to="/space"
+          state={{ transitionDirection: "back" }}
+          className="mt-4 inline-block text-indigo-600 hover:underline"
+        >
           목록으로
         </Link>
       </div>
@@ -223,20 +263,23 @@ function SpaceDetailPage() {
         {/* 캐러셀 */}
         <div ref={carouselRef} className="relative w-full">
           {imageUrls.length > 0 ? (
-            <ImageCarousel imageUrls={imageUrls} aspectRatio="1/1" altPrefix="공간 이미지" />
-          ) : logoUrl ? (
-            <img
+            <ImageCarousel
+              imageUrls={imageUrls}
+              aspectRatio="1/1"
+              altPrefix="공간 이미지"
+              fallbackOnError
+            />
+          ) : (
+            <SpaceImage
               src={logoUrl}
               alt="공간 대표 이미지"
               className="w-full aspect-square object-cover"
             />
-          ) : (
-            <div className="w-full aspect-square bg-bg-light-gray" />
           )}
         </div>
 
-        <section className="space-y-16">
-          <div className="px-(--spacing-screen-x) space-y-24">
+        <section className="space-y-24">
+          <div className="px-(--spacing-screen-x) space-y-16 mt-32">
             <SpaceTitleWithLike data={data} />
 
             <div className="mt-1 flex flex-col gap-0.5">
@@ -261,7 +304,33 @@ function SpaceDetailPage() {
             </div>
           </div>
 
-          <dl className="px-(--spacing-screen-x) mt-4 flex flex-col gap-8 typo-caption1 text-gray-deep">
+          <div className="px-(--spacing-screen-x)">
+            <button className="w-full p-16 flex flex-col items-center justify-center border border-stroke-eee rounded-lg">
+              <p className="typo-caption2 text-gray-medium mb-8">유동인구 핵심 분석</p>
+              {data.analysis && (data.analysis.title || data.analysis.description) ? (
+                <div className="flex flex-col gap-4">
+                  {data.analysis.title && (
+                    <p className="typo-subtitle2 text-system-purple">{data.analysis.title}</p>
+                  )}
+                  {data.analysis.description && (
+                    <p className="typo-body1 text-gray-dark">{data.analysis.description}</p>
+                  )}
+                </div>
+              ) : (
+                <p className="typo-caption1 text-gray-semilight h-14 flex items-center justify-center">
+                  공간 분석 데이터가 아직 없어요 기다려주세요
+                </p>
+              )}
+
+              {data.analysis && (data.analysis.title || data.analysis.description) && (
+                <p className="w-full typo-caption1 text-gray-semilight border-t border-stroke-eee pt-16">
+                  선택한 모든 브랜드 타겟 유동인구 더보기
+                </p>
+              )}
+            </button>
+          </div>
+
+          <dl className="px-(--spacing-screen-x) mt-4 flex flex-col gap-8 typo-caption1 text-gray-deep border-b border-stroke-eee pb-5">
             <div className="flex gap-5">
               <dt className="w-14 shrink-0">영업 시간</dt>
               <dd className="min-w-0">
@@ -311,7 +380,7 @@ function SpaceDetailPage() {
           <button
             type="button"
             onClick={() => setDetailsExpanded((prev) => !prev)}
-            className="mt-1.5 text-sm font-medium text-indigo-600 hover:text-indigo-500"
+            className="typo-button1 w-full rounded-lg bg-white py-16 text-gray-medium border border-stroke-eee transition-opacity hover:opacity-90"
           >
             {detailsExpanded ? "간략히 보기" : "자세히 보기"}
           </button>
@@ -319,9 +388,9 @@ function SpaceDetailPage() {
 
         <div className="h-8 bg-bg-light-gray my-24" />
 
-        {facilityInfos.length > 0 && (
-          <section className="px-(--spacing-screen-x)">
-            <h2 className="typo-subtitle2 text-dice-black">시설·집기 이용 안내</h2>
+        <section className="px-(--spacing-screen-x)">
+          <h2 className="typo-subtitle2 text-dice-black">시설·집기 이용 안내</h2>
+          {facilityInfos.length > 0 ? (
             <ul className="mt-2 flex flex-col gap-3">
               {facilityInfos.map((info, index) => (
                 <li key={info.key ?? info.name ?? index}>
@@ -329,27 +398,60 @@ function SpaceDetailPage() {
                 </li>
               ))}
             </ul>
-          </section>
-        )}
+          ) : (
+            <div className="mt-2 flex h-[256px] items-center justify-center">
+              <p className="typo-body1 text-gray-semilight">아직 등록된 시설·집기가 없어요</p>
+            </div>
+          )}
+        </section>
 
         <div className="h-8 bg-bg-light-gray my-24" />
 
         <section className="px-(--spacing-screen-x) space-y-24">
           <h2 className="typo-subtitle2 text-dice-black">위치 안내</h2>
           <div className="typo-body1 text-gray-deep">{data.address}</div>
+          {data.latitude != null &&
+            data.longitude != null &&
+            Number.isFinite(data.latitude) &&
+            Number.isFinite(data.longitude) && (
+              <Link
+                to="/space/$id/map"
+                params={{ id: String(spaceId) }}
+                state={{ transitionDirection: "forward" }}
+                className="block cursor-pointer relative"
+                aria-label="지도 크게 보기"
+              >
+                <NaverMap
+                  latitude={data.latitude}
+                  longitude={data.longitude}
+                  title={data.name}
+                  height={200}
+                  interactive={false}
+                />
+                <span className="absolute bottom-8 left-1/2 -translate-x-1/2 typo-caption2 text-white bg-black/50 px-3 py-1.5 rounded-full">
+                  탭하여 크게 보기
+                </span>
+              </Link>
+            )}
         </section>
 
         <div className="h-8 bg-bg-light-gray my-24" />
 
         <section className="px-(--spacing-screen-x) space-y-24">
           <h2 className="typo-subtitle2 text-dice-black">공지사항 안내</h2>
-          <ul className="border border-stroke-eee rounded-lg p-16 bg-bg-light-gray">
-            {data.notices?.map((notice) => (
-              <li key={notice}>
-                <p className="typo-body1 text-gray-deep">* {notice}</p>
-              </li>
-            ))}
-          </ul>
+          {data.notices && data.notices.length > 0 ? (
+            <ul className="border border-stroke-eee rounded-lg p-16 bg-bg-light-gray">
+              {data.notices.map((notice) => (
+                <li key={notice}>
+                  <p className="typo-body1 text-gray-deep">* {notice}</p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="border border-stroke-eee rounded-lg p-16 bg-bg-light-gray">
+              <p className="typo-body1 text-gray-deep">아직 등록된 공지사항이 없어요</p>
+            </div>
+          )}
         </section>
       </div>
 
@@ -392,6 +494,7 @@ function SpaceDetailPage() {
               navigate({
                 to: "/reservation/apply",
                 search: { spaceId, startDate, endDate },
+                state: { transitionDirection: "forward" },
               });
             }}
           />

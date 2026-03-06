@@ -1,8 +1,16 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useStackedBack } from "@/shared/ui/use-stacked-back";
 import ArrowRightIcon from "@/assets/icons/Arrow/right.svg?react";
+import { createReservation, queryKeys, uploadImageList } from "@/api";
 
 export const Route = createFileRoute("/reservation/apply/info")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    spaceId: Number(search.spaceId) || 0,
+    startDate: String(search.startDate ?? ""),
+    endDate: String(search.endDate ?? ""),
+  }),
   component: ReservationApplyInfoPage,
 });
 
@@ -10,33 +18,84 @@ const inputBase =
   "typo-body2 w-full appearance-none rounded-lg border border-(--gray-light) bg-white px-16 py-3 text-[16px] text-(--gray-dark) placeholder:text-(--gray-light) focus:border-(--dice-black) focus:outline-none focus:ring-1 focus:ring-(--dice-black)";
 
 const textareaBase =
-  "typo-body2 w-full min-h-[120px] resize-y appearance-none rounded-lg border border-(--gray-light) bg-white px-16 py-3 text-[16px] text-(--gray-dark) placeholder:text-(--gray-light) focus:border-(--dice-black) focus:outline-none focus:ring-1 focus:ring-(--dice-black)";
+  "typo-body2 w-full min-h-[120px] resize-none rounded-lg border border-(--gray-light) bg-white px-16 py-3 text-[16px] text-(--gray-dark) placeholder:text-(--gray-light) focus:border-(--dice-black) focus:outline-none focus:ring-1 focus:ring-(--dice-black)";
 
 function ReservationApplyInfoPage() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const stackedBack = useStackedBack();
+  const search = Route.useSearch();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const [eventName, setEventName] = useState("");
   const [eventContent, setEventContent] = useState("");
   const [extraRequest, setExtraRequest] = useState("");
 
+  const createMutation = useMutation({
+    mutationFn: createReservation,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.reservation.all });
+      navigate({ to: "/reservation", state: { transitionDirection: "back" } });
+    },
+  });
+
   const handleBack = () => {
-    if (window.history.length > 1) {
-      window.history.back();
+    if (window.history.length > 1 && stackedBack) {
+      stackedBack.requestBack();
     } else {
-      navigate({ to: "/reservation/apply" });
+      navigate({
+        to: "/reservation/apply",
+        search: { spaceId: search.spaceId, startDate: search.startDate, endDate: search.endDate },
+        state: { transitionDirection: "back" },
+      });
     }
   };
 
-  const handleSubmit = () => {
-    // TODO: 예약 신청 제출 로직
+  const handleSubmit = async () => {
+    const trimmedName = eventName.trim();
+    const trimmedContent = eventContent.trim();
+    if (!trimmedName || !trimmedContent) {
+      window.alert("팝업스토어 행사 이름과 행사 내용을 입력해주세요.");
+      return;
+    }
+    if (!search.spaceId || !search.startDate || !search.endDate) {
+      window.alert("예약 정보가 없습니다. 처음부터 다시 진행해주세요.");
+      return;
+    }
+
+    let fileUrls: string[] = [];
+    const files = fileInputRef.current?.files;
+    if (files && files.length > 0) {
+      const imageFiles = Array.from(files).filter((f) => f.type.startsWith("image/"));
+      if (imageFiles.length > 0) {
+        try {
+          const { imageUrls } = await uploadImageList(imageFiles);
+          fileUrls = imageUrls ?? [];
+        } catch {
+          window.alert("파일 업로드에 실패했습니다. 다시 시도해주세요.");
+          return;
+        }
+      }
+    }
+
+    createMutation.mutate({
+      spaceId: search.spaceId,
+      startDate: search.startDate,
+      endDate: search.endDate,
+      eventName: trimmedName,
+      eventContent: trimmedContent,
+      fileList: fileUrls,
+      etcRequest: extraRequest.trim(),
+    });
   };
 
   return (
     <div className="min-h-screen bg-dice-white">
-      <header className="relative flex shrink-0 items-center justify-between px-[3px] py-12">
+      <header className="fixed top-0 left-1/2 z-10 flex w-full max-w-(--common-max-width) -translate-x-1/2 items-center justify-between bg-dice-white px-[3px]">
         <button
           type="button"
           onClick={handleBack}
-          className="flex h-[48px] w-[48px] items-center justify-center rounded-full text-(--dice-black) transition-colors hover:bg-neutral-100"
+          className="flex h-[48px] w-[48px] shrink-0 items-center justify-center rounded-full text-(--dice-black) transition-colors hover:bg-neutral-100"
           aria-label="뒤로가기"
         >
           <ArrowRightIcon className="h-24 w-24" aria-hidden />
@@ -47,7 +106,7 @@ function ReservationApplyInfoPage() {
         <div className="h-10 w-10 shrink-0" aria-hidden />
       </header>
 
-      <div className="px-(--spacing-screen-x) pt-5">
+      <div className="px-(--spacing-screen-x) pt-20">
         <div className="space-y-24">
           <section className="space-y-8">
             <h2 className="whitespace-pre-line typo-h2 text-(--dice-black)">
@@ -90,6 +149,7 @@ function ReservationApplyInfoPage() {
           <section className="space-y-8">
             <span className="block typo-caption1 text-(--gray-dark)">행사 내용 관련 첨부 파일</span>
             <input
+              ref={fileInputRef}
               type="file"
               multiple
               accept="image/*,.pdf"
@@ -115,15 +175,16 @@ function ReservationApplyInfoPage() {
       </div>
 
       <div
-        className="fixed bottom-0 left-0 right-0 z-10 mx-auto max-w-sm bg-dice-white px-(--spacing-screen-x) pt-16"
+        className="fixed bottom-0 left-0 right-0 z-10 mx-auto w-full max-w-(--common-max-width) bg-dice-white px-(--spacing-screen-x) pt-16"
         style={{ paddingBottom: "max(20px, env(safe-area-inset-bottom))" }}
       >
         <button
           type="button"
           onClick={handleSubmit}
-          className="w-full rounded-lg bg-dice-black px-16 py-[15.5px] typo-button1 text-dice-white transition-colors hover:opacity-90"
+          disabled={createMutation.isPending}
+          className="w-full rounded-lg bg-dice-black px-16 py-[15.5px] typo-button1 text-dice-white transition-colors hover:opacity-90 disabled:opacity-60"
         >
-          예약 신청
+          {createMutation.isPending ? "신청 중..." : "예약 신청"}
         </button>
       </div>
     </div>

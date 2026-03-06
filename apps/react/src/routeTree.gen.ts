@@ -13,12 +13,12 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SpaceIndexRouteImport } from './routes/space/index'
 import { Route as SignupIndexRouteImport } from './routes/signup/index'
 import { Route as ReservationIndexRouteImport } from './routes/reservation/index'
-import { Route as NotificationsIndexRouteImport } from './routes/notifications/index'
 import { Route as MypageIndexRouteImport } from './routes/mypage/index'
 import { Route as MessagesIndexRouteImport } from './routes/messages/index'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as LikedIndexRouteImport } from './routes/liked/index'
 import { Route as AnnouncementIndexRouteImport } from './routes/announcement/index'
+import { Route as AlarmsIndexRouteImport } from './routes/alarms/index'
 import { Route as SpaceSearchRouteImport } from './routes/space/search'
 import { Route as SpaceIdRouteImport } from './routes/space/$id'
 import { Route as SignupBrandProfileRouteImport } from './routes/signup/brand-profile'
@@ -29,6 +29,7 @@ import { Route as MypageBrandProfileRouteImport } from './routes/mypage/brand-pr
 import { Route as MessagesRoomIdRouteImport } from './routes/messages/$roomId'
 import { Route as AnnouncementSearchRouteImport } from './routes/announcement/search'
 import { Route as AnnouncementIdRouteImport } from './routes/announcement/$id'
+import { Route as SpaceIdMapRouteImport } from './routes/space/$id.map'
 import { Route as ReservationApplyInfoRouteImport } from './routes/reservation/apply.info'
 
 const IndexRoute = IndexRouteImport.update({
@@ -49,11 +50,6 @@ const SignupIndexRoute = SignupIndexRouteImport.update({
 const ReservationIndexRoute = ReservationIndexRouteImport.update({
   id: '/reservation/',
   path: '/reservation/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NotificationsIndexRoute = NotificationsIndexRouteImport.update({
-  id: '/notifications/',
-  path: '/notifications/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MypageIndexRoute = MypageIndexRouteImport.update({
@@ -79,6 +75,11 @@ const LikedIndexRoute = LikedIndexRouteImport.update({
 const AnnouncementIndexRoute = AnnouncementIndexRouteImport.update({
   id: '/announcement/',
   path: '/announcement/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AlarmsIndexRoute = AlarmsIndexRouteImport.update({
+  id: '/alarms/',
+  path: '/alarms/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SpaceSearchRoute = SpaceSearchRouteImport.update({
@@ -131,6 +132,11 @@ const AnnouncementIdRoute = AnnouncementIdRouteImport.update({
   path: '/announcement/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SpaceIdMapRoute = SpaceIdMapRouteImport.update({
+  id: '/map',
+  path: '/map',
+  getParentRoute: () => SpaceIdRoute,
+} as any)
 const ReservationApplyInfoRoute = ReservationApplyInfoRouteImport.update({
   id: '/info',
   path: '/info',
@@ -147,18 +153,19 @@ export interface FileRoutesByFullPath {
   '/mypage/withdraw': typeof MypageWithdrawRoute
   '/reservation/apply': typeof ReservationApplyRouteWithChildren
   '/signup/brand-profile': typeof SignupBrandProfileRoute
-  '/space/$id': typeof SpaceIdRoute
+  '/space/$id': typeof SpaceIdRouteWithChildren
   '/space/search': typeof SpaceSearchRoute
+  '/alarms/': typeof AlarmsIndexRoute
   '/announcement/': typeof AnnouncementIndexRoute
   '/liked/': typeof LikedIndexRoute
   '/login/': typeof LoginIndexRoute
   '/messages/': typeof MessagesIndexRoute
   '/mypage/': typeof MypageIndexRoute
-  '/notifications/': typeof NotificationsIndexRoute
   '/reservation/': typeof ReservationIndexRoute
   '/signup/': typeof SignupIndexRoute
   '/space/': typeof SpaceIndexRoute
   '/reservation/apply/info': typeof ReservationApplyInfoRoute
+  '/space/$id/map': typeof SpaceIdMapRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -170,18 +177,19 @@ export interface FileRoutesByTo {
   '/mypage/withdraw': typeof MypageWithdrawRoute
   '/reservation/apply': typeof ReservationApplyRouteWithChildren
   '/signup/brand-profile': typeof SignupBrandProfileRoute
-  '/space/$id': typeof SpaceIdRoute
+  '/space/$id': typeof SpaceIdRouteWithChildren
   '/space/search': typeof SpaceSearchRoute
+  '/alarms': typeof AlarmsIndexRoute
   '/announcement': typeof AnnouncementIndexRoute
   '/liked': typeof LikedIndexRoute
   '/login': typeof LoginIndexRoute
   '/messages': typeof MessagesIndexRoute
   '/mypage': typeof MypageIndexRoute
-  '/notifications': typeof NotificationsIndexRoute
   '/reservation': typeof ReservationIndexRoute
   '/signup': typeof SignupIndexRoute
   '/space': typeof SpaceIndexRoute
   '/reservation/apply/info': typeof ReservationApplyInfoRoute
+  '/space/$id/map': typeof SpaceIdMapRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -194,18 +202,19 @@ export interface FileRoutesById {
   '/mypage/withdraw': typeof MypageWithdrawRoute
   '/reservation/apply': typeof ReservationApplyRouteWithChildren
   '/signup/brand-profile': typeof SignupBrandProfileRoute
-  '/space/$id': typeof SpaceIdRoute
+  '/space/$id': typeof SpaceIdRouteWithChildren
   '/space/search': typeof SpaceSearchRoute
+  '/alarms/': typeof AlarmsIndexRoute
   '/announcement/': typeof AnnouncementIndexRoute
   '/liked/': typeof LikedIndexRoute
   '/login/': typeof LoginIndexRoute
   '/messages/': typeof MessagesIndexRoute
   '/mypage/': typeof MypageIndexRoute
-  '/notifications/': typeof NotificationsIndexRoute
   '/reservation/': typeof ReservationIndexRoute
   '/signup/': typeof SignupIndexRoute
   '/space/': typeof SpaceIndexRoute
   '/reservation/apply/info': typeof ReservationApplyInfoRoute
+  '/space/$id/map': typeof SpaceIdMapRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -221,16 +230,17 @@ export interface FileRouteTypes {
     | '/signup/brand-profile'
     | '/space/$id'
     | '/space/search'
+    | '/alarms/'
     | '/announcement/'
     | '/liked/'
     | '/login/'
     | '/messages/'
     | '/mypage/'
-    | '/notifications/'
     | '/reservation/'
     | '/signup/'
     | '/space/'
     | '/reservation/apply/info'
+    | '/space/$id/map'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -244,16 +254,17 @@ export interface FileRouteTypes {
     | '/signup/brand-profile'
     | '/space/$id'
     | '/space/search'
+    | '/alarms'
     | '/announcement'
     | '/liked'
     | '/login'
     | '/messages'
     | '/mypage'
-    | '/notifications'
     | '/reservation'
     | '/signup'
     | '/space'
     | '/reservation/apply/info'
+    | '/space/$id/map'
   id:
     | '__root__'
     | '/'
@@ -267,16 +278,17 @@ export interface FileRouteTypes {
     | '/signup/brand-profile'
     | '/space/$id'
     | '/space/search'
+    | '/alarms/'
     | '/announcement/'
     | '/liked/'
     | '/login/'
     | '/messages/'
     | '/mypage/'
-    | '/notifications/'
     | '/reservation/'
     | '/signup/'
     | '/space/'
     | '/reservation/apply/info'
+    | '/space/$id/map'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -289,14 +301,14 @@ export interface RootRouteChildren {
   MypageWithdrawRoute: typeof MypageWithdrawRoute
   ReservationApplyRoute: typeof ReservationApplyRouteWithChildren
   SignupBrandProfileRoute: typeof SignupBrandProfileRoute
-  SpaceIdRoute: typeof SpaceIdRoute
+  SpaceIdRoute: typeof SpaceIdRouteWithChildren
   SpaceSearchRoute: typeof SpaceSearchRoute
+  AlarmsIndexRoute: typeof AlarmsIndexRoute
   AnnouncementIndexRoute: typeof AnnouncementIndexRoute
   LikedIndexRoute: typeof LikedIndexRoute
   LoginIndexRoute: typeof LoginIndexRoute
   MessagesIndexRoute: typeof MessagesIndexRoute
   MypageIndexRoute: typeof MypageIndexRoute
-  NotificationsIndexRoute: typeof NotificationsIndexRoute
   ReservationIndexRoute: typeof ReservationIndexRoute
   SignupIndexRoute: typeof SignupIndexRoute
   SpaceIndexRoute: typeof SpaceIndexRoute
@@ -332,13 +344,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReservationIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/notifications/': {
-      id: '/notifications/'
-      path: '/notifications'
-      fullPath: '/notifications/'
-      preLoaderRoute: typeof NotificationsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/mypage/': {
       id: '/mypage/'
       path: '/mypage'
@@ -372,6 +377,13 @@ declare module '@tanstack/react-router' {
       path: '/announcement'
       fullPath: '/announcement/'
       preLoaderRoute: typeof AnnouncementIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/alarms/': {
+      id: '/alarms/'
+      path: '/alarms'
+      fullPath: '/alarms/'
+      preLoaderRoute: typeof AlarmsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/space/search': {
@@ -444,6 +456,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AnnouncementIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/space/$id/map': {
+      id: '/space/$id/map'
+      path: '/map'
+      fullPath: '/space/$id/map'
+      preLoaderRoute: typeof SpaceIdMapRouteImport
+      parentRoute: typeof SpaceIdRoute
+    }
     '/reservation/apply/info': {
       id: '/reservation/apply/info'
       path: '/info'
@@ -465,6 +484,17 @@ const ReservationApplyRouteChildren: ReservationApplyRouteChildren = {
 const ReservationApplyRouteWithChildren =
   ReservationApplyRoute._addFileChildren(ReservationApplyRouteChildren)
 
+interface SpaceIdRouteChildren {
+  SpaceIdMapRoute: typeof SpaceIdMapRoute
+}
+
+const SpaceIdRouteChildren: SpaceIdRouteChildren = {
+  SpaceIdMapRoute: SpaceIdMapRoute,
+}
+
+const SpaceIdRouteWithChildren =
+  SpaceIdRoute._addFileChildren(SpaceIdRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AnnouncementIdRoute: AnnouncementIdRoute,
@@ -475,14 +505,14 @@ const rootRouteChildren: RootRouteChildren = {
   MypageWithdrawRoute: MypageWithdrawRoute,
   ReservationApplyRoute: ReservationApplyRouteWithChildren,
   SignupBrandProfileRoute: SignupBrandProfileRoute,
-  SpaceIdRoute: SpaceIdRoute,
+  SpaceIdRoute: SpaceIdRouteWithChildren,
   SpaceSearchRoute: SpaceSearchRoute,
+  AlarmsIndexRoute: AlarmsIndexRoute,
   AnnouncementIndexRoute: AnnouncementIndexRoute,
   LikedIndexRoute: LikedIndexRoute,
   LoginIndexRoute: LoginIndexRoute,
   MessagesIndexRoute: MessagesIndexRoute,
   MypageIndexRoute: MypageIndexRoute,
-  NotificationsIndexRoute: NotificationsIndexRoute,
   ReservationIndexRoute: ReservationIndexRoute,
   SignupIndexRoute: SignupIndexRoute,
   SpaceIndexRoute: SpaceIndexRoute,

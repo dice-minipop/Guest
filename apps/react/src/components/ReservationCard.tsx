@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ReservationItem } from "../api";
 import { cancelReservation, queryKeys } from "../api";
 import MessageIcon from "@/assets/icons/Message/message.svg?react";
+import { SpaceImage } from "@/shared/ui/space-image-fallback";
 
 const IMAGE_SIZE = 120;
 
@@ -67,9 +68,11 @@ export function ReservationCard({ item, onCancelSuccess }: ReservationCardProps)
             className="relative shrink-0 overflow-hidden rounded-lg bg-neutral-200"
             style={{ width: IMAGE_SIZE, height: IMAGE_SIZE }}
           >
-            {item.spaceImage ? (
-              <img src={item.spaceImage} alt="" className="h-full w-full object-cover" />
-            ) : null}
+            <SpaceImage
+              src={item.spaceImage}
+              alt=""
+              className="h-full w-full object-cover"
+            />
           </div>
         </div>
 
@@ -103,6 +106,7 @@ export function ReservationCard({ item, onCancelSuccess }: ReservationCardProps)
               <Link
                 to="/messages/$roomId"
                 params={{ roomId: String(item.messageRoomId) }}
+                state={{ transitionDirection: "forward" }}
                 className="flex items-center justify-center rounded-lg border border-stroke-eee bg-white p-3.5"
               >
                 <MessageIcon className="size-24" aria-hidden />

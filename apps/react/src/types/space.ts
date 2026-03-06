@@ -50,6 +50,8 @@ export interface NearestSubwayDto {
 
 /** SpaceInfoDtoV2 - 분석(타깃) 정보 (선택 사용) */
 export interface AnalysisPersonDto {
+  title?: string;
+  description?: string;
   [key: string]: unknown;
 }
 
