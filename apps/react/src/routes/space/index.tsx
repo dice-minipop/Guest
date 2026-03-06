@@ -1,6 +1,8 @@
 import { createFileRoute, Outlet, useRouterState } from "@tanstack/react-router";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
+import { useTabScrollStorage } from "@/hooks/useTabScrollStorage";
+import { SPACE_SCROLL_STORAGE_KEY } from "@/lib/scrollStorage";
 import { BottomSheet } from "@/components/BottomSheet";
 import { PageHeader } from "@/components/PageHeader";
 import { SpaceCard } from "@/components/SpaceCard";
@@ -40,6 +42,7 @@ function SpaceLayout() {
 }
 
 function SpacePage() {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const [filterSheetOpen, setFilterSheetOpen] = useState(false);
   const [regionFilter, setRegionFilter] = useState<RegionFilter>(DEFAULT_REGION);
@@ -72,32 +75,46 @@ function SpacePage() {
     sortBy,
   };
 
-  const { data, isLoading, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteQuery({
-      queryKey: queryKeys.space.list({ size: PAGE_SIZE }, filterPayload),
-      queryFn: async ({ pageParam }) => {
-        try {
-          return await getFilteredSpaceLists({ page: pageParam, size: PAGE_SIZE }, filterPayload);
-        } catch {
-          return pageParam === 0
-            ? DUMMY_SPACE_LIST
-            : {
-                content: [],
-                totalPages: 0,
-                totalElements: 0,
-                size: PAGE_SIZE,
-                number: pageParam,
-                first: false,
-                last: true,
-              };
-        }
-      },
-      initialPageParam: 0,
-      getNextPageParam: (lastPage) => {
-        const next = (lastPage.number ?? 0) + 1;
-        return next < (lastPage.totalPages ?? 0) ? next : undefined;
-      },
-    });
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isFetched,
+  } = useInfiniteQuery({
+    queryKey: queryKeys.space.list({ size: PAGE_SIZE }, filterPayload),
+    queryFn: async ({ pageParam }) => {
+      try {
+        return await getFilteredSpaceLists({ page: pageParam, size: PAGE_SIZE }, filterPayload);
+      } catch {
+        return pageParam === 0
+          ? DUMMY_SPACE_LIST
+          : {
+              content: [],
+              totalPages: 0,
+              totalElements: 0,
+              size: PAGE_SIZE,
+              number: pageParam,
+              first: false,
+              last: true,
+            };
+      }
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => {
+      const next = (lastPage.number ?? 0) + 1;
+      return next < (lastPage.totalPages ?? 0) ? next : undefined;
+    },
+  });
+
+  useTabScrollStorage({
+    storageKey: SPACE_SCROLL_STORAGE_KEY,
+    scrollContainerRef,
+    restoreDeps: [isFetched],
+  });
 
   useEffect(() => {
     const el = loadMoreRef.current;
@@ -160,6 +177,7 @@ function SpacePage() {
 
   return (
     <div
+      ref={scrollContainerRef}
       className="h-full overflow-y-auto overflow-x-hidden bg-white"
       style={{ overscrollBehaviorY: "none" }}
     >
