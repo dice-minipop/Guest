@@ -9,7 +9,7 @@ import {
   pickImageFromNativeCamera,
   isNativeImagePickerAvailable,
 } from "@/utils/nativeImagePicker";
-import ArrowRightIcon from "@/assets/icons/Arrow/right.svg?react";
+import { BackHeader } from "@/components/BackHeader";
 import CameraIcon from "@/assets/icons/Brand/camera.svg?react";
 import PlusIcon from "@/assets/icons/Plus/plus.svg?react";
 import XIcon from "@/assets/icons/Onboarding/round-x.svg?react";
@@ -388,29 +388,20 @@ function MypageBrandProfilePage() {
 
   return (
     <div className="min-h-screen bg-dice-white">
-      <header className="relative flex shrink-0 items-center justify-between py-12 px-[3px]">
-        <button
-          type="button"
-          onClick={handleBack}
-          className="flex h-[48px] w-[48px] items-center justify-center rounded-full text-(--dice-black) transition-colors hover:bg-neutral-100"
-          aria-label="뒤로가기"
-        >
-          <ArrowRightIcon className="h-24 w-24" aria-hidden />
-        </button>
-
-        <h1 className="typo-subtitle3 absolute left-0 right-0 text-center text-(--dice-black) pointer-events-none">
-          나의 브랜드 프로필 편집
-        </h1>
-
-        <button
-          type="button"
-          onClick={handleComplete}
-          className="h-10 min-w-[60px] shrink-0 px-8 typo-button1 text-(--dice-black) transition-colors hover:opacity-80"
-        >
-          완료
-        </button>
-      </header>
-
+      <BackHeader
+        title="나의 브랜드 프로필 편집"
+        onBack={handleBack}
+        rightSlot={
+          <button
+            type="button"
+            onClick={handleComplete}
+            className="min-w-[60px] px-8 typo-button1 text-(--dice-black) transition-colors hover:opacity-80"
+          >
+            완료
+          </button>
+        }
+      />
+      <div aria-hidden style={{ minHeight: 72 }} />
       <BrandProfileForm ref={formRef} key={brand.id} brand={brand} />
     </div>
   );

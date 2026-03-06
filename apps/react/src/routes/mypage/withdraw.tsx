@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
-import ArrowRightIcon from "@/assets/icons/Arrow/right.svg?react";
 import ArrowDownIcon from "@/assets/icons/Arrow/down.svg?react";
+import { BackHeader } from "@/components/BackHeader";
 import { BottomSheet } from "@/components/BottomSheet";
 import { backWithHistory } from "@/shared/navigation/back";
 
@@ -38,22 +38,8 @@ function MypageWithdrawPage() {
 
   return (
     <div className="min-h-screen bg-dice-white">
-      <header className="relative flex shrink-0 items-center justify-between py-12 px-[3px]">
-        <button
-          type="button"
-          onClick={handleBack}
-          className="flex h-[48px] w-[48px] items-center justify-center rounded-full text-(--dice-black) transition-colors hover:bg-neutral-100"
-          aria-label="뒤로가기"
-        >
-          <ArrowRightIcon className="h-24 w-24" aria-hidden />
-        </button>
-
-        <h1 className="typo-subtitle3 absolute left-0 right-0 text-center text-(--dice-black) pointer-events-none">
-          탈퇴하기
-        </h1>
-        <div className="h-10 w-10 shrink-0" aria-hidden />
-      </header>
-
+      <BackHeader title="탈퇴하기" onBack={handleBack} />
+      <div aria-hidden style={{ minHeight: 72 }} />
       <div
         className="px-(--spacing-screen-x) pt-32 space-y-32"
         style={{ paddingBottom: "calc(100px + env(safe-area-inset-bottom))" }}

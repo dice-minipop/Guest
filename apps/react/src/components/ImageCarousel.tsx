@@ -35,12 +35,7 @@ export function ImageCarousel({
 
   const slides = imageUrls.map((url, i) =>
     fallbackOnError ? (
-      <SpaceImage
-        key={i}
-        src={url}
-        alt={`${altPrefix} ${i + 1}`}
-        className={slideClassName}
-      />
+      <SpaceImage key={i} src={url} alt={`${altPrefix} ${i + 1}`} className={slideClassName} />
     ) : (
       <img
         key={i}

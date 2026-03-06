@@ -68,11 +68,7 @@ export function ReservationCard({ item, onCancelSuccess }: ReservationCardProps)
             className="relative shrink-0 overflow-hidden rounded-lg bg-neutral-200"
             style={{ width: IMAGE_SIZE, height: IMAGE_SIZE }}
           >
-            <SpaceImage
-              src={item.spaceImage}
-              alt=""
-              className="h-full w-full object-cover"
-            />
+            <SpaceImage src={item.spaceImage} alt="" className="h-full w-full object-cover" />
           </div>
         </div>
 

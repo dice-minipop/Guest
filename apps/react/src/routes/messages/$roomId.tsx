@@ -1,8 +1,8 @@
 import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import ArrowRightIcon from "@/assets/icons/Arrow/right.svg?react";
 import SirenIcon from "@/assets/icons/Message/siren.svg?react";
+import { BackHeader } from "@/components/BackHeader";
 import { BottomSheet } from "@/components/BottomSheet";
 import {
   getMessageDetailData,
@@ -183,40 +183,20 @@ function MessageRoomPage() {
 
   return (
     <div className="min-h-screen bg-bg-light-gray pb-[72px]">
-      <header
-        className="fixed top-0 left-1/2 z-10 w-full max-w-(--common-max-width) -translate-x-1/2 bg-dice-white"
-        style={{
-          paddingLeft: "3px",
-          paddingRight: "3px",
-        }}
-      >
-        <div className="relative flex min-h-[44px] w-full items-center">
-          <button
-            type="button"
-            onClick={handleBack}
-            className="w-[48px] h-[48px] flex shrink-0 items-center justify-center typo-subtitle1 text-white transition-opacity hover:opacity-80 active:opacity-70"
-            aria-label="뒤로가기"
-          >
-            <ArrowRightIcon className="size-24" aria-hidden />
-          </button>
-
-          <p
-            className="min-w-0 flex-1 truncate text-center typo-subtitle3 text-gray-dark"
-            aria-label={`${spaceName} 담당자와의 쪽지`}
-          >
-            {spaceName}
-          </p>
-
+      <BackHeader
+        title={spaceName}
+        onBack={handleBack}
+        rightSlot={
           <button
             type="button"
             onClick={() => setReportSheetOpen(true)}
-            className="w-[48px] h-[48px] flex shrink-0 items-center justify-center text-gray-dark transition-opacity hover:opacity-80 active:opacity-70"
+            className="flex h-[48px] w-[48px] shrink-0 items-center justify-center text-gray-dark transition-opacity hover:opacity-80 active:opacity-70"
             aria-label="채팅방 신고"
           >
             <SirenIcon className="size-24" aria-hidden />
           </button>
-        </div>
-      </header>
+        }
+      />
 
       <BottomSheet
         open={reportSheetOpen}
