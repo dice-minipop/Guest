@@ -1,8 +1,8 @@
-import { createFileRoute, useNavigate, Outlet, useRouterState } from "@tanstack/react-router";
-import { useStackedBack } from "@/shared/ui/use-stacked-back";
+import { createFileRoute, useNavigate, Outlet, useRouter, useRouterState } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import ArrowRightIcon from "@/assets/icons/Arrow/right.svg?react";
+import { BackHeader } from "@/components/BackHeader";
 import { getMyBrandInfo, queryKeys } from "@/api";
+import { backWithHistory } from "@/shared/navigation/back";
 
 export const Route = createFileRoute("/reservation/apply")({
   validateSearch: (search: Record<string, unknown>) => ({
@@ -26,7 +26,7 @@ function ReservationApplyLayout() {
 
 function ReservationApplyPage() {
   const navigate = useNavigate();
-  const stackedBack = useStackedBack();
+  const router = useRouter();
   const search = Route.useSearch();
   const { data: brandList, isLoading } = useQuery({
     queryKey: queryKeys.brand.myInfo,
@@ -35,8 +35,8 @@ function ReservationApplyPage() {
   const brand = brandList && brandList.length > 0 ? brandList[0] : null;
 
   const handleBack = () => {
-    if (window.history.length > 1 && stackedBack) {
-      stackedBack.requestBack();
+    if (window.history.length > 1) {
+      backWithHistory(router);
     } else {
       navigate({ to: "/reservation", state: { transitionDirection: "back" } });
     }
@@ -54,21 +54,7 @@ function ReservationApplyPage() {
 
   return (
     <div className="min-h-screen bg-dice-white">
-      <header className="fixed top-0 left-1/2 z-10 flex w-full max-w-(--common-max-width) -translate-x-1/2 items-center justify-between bg-dice-white px-[3px]">
-        <button
-          type="button"
-          onClick={handleBack}
-          className="flex h-[48px] w-[48px] shrink-0 items-center justify-center rounded-full text-(--dice-black) transition-colors hover:bg-neutral-100"
-          aria-label="뒤로가기"
-        >
-          <ArrowRightIcon className="h-24 w-24" aria-hidden />
-        </button>
-        <h1 className="pointer-events-none absolute left-0 right-0 text-center typo-subtitle3 text-(--dice-black)">
-          예약 신청
-        </h1>
-        <div className="h-10 w-10 shrink-0" aria-hidden />
-      </header>
-
+      <BackHeader title="예약 신청" onBack={handleBack} />
       <div className="px-(--spacing-screen-x) pt-20">
         {isLoading && (
           <p className="py-8 text-center typo-body2 text-gray-medium">

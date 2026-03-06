@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import ArrowRightIcon from "@/assets/icons/Arrow/right.svg?react";
+import { BackHeader } from "@/components/BackHeader";
 import { getLikedSpaceLists, getLikedAnnouncementLists, queryKeys } from "@/api";
 import { canUseMemberOnlyApi } from "@/api/axios";
 import type { AnnouncementItem, LikedAnnouncement } from "@/api";
@@ -119,59 +119,39 @@ function LikedPage() {
 
   return (
     <div className="min-h-screen bg-dice-white">
-      <header
+      <BackHeader
         ref={headerRef}
-        className="fixed top-0 left-1/2 z-10 w-full max-w-(--common-max-width) -translate-x-1/2 bg-dice-white"
-        style={{
-          paddingTop: "max(var(--spacing-12), env(safe-area-inset-top, 0px))",
-          paddingBottom: "var(--spacing-12)",
-          paddingLeft: "3px",
-          paddingRight: "3px",
-        }}
-      >
-        <div className="relative flex min-h-[44px] w-full items-center">
-          <button
-            type="button"
-            onClick={handleBack}
-            className="w-[48px] h-[48px] flex shrink-0 items-center justify-center typo-subtitle1 text-white transition-opacity hover:opacity-80 active:opacity-70"
-            aria-label="뒤로가기"
-          >
-            <ArrowRightIcon className="size-24" aria-hidden />
-          </button>
-
-          <div className="absolute left-0 right-0 flex justify-center px-[10px] pointer-events-none">
-            <div className="relative flex w-full max-w-[160px] pointer-events-auto rounded-full border border-neutral-600 bg-neutral-800 p-1">
-              <div
-                className="absolute top-1 bottom-1 w-[calc(50%-4px)] rounded-full bg-white shadow-sm transition-[left] duration-200 ease-out"
-                style={{
-                  left: tab === "space" ? "4px" : "calc(50% + 2px)",
-                }}
-                aria-hidden
-              />
-              <button
-                type="button"
-                onClick={() => setTab("space")}
-                className={`relative z-10 flex flex-1 items-center justify-center rounded-full py-2.5 typo-button1 transition-colors duration-200 ease-out ${
-                  tab === "space" ? "text-black" : "text-white"
-                }`}
-              >
-                찜한공간
-              </button>
-              <button
-                type="button"
-                onClick={() => setTab("announcement")}
-                className={`relative z-10 flex flex-1 items-center justify-center rounded-full py-2.5 typo-button1 transition-colors duration-200 ease-out ${
-                  tab === "announcement" ? "text-black" : "text-white"
-                }`}
-              >
-                찜한공고
-              </button>
-            </div>
+        onBack={handleBack}
+        centerSlot={
+          <div className="relative flex w-full max-w-[160px] rounded-full border border-neutral-600 bg-neutral-800 p-1">
+            <div
+              className="absolute top-1 bottom-1 w-[calc(50%-4px)] rounded-full bg-white shadow-sm transition-[left] duration-200 ease-out"
+              style={{
+                left: tab === "space" ? "4px" : "calc(50% + 2px)",
+              }}
+              aria-hidden
+            />
+            <button
+              type="button"
+              onClick={() => setTab("space")}
+              className={`relative z-10 flex flex-1 items-center justify-center rounded-full py-2.5 typo-button1 transition-colors duration-200 ease-out ${
+                tab === "space" ? "text-black" : "text-white"
+              }`}
+            >
+              찜한공간
+            </button>
+            <button
+              type="button"
+              onClick={() => setTab("announcement")}
+              className={`relative z-10 flex flex-1 items-center justify-center rounded-full py-2.5 typo-button1 transition-colors duration-200 ease-out ${
+                tab === "announcement" ? "text-black" : "text-white"
+              }`}
+            >
+              찜한공고
+            </button>
           </div>
-
-          <div className="w-12 shrink-0" aria-hidden />
-        </div>
-      </header>
+        }
+      />
       <div aria-hidden style={{ minHeight: headerHeight || 56 }} />
 
       <div

@@ -6,26 +6,28 @@
     "packages/*"
   ],
   "scripts": {
-    "react": "pnpm --filter @dice-v2/react dev",
-    "react:build": "pnpm --filter @dice-v2/react build",
-    "expo": "pnpm --filter @dice-v2/expo start",
-    "expo:ios": "pnpm --filter @dice-v2/expo ios",
-    "expo:android": "pnpm --filter @dice-v2/expo android",
+    "react": "turbo run dev --filter=@dice-v2/react",
+    "react:build": "turbo run build --filter=@dice-v2/react",
+    "expo": "pnpm --filter @dice-v2/expo exec -- npx expo start",
+    "expo:ios": "turbo run ios --filter=@dice-v2/expo",
+    "expo:android": "turbo run android --filter=@dice-v2/expo",
     "expo:prebuild": "pnpm --filter @dice-v2/expo exec -- npx expo prebuild",
     "expo:prebuild:clean": "pnpm --filter @dice-v2/expo exec -- npx expo prebuild --clean",
-    "lint": "pnpm -r run lint",
+    "lint": "turbo run lint",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "android": "pnpm --filter @dice-v2/expo run android",
-    "ios": "pnpm --filter @dice-v2/expo run ios",
-    "ios:device": "pnpm --filter @dice-v2/expo run ios -- --device"
+    "android": "turbo run android --filter=@dice-v2/expo",
+    "ios": "turbo run ios --filter=@dice-v2/expo",
+    "ios:device": "pnpm --filter @dice-v2/expo run ios -- --device",
+    "build": "turbo run build"
   },
   "packageManager": "pnpm@9.15.0",
   "engines": {
     "node": ">=18"
   },
   "devDependencies": {
-    "prettier": "^3.4.2"
+    "prettier": "^3.4.2",
+    "turbo": "^2.8.13"
   },
   "version": "1.0.0",
   "dependencies": {

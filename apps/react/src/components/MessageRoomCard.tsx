@@ -45,11 +45,7 @@ export function MessageRoomCard({ item }: MessageRoomCardProps) {
       >
         {/* 공간 이미지 */}
         <div className="relative size-14 shrink-0 overflow-hidden rounded-lg bg-neutral-200">
-          <SpaceImage
-            src={item.spaceImage}
-            alt=""
-            className="size-full object-cover"
-          />
+          <SpaceImage src={item.spaceImage} alt="" className="size-full object-cover" />
         </div>
 
         {/* 공간명+마지막 메시지 | 시간+안읽은 개수 (간격 4px) */}

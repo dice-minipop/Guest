@@ -1,8 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { Outlet, useRouter, useRouterState } from "@tanstack/react-router";
+import { useEffect, useRef } from "react";
+import { Outlet, useRouterState } from "@tanstack/react-router";
 
 import { TRANSITION_DIRECTION_KEY } from "@/shared/navigation/constants";
-import { StackedBackContext } from "@/shared/ui/use-stacked-back";
 
 const TAB_ROOT_PATHS = new Set(["/space", "/announcement", "/reservation", "/mypage"]);
 
@@ -10,17 +9,20 @@ function isTabRootPath(path: string) {
   return TAB_ROOT_PATHS.has(path);
 }
 
+/**
+ * Running-Rife 스타일 스택 뷰포트.
+ * - 진입 시에만 애니메이션 (forward: 오른쪽에서, back: 왼쪽에서)
+ * - history.back() 시 sessionStorage로 전환 방향 전달
+ */
 export function StackedOutlet() {
-  const router = useRouter();
   const location = useRouterState({ select: (state) => state.location });
   const pathname = location.pathname;
   const locationState = location.state as { transitionDirection?: "forward" | "back" } | undefined;
-  const [isExiting, setIsExiting] = useState(false);
+  const lastClearedPathRef = useRef<string | null>(null);
 
   const rawSession =
     typeof window !== "undefined" ? sessionStorage.getItem(TRANSITION_DIRECTION_KEY) : null;
   const sessionValue = rawSession === "forward" || rawSession === "back" ? rawSession : null;
-  const lastClearedPathRef = useRef<string | null>(null);
 
   useEffect(() => {
     if (sessionValue && lastClearedPathRef.current !== pathname) {
@@ -29,63 +31,22 @@ export function StackedOutlet() {
     }
   }, [pathname, sessionValue]);
 
-  const requestBack = useCallback(() => {
-    if (window.history.length <= 1) return;
-    if (typeof window !== "undefined") {
-      sessionStorage.setItem(TRANSITION_DIRECTION_KEY, "back");
-    }
-    setIsExiting(true);
-  }, []);
+  const effectiveTransitionDirection = sessionValue ?? locationState?.transitionDirection;
 
-  const exitHandledRef = useRef(false);
-  const handleExitAnimationEnd = useCallback(() => {
-    if (exitHandledRef.current) return;
-    exitHandledRef.current = true;
-    setIsExiting(false);
-    router.history.back();
-  }, [router]);
-
-  useEffect(() => {
-    if (!isExiting) return;
-    exitHandledRef.current = false;
-    const id = setTimeout(handleExitAnimationEnd, 300);
-    return () => clearTimeout(id);
-  }, [isExiting, handleExitAnimationEnd]);
-
-  const effectiveTransitionDirection = isExiting ? undefined : (sessionValue ?? locationState?.transitionDirection);
-  const isBackFromStackedBack = sessionValue === "back";
-
-  const animationClass = isExiting
-    ? "route-exit-forward exiting"
-    : isBackFromStackedBack
-      ? "route-enter-none"
-      : effectiveTransitionDirection === "back"
-        ? "route-enter-back"
-        : effectiveTransitionDirection === "forward"
+  const animationClass =
+    effectiveTransitionDirection === "back"
+      ? "route-enter-back"
+      : effectiveTransitionDirection === "forward"
         ? "route-enter-forward"
         : isTabRootPath(pathname)
           ? "route-enter-none"
           : "route-enter-forward";
 
   return (
-    <StackedBackContext.Provider value={{ requestBack }}>
-      <div className="route-stack-viewport relative h-full w-full overflow-hidden">
-        <div
-          key={location.href}
-          className={`route-stack-view ${animationClass}`}
-          onAnimationEnd={
-            isExiting
-              ? (e) => {
-                  if (e.target === e.currentTarget && e.animationName) {
-                    handleExitAnimationEnd();
-                  }
-                }
-              : undefined
-          }
-        >
-          <Outlet />
-        </div>
+    <div className="route-stack-viewport relative h-full w-full overflow-hidden">
+      <div key={location.href} className={`route-stack-view ${animationClass}`}>
+        <Outlet />
       </div>
-    </StackedBackContext.Provider>
+    </div>
   );
 }
