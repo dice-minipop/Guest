@@ -52,7 +52,6 @@ export function BottomNav() {
             key={to}
             to={to}
             replace
-            state={{ skipTransition: true }}
             className={`flex flex-1 flex-col items-center justify-center gap-8 py-8 no-underline transition-colors ${
               isActive ? "text-gray-dark" : "text-gray-medium"
             } hover:text-gray-dark`}
