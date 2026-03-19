@@ -49,8 +49,8 @@ export function AnnouncementFilterChips({
   onOpenFilter,
 }: AnnouncementFilterChipsProps) {
   return (
-    <div className="mb-16 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-      <div className="flex w-max min-w-full flex-nowrap gap-2">
+    <div className="mb-4 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+      <div className="flex w-max min-w-full flex-nowrap gap-0.5">
         {ANNOUNCEMENT_FILTER_CHIPS.map(({ key, label }) => {
           const isActive = hasSavedValue(key, filterSummary);
           return (
@@ -58,14 +58,14 @@ export function AnnouncementFilterChips({
               key={key}
               type="button"
               onClick={() => onOpenFilter(key)}
-              className={`flex flex-row items-center gap-2 rounded-full border pl-12 pr-8 py-[5.5px] typo-button1 transition-colors ${
+              className={`flex flex-row items-center gap-0.5 rounded-full border pl-3 pr-2 py-[5.5px] typo-button1 transition-colors ${
                 isActive
                   ? "border-transparent bg-dice-black text-dice-white hover:bg-dice-black/90"
                   : "border-(--stroke-eee) bg-bg-light-gray text-(--gray-deep) hover:bg-neutral-50"
               }`}
             >
               {getChipLabel(key, label, filterSummary)}
-              <ArrowDownIcon className="size-16 shrink-0" aria-hidden />
+              <ArrowDownIcon className="size-4 shrink-0" aria-hidden />
             </button>
           );
         })}

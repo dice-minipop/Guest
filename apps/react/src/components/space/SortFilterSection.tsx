@@ -1,6 +1,6 @@
 import { SORT_OPTIONS } from "./constants";
 
-const itemBaseClass = "w-full rounded-lg p-16 typo-subtitle2 text-left transition-colors";
+const itemBaseClass = "w-full rounded-lg p-4 typo-subtitle2 text-left transition-colors";
 
 function itemClass(selected: boolean) {
   return selected ? "bg-bg-light-gray text-dice-black" : "bg-white text-gray-medium";
@@ -13,7 +13,7 @@ export interface SortFilterSectionProps {
 
 export function SortFilterSection({ value, onChange }: SortFilterSectionProps) {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-0.5">
       {SORT_OPTIONS.map((opt) => (
         <button
           key={opt.value}

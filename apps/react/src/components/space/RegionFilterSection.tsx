@@ -1,6 +1,6 @@
 import { regionItems } from "../../data/regionItems";
 
-const cityChipBaseClass = "rounded-full border px-12 py-[5.5px] typo-button1 transition-colors";
+const cityChipBaseClass = "rounded-full border px-3 py-[5.5px] typo-button1 transition-colors";
 
 function cityChipClass(selected: boolean) {
   return selected
@@ -30,11 +30,11 @@ export function RegionFilterSection({
   const districtOptions = selectedRegion?.item ?? [];
 
   return (
-    <div className="flex flex-col gap-24">
+    <div className="flex flex-col gap-6">
       {/* 시·도 칩: 2줄 고정, 가로 스크롤 */}
       <div className="overflow-x-auto py-1 scrollbar-none">
         <div
-          className="grid w-max gap-2"
+          className="grid w-max gap-0.5"
           style={{
             gridTemplateRows: "repeat(2, auto)",
             gridAutoFlow: "column",
@@ -54,7 +54,7 @@ export function RegionFilterSection({
       </div>
 
       {districtOptions.length > 0 && (
-        <div className="flex flex-wrap gap-x-6 gap-y-8 bg-bg-light-gray p-16 rounded-lg">
+        <div className="flex flex-wrap gap-x-1.5 gap-y-2 bg-bg-light-gray p-4 rounded-lg">
           {districtOptions.map((name) => {
             const value = name === "전체" ? "" : name;
             const selected = sheetDistrict === value;

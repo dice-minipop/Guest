@@ -8,7 +8,7 @@ import { SortFilterSection } from "./SortFilterSection";
 import { CHIP_KEY_TO_SECTION_INDEX, FILTER_TABS } from "./constants";
 import type { FilterChipKey, PopulationFilterState } from "./constants";
 
-const SECTION_CLASS = "scroll-mt-2 py-24 px-5";
+const SECTION_CLASS = "scroll-mt-0.5 py-6 px-5";
 
 export interface SpaceFilterSheetContentProps {
   sheetCity: string;
@@ -90,9 +90,9 @@ export function SpaceFilterSheetContent({
     <div className="flex max-h-[85vh] flex-col overflow-hidden">
       {/* 스크롤 영역: 탭(고정) + 섹션들. 탭은 이 컨테이너 안에서 sticky로 상단 고정 */}
       <div ref={scrollContainerRef} className="min-h-0 flex-1 overflow-y-auto">
-        <div className="sticky top-0 z-10 flex items-center gap-2 border-b border-neutral-200 bg-white pl-5 pr-[3px] py-2">
+        <div className="sticky top-0 z-10 flex items-center gap-0.5 border-b border-neutral-200 bg-white pl-5 pr-[3px] py-0.5">
           <div className="min-w-0 flex-1 overflow-x-auto scrollbar-none">
-            <div className="flex w-max flex-nowrap gap-4">
+            <div className="flex w-max flex-nowrap gap-1">
               {FILTER_TABS.map((tab, index) => {
                 const isActive = activeTabIndex === index;
                 return (
@@ -100,7 +100,7 @@ export function SpaceFilterSheetContent({
                     key={tab.id}
                     type="button"
                     onClick={() => scrollToSection(index)}
-                    className={`typo-subtitle1 text-left shrink-0 rounded-full pr-8 py-8 transition-colors hover:bg-neutral-100 ${
+                    className={`typo-subtitle1 text-left shrink-0 rounded-full pr-2 py-2 transition-colors hover:bg-neutral-100 ${
                       isActive ? "text-(--dice-black)" : "text-(--gray-light)"
                     }`}
                   >
@@ -116,7 +116,7 @@ export function SpaceFilterSheetContent({
             aria-label="필터 닫기"
             className="flex h-[48px] w-[48px] shrink-0 items-center justify-center rounded-full text-(--gray-deep) transition-colors hover:bg-neutral-100 hover:text-(--dice-black)"
           >
-            <XIcon className="size-24" aria-hidden />
+            <XIcon className="size-6" aria-hidden />
           </button>
         </div>
 
@@ -136,7 +136,7 @@ export function SpaceFilterSheetContent({
             />
           </section>
 
-          <div className="h-8 bg-bg-light-gray" />
+          <div className="h-2 bg-bg-light-gray" />
 
           <section
             ref={(el) => {
@@ -148,7 +148,7 @@ export function SpaceFilterSheetContent({
             <PopulationFilterSection value={population} onChange={onPopulationChange} />
           </section>
 
-          <div className="h-8 bg-bg-light-gray" />
+          <div className="h-2 bg-bg-light-gray" />
 
           <section
             ref={(el) => {
@@ -160,7 +160,7 @@ export function SpaceFilterSheetContent({
             <PriceFilterSection value={price} onChange={onPriceChange} />
           </section>
 
-          <div className="h-8 bg-bg-light-gray" />
+          <div className="h-2 bg-bg-light-gray" />
 
           <section
             ref={(el) => {
@@ -172,7 +172,7 @@ export function SpaceFilterSheetContent({
             <SizeFilterSection value={size} onChange={onSizeChange} />
           </section>
 
-          <div className="h-8 bg-bg-light-gray" />
+          <div className="h-2 bg-bg-light-gray" />
 
           <section
             ref={(el) => {
@@ -188,18 +188,18 @@ export function SpaceFilterSheetContent({
         </div>
       </div>
 
-      <div className="flex shrink-0 gap-12 border-t border-neutral-200 px-5 py-16">
+      <div className="flex shrink-0 gap-3 border-t border-neutral-200 px-5 py-4">
         <button
           type="button"
           onClick={onReset}
-          className="rounded-lg border border-stroke-eee p-16 typo-button1 text-dice-black"
+          className="rounded-lg border border-stroke-eee p-4 typo-button1 text-dice-black"
         >
           초기화
         </button>
         <button
           type="button"
           onClick={onApply}
-          className="flex-1 rounded-lg bg-dice-black p-16 typo-button1 text-white"
+          className="flex-1 rounded-lg bg-dice-black p-4 typo-button1 text-white"
         >
           필터 결과 보기
         </button>

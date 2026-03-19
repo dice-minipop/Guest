@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { getGuestInfo, queryKeys } from "@/api";
+import { BackHeader } from "@/components/BackHeader";
 import { backWithHistory } from "@/shared/navigation/back";
 
 export const Route = createFileRoute("/mypage/profile")({
@@ -8,7 +9,7 @@ export const Route = createFileRoute("/mypage/profile")({
 });
 
 const inputBase =
-  "typo-body2 w-full appearance-none rounded-lg border border-(--gray-light) bg-(--gray-light) px-16 py-3 text-[16px] text-(--gray-dark) cursor-not-allowed";
+  "typo-body2 w-full appearance-none rounded-lg border border-(--gray-light) bg-(--gray-light) px-4 py-3 text-[16px] text-(--gray-dark) cursor-not-allowed";
 
 function MypageProfilePage() {
   const navigate = useNavigate();
@@ -27,66 +28,59 @@ function MypageProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-dice-white px-(--spacing-screen-x)">
-      <div className="mb-4 flex items-center gap-2">
-        <button
-          type="button"
-          onClick={handleBack}
-          className="typo-body2 text-(--gray-deep) active:opacity-80"
-        >
-          ‹ 마이페이지
-        </button>
+    <div className="min-h-screen bg-dice-white">
+      <BackHeader title="회원 정보 관리" onBack={handleBack} />
+      <div aria-hidden style={{ minHeight: 48 }} />
+      <div className="px-5 pt-8">
+        {isLoading ? (
+          <p className="mt-1 typo-body2 text-(--gray-deep)">불러오는 중...</p>
+        ) : (
+          <div className="mt-1.5 flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
+              <label htmlFor="profile-name" className="typo-caption1 text-(--gray-dark)">
+                이름
+              </label>
+              <input
+                id="profile-name"
+                type="text"
+                value={data?.name ?? ""}
+                disabled
+                readOnly
+                className={inputBase}
+                aria-label="이름"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label htmlFor="profile-email" className="typo-caption1 text-(--gray-dark)">
+                이메일
+              </label>
+              <input
+                id="profile-email"
+                type="email"
+                value={data?.email ?? ""}
+                disabled
+                readOnly
+                className={inputBase}
+                aria-label="이메일"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label htmlFor="profile-phone" className="typo-caption1 text-(--gray-dark)">
+                휴대폰 번호
+              </label>
+              <input
+                id="profile-phone"
+                type="tel"
+                value={data?.phone ?? ""}
+                disabled
+                readOnly
+                className={inputBase}
+                aria-label="휴대폰 번호"
+              />
+            </div>
+          </div>
+        )}
       </div>
-      <h1 className="typo-h1 text-(--dice-black)">회원 정보 관리</h1>
-
-      {isLoading ? (
-        <p className="mt-4 typo-body2 text-(--gray-deep)">불러오는 중...</p>
-      ) : (
-        <div className="mt-6 flex flex-col gap-16">
-          <div className="flex flex-col gap-8">
-            <label htmlFor="profile-name" className="typo-caption1 text-(--gray-dark)">
-              이름
-            </label>
-            <input
-              id="profile-name"
-              type="text"
-              value={data?.name ?? ""}
-              disabled
-              readOnly
-              className={inputBase}
-              aria-label="이름"
-            />
-          </div>
-          <div className="flex flex-col gap-8">
-            <label htmlFor="profile-email" className="typo-caption1 text-(--gray-dark)">
-              이메일
-            </label>
-            <input
-              id="profile-email"
-              type="email"
-              value={data?.email ?? ""}
-              disabled
-              readOnly
-              className={inputBase}
-              aria-label="이메일"
-            />
-          </div>
-          <div className="flex flex-col gap-8">
-            <label htmlFor="profile-phone" className="typo-caption1 text-(--gray-dark)">
-              휴대폰 번호
-            </label>
-            <input
-              id="profile-phone"
-              type="tel"
-              value={data?.phone ?? ""}
-              disabled
-              readOnly
-              className={inputBase}
-              aria-label="휴대폰 번호"
-            />
-          </div>
-        </div>
-      )}
     </div>
   );
 }

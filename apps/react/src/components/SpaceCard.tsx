@@ -55,12 +55,12 @@ export function SpaceCard({ item }: SpaceCardProps) {
           <SpaceImage src={imageUrl} alt="" className="h-full w-full object-cover" />
         </div>
 
-        <div className="flex flex-col gap-1 p-16">
+        <div className="flex flex-col gap-1 p-4">
           {/* 위치·이름·크기 묶음 ↔ 좋아요 버튼 (좌우 정렬) */}
-          <div className="flex items-start justify-between gap-2">
+          <div className="flex items-start justify-between gap-0.5">
             <div className="min-w-0 flex-1 flex flex-col">
               <span className="typo-caption1 truncate text-gray-medium">{location}</span>
-              <h2 className="typo-subtitle1 truncate text-dice-black mb-2">{item.name}</h2>
+              <h2 className="typo-subtitle1 truncate text-dice-black mb-0.5">{item.name}</h2>
               <p className="typo-caption2 text-gray-light">
                 {item.size > 0 || item.square > 0
                   ? `${item.size}m² (${item.square}평)`
@@ -85,9 +85,9 @@ export function SpaceCard({ item }: SpaceCardProps) {
                 disabled={likeMutation.isPending}
               >
                 {isLiked ? (
-                  <LikePurple className="h-24 w-24" />
+                  <LikePurple className="h-6 w-6" />
                 ) : (
-                  <LikeLightgray className="h-24 w-24" />
+                  <LikeLightgray className="h-6 w-6" />
                 )}
               </button>
               <span

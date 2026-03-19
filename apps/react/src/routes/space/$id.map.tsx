@@ -46,9 +46,9 @@ function SpaceMapPage() {
 
   if (!Number.isInteger(spaceId) || spaceId <= 0) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center px-4">
+      <div className="flex min-h-screen flex-col items-center justify-center px-1">
         <p className="text-neutral-500">잘못된 공간 ID입니다.</p>
-        <Link to="/space" className="mt-4 text-indigo-600 hover:underline">
+        <Link to="/space" className="mt-1 text-indigo-600 hover:underline">
           목록으로
         </Link>
       </div>
@@ -65,11 +65,11 @@ function SpaceMapPage() {
 
   if (isError || !data) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center px-4">
+      <div className="flex min-h-screen flex-col items-center justify-center px-1">
         <p className="text-red-600">
           {error instanceof Error ? error.message : "공간 정보를 불러오지 못했습니다."}
         </p>
-        <Link to="/space" className="mt-4 text-indigo-600 hover:underline">
+        <Link to="/space" className="mt-1 text-indigo-600 hover:underline">
           목록으로
         </Link>
       </div>
@@ -139,12 +139,12 @@ function SpaceMapPage() {
             className="flex h-[48px] w-[48px] shrink-0 items-center justify-center text-dice-black transition-opacity hover:opacity-80 active:opacity-70"
             aria-label="뒤로 가기"
           >
-            <ArrowRightIcon className="size-24" aria-hidden />
+            <ArrowRightIcon className="size-6" aria-hidden />
           </button>
           <h1 className="pointer-events-none absolute left-0 right-0 text-center typo-subtitle3 text-dice-black">
             {data.name} 위치
           </h1>
-          <div className="w-12 shrink-0" aria-hidden />
+          <div className="w-3 shrink-0" aria-hidden />
         </div>
       </header>
 
@@ -167,7 +167,7 @@ function SpaceMapPage() {
       </div>
 
       {/* 하단 주소 + 길찾기 */}
-      <div className="shrink-0 border-t border-stroke-eee bg-white px-(--spacing-screen-x) py-4 space-y-3">
+      <div className="shrink-0 border-t border-stroke-eee bg-white px-5 py-1 space-y-3">
         {data.address && <p className="typo-body1 text-gray-deep">{data.address}</p>}
         {browserUrl && (
           <button

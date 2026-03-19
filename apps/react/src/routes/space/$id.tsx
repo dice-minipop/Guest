@@ -81,9 +81,9 @@ function SpaceTitleWithLike({ data }: { data: SpaceDetailData }) {
           aria-label={isLiked ? "좋아요 취소" : "좋아요"}
         >
           {isLiked ? (
-            <LikePurple className="h-24 w-24" aria-hidden />
+            <LikePurple className="h-6 w-6" aria-hidden />
           ) : (
-            <LikeLightgray className="h-24 w-24" aria-hidden />
+            <LikeLightgray className="h-6 w-6" aria-hidden />
           )}
         </button>
         <span
@@ -174,12 +174,12 @@ function SpaceDetailPage() {
 
   if (!Number.isInteger(spaceId) || spaceId <= 0) {
     return (
-      <div className="px-4 py-8">
+      <div className="px-1 py-2">
         <p className="text-neutral-500">잘못된 공간 ID입니다.</p>
         <Link
           to="/space"
           state={{ transitionDirection: "back" }}
-          className="mt-4 inline-block text-indigo-600 hover:underline"
+          className="mt-1 inline-block text-indigo-600 hover:underline"
         >
           목록으로
         </Link>
@@ -188,19 +188,19 @@ function SpaceDetailPage() {
   }
 
   if (isLoading) {
-    return <div className="px-4 py-12 text-center text-sm text-neutral-500">불러오는 중...</div>;
+    return <div className="px-1 py-3 text-center text-sm text-neutral-500">불러오는 중...</div>;
   }
 
   if (isError || !data) {
     return (
-      <div className="px-4 py-8">
+      <div className="px-1 py-2">
         <p className="text-red-600">
           {error instanceof Error ? error.message : "공간 정보를 불러오지 못했습니다."}
         </p>
         <Link
           to="/space"
           state={{ transitionDirection: "back" }}
-          className="mt-4 inline-block text-indigo-600 hover:underline"
+          className="mt-1 inline-block text-indigo-600 hover:underline"
         >
           목록으로
         </Link>
@@ -235,10 +235,10 @@ function SpaceDetailPage() {
         <button
           type="button"
           onClick={handleBackToList}
-          className="flex p-12 pl-[15px] shrink-0 items-center justify-center"
+          className="flex p-3 pl-[15px] shrink-0 items-center justify-center"
           aria-label="목록으로"
         >
-          <RightWhiteIcon className="size-24" aria-hidden />
+          <RightWhiteIcon className="size-6" aria-hidden />
         </button>
       </div>
 
@@ -246,7 +246,7 @@ function SpaceDetailPage() {
       <button
         type="button"
         onClick={handleBackToList}
-        className={`absolute z-30 flex items-center justify-center rounded-full bg-(--dim-basic) p-6 transition-opacity ${
+        className={`absolute z-30 flex items-center justify-center rounded-full bg-(--dim-basic) p-1.5 transition-opacity ${
           isPastCarousel ? "pointer-events-none opacity-0" : "opacity-100"
         }`}
         style={{
@@ -255,11 +255,11 @@ function SpaceDetailPage() {
         }}
         aria-label="목록으로"
       >
-        <RightWhiteIcon className="size-24 shrink-0 text-white [&_path]:stroke-white" aria-hidden />
+        <RightWhiteIcon className="size-6 shrink-0 text-white [&_path]:stroke-white" aria-hidden />
       </button>
 
       {/* 스크롤 영역 (스크롤바는 이 영역 안에서만, 바텀 바 위에서 끊김) */}
-      <div ref={scrollRef} className="no-bounce-scroll min-h-0 flex-1 overflow-y-auto pb-20">
+      <div ref={scrollRef} className="no-bounce-scroll min-h-0 flex-1 overflow-y-auto pb-5">
         {/* 캐러셀 */}
         <div ref={carouselRef} className="relative w-full">
           {imageUrls.length > 0 ? (
@@ -278,8 +278,8 @@ function SpaceDetailPage() {
           )}
         </div>
 
-        <section className="space-y-24">
-          <div className="px-(--spacing-screen-x) space-y-16 mt-32">
+        <section className="space-y-6">
+          <div className="px-5 space-y-4 mt-8">
             <SpaceTitleWithLike data={data} />
 
             <div className="mt-1 flex flex-col gap-0.5">
@@ -304,11 +304,11 @@ function SpaceDetailPage() {
             </div>
           </div>
 
-          <div className="px-(--spacing-screen-x)">
-            <button className="w-full p-16 flex flex-col items-center justify-center border border-stroke-eee rounded-lg">
-              <p className="typo-caption2 text-gray-medium mb-8">유동인구 핵심 분석</p>
+          <div className="px-5">
+            <button className="w-full p-4 flex flex-col items-center justify-center border border-stroke-eee rounded-lg">
+              <p className="typo-caption2 text-gray-medium mb-2">유동인구 핵심 분석</p>
               {data.analysis && (data.analysis.title || data.analysis.description) ? (
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-1">
                   {data.analysis.title && (
                     <p className="typo-subtitle2 text-system-purple">{data.analysis.title}</p>
                   )}
@@ -323,14 +323,14 @@ function SpaceDetailPage() {
               )}
 
               {data.analysis && (data.analysis.title || data.analysis.description) && (
-                <p className="w-full typo-caption1 text-gray-semilight border-t border-stroke-eee pt-16">
+                <p className="w-full typo-caption1 text-gray-semilight border-t border-stroke-eee pt-4">
                   선택한 모든 브랜드 타겟 유동인구 더보기
                 </p>
               )}
             </button>
           </div>
 
-          <dl className="px-(--spacing-screen-x) mt-4 flex flex-col gap-8 typo-caption1 text-gray-deep border-b border-stroke-eee pb-5">
+          <dl className="px-5 mt-1 flex flex-col gap-2 typo-caption1 text-gray-deep border-b border-stroke-eee pb-5">
             <div className="flex gap-5">
               <dt className="w-14 shrink-0">영업 시간</dt>
               <dd className="min-w-0">
@@ -349,13 +349,13 @@ function SpaceDetailPage() {
           </dl>
 
           {tags.length > 0 && (
-            <div className="px-(--spacing-screen-x) space-y-[5px]">
+            <div className="px-5 space-y-[5px]">
               <h3 className="typo-caption1 text-dice-black">동네 해시태그</h3>
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-wrap gap-1">
                 {tags.map((tag) => (
                   <span
                     key={tag}
-                    className="typo-caption1 text-gray-deep px-2.5 py-4 rounded-full border border-stroke-eee"
+                    className="typo-caption1 text-gray-deep px-2.5 py-1 rounded-full border border-stroke-eee"
                   >
                     <span className="text-gray-light mr-0.5">#</span>
                     {tag}
@@ -366,9 +366,9 @@ function SpaceDetailPage() {
           )}
         </section>
 
-        <div className="h-8 bg-bg-light-gray my-24" />
+        <div className="h-2 bg-bg-light-gray my-6" />
 
-        <section className="px-(--spacing-screen-x) space-y-24">
+        <section className="px-5 space-y-6">
           <h2 className="typo-subtitle2 text-dice-black">팝업 공간 소개</h2>
           <p
             className={`mt-1 whitespace-pre-wrap typo-body1 text-gray-deep ${
@@ -380,18 +380,18 @@ function SpaceDetailPage() {
           <button
             type="button"
             onClick={() => setDetailsExpanded((prev) => !prev)}
-            className="typo-button1 w-full rounded-lg bg-white py-16 text-gray-medium border border-stroke-eee transition-opacity hover:opacity-90"
+            className="typo-button1 w-full rounded-lg bg-white py-4 text-gray-medium border border-stroke-eee transition-opacity hover:opacity-90"
           >
             {detailsExpanded ? "간략히 보기" : "자세히 보기"}
           </button>
         </section>
 
-        <div className="h-8 bg-bg-light-gray my-24" />
+        <div className="h-2 bg-bg-light-gray my-6" />
 
-        <section className="px-(--spacing-screen-x)">
+        <section className="px-5">
           <h2 className="typo-subtitle2 text-dice-black">시설·집기 이용 안내</h2>
           {facilityInfos.length > 0 ? (
-            <ul className="mt-2 flex flex-col gap-3">
+            <ul className="mt-0.5 flex flex-col gap-3">
               {facilityInfos.map((info, index) => (
                 <li key={info.key ?? info.name ?? index}>
                   <FacilityInfoRow item={info} />
@@ -399,15 +399,15 @@ function SpaceDetailPage() {
               ))}
             </ul>
           ) : (
-            <div className="mt-2 flex h-[256px] items-center justify-center">
+            <div className="mt-0.5 flex h-[256px] items-center justify-center">
               <p className="typo-body1 text-gray-semilight">아직 등록된 시설·집기가 없어요</p>
             </div>
           )}
         </section>
 
-        <div className="h-8 bg-bg-light-gray my-24" />
+        <div className="h-2 bg-bg-light-gray my-6" />
 
-        <section className="px-(--spacing-screen-x) space-y-24">
+        <section className="px-5 space-y-6">
           <h2 className="typo-subtitle2 text-dice-black">위치 안내</h2>
           <div className="typo-body1 text-gray-deep">{data.address}</div>
           {data.latitude != null &&
@@ -428,19 +428,19 @@ function SpaceDetailPage() {
                   height={200}
                   interactive={false}
                 />
-                <span className="absolute bottom-8 left-1/2 -translate-x-1/2 typo-caption2 text-white bg-black/50 px-3 py-1.5 rounded-full">
+                <span className="absolute bottom-2 left-1/2 -translate-x-1/2 typo-caption2 text-white bg-black/50 px-3 py-1.5 rounded-full">
                   탭하여 크게 보기
                 </span>
               </Link>
             )}
         </section>
 
-        <div className="h-8 bg-bg-light-gray my-24" />
+        <div className="h-2 bg-bg-light-gray my-6" />
 
-        <section className="px-(--spacing-screen-x) space-y-24">
+        <section className="px-5 space-y-6">
           <h2 className="typo-subtitle2 text-dice-black">공지사항 안내</h2>
           {data.notices && data.notices.length > 0 ? (
-            <ul className="border border-stroke-eee rounded-lg p-16 bg-bg-light-gray">
+            <ul className="border border-stroke-eee rounded-lg p-4 bg-bg-light-gray">
               {data.notices.map((notice) => (
                 <li key={notice}>
                   <p className="typo-body1 text-gray-deep">* {notice}</p>
@@ -448,7 +448,7 @@ function SpaceDetailPage() {
               ))}
             </ul>
           ) : (
-            <div className="border border-stroke-eee rounded-lg p-16 bg-bg-light-gray">
+            <div className="border border-stroke-eee rounded-lg p-4 bg-bg-light-gray">
               <p className="typo-body1 text-gray-deep">아직 등록된 공지사항이 없어요</p>
             </div>
           )}
@@ -457,10 +457,10 @@ function SpaceDetailPage() {
 
       {/* 하단 바 (바텀 네비처럼 레이아웃 흐름에 포함, 스크롤바가 뒤로 감) */}
       <div
-        className="flex shrink-0 items-center gap-3 border-t border-stroke-eee bg-dice-white px-(--spacing-screen-x)"
+        className="flex shrink-0 items-center gap-3 border-t border-stroke-eee bg-dice-white px-5"
         style={{
-          paddingTop: "var(--spacing-12)",
-          paddingBottom: "max(var(--spacing-12), env(safe-area-inset-bottom, 0px))",
+          paddingTop: "12px",
+          paddingBottom: "max(12px, env(safe-area-inset-bottom, 0px))",
         }}
       >
         <Link
@@ -468,12 +468,12 @@ function SpaceDetailPage() {
           className="flex p-3.5 shrink-0 border border-gray-light rounded-lg text-gray-dark transition-colors hover:bg-bg-light-gray"
           aria-label="쪽지함"
         >
-          <MessageIcon className="size-24" aria-hidden />
+          <MessageIcon className="size-6" aria-hidden />
         </Link>
         <button
           type="button"
           onClick={() => setReservationSheetOpen(true)}
-          className="typo-button1 flex-1 rounded-lg bg-dice-black py-16 text-white transition-opacity hover:opacity-90"
+          className="typo-button1 flex-1 rounded-lg bg-dice-black py-4 text-white transition-opacity hover:opacity-90"
         >
           공간 예약 신청
         </button>

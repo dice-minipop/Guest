@@ -115,7 +115,7 @@ function ReservationPage() {
       className="h-full overflow-y-auto overflow-x-hidden bg-white"
       style={{ overscrollBehaviorY: "none" }}
     >
-      <div className="pb-64">
+      <div className="pb-16">
         <PageHeader variant="reservation" title="예약 관리" />
 
         {isMemberOnlyAllowed ? (
@@ -146,7 +146,7 @@ function ReservationPage() {
               ))}
             </div>
 
-            <div className="pt-12 px-(--spacing-screen-x) py-4">
+            <div className="pt-3 px-5 py-1">
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div
                   key={activeStatus}
@@ -160,13 +160,13 @@ function ReservationPage() {
                   }
                 >
                   {isLoading && (
-                    <div className="py-12 text-center text-sm text-neutral-500">
+                    <div className="py-3 text-center text-sm text-neutral-500">
                       목록을 불러오는 중...
                     </div>
                   )}
 
                   {isError && (
-                    <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+                    <div className="rounded-lg border border-red-200 bg-red-50 p-1 text-sm text-red-700">
                       {error instanceof Error ? error.message : "목록을 불러오지 못했습니다."}
                     </div>
                   )}
@@ -184,7 +184,7 @@ function ReservationPage() {
                           <ReservationCard key={item.reservationId} item={item} />
                         ))}
                       </ul>
-                      <div ref={loadMoreRef} className="h-8 py-4" aria-hidden>
+                      <div ref={loadMoreRef} className="h-2 py-1" aria-hidden>
                         {isFetchingNextPage && (
                           <p className="text-center text-sm text-neutral-500">더 불러오는 중...</p>
                         )}
@@ -196,11 +196,12 @@ function ReservationPage() {
             </div>
           </>
         ) : (
-          <div className="px-(--spacing-screen-x) py-32 text-center">
+          <div className="px-5 py-8 text-center">
             <p className="typo-subtitle3 text-gray-deep">예약 목록은 로그인 후 이용할 수 있어요.</p>
             <Link
               to="/login"
-              className="mt-16 inline-flex items-center justify-center rounded-lg bg-dice-black px-20 py-12 typo-button1 text-white"
+              search={{ fromGuestBrowse: false }}
+              className="mt-4 inline-flex items-center justify-center rounded-lg bg-dice-black px-5 py-3 typo-button1 text-white"
             >
               로그인 하러가기
             </Link>

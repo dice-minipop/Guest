@@ -61,7 +61,7 @@ function AlarmsPage() {
   return (
     <div className="min-h-screen bg-dice-white">
       <BackHeader title="알림" onBack={handleBack} />
-      <div className="flex min-h-screen flex-col px-(--spacing-screen-x) pt-24 pb-8">
+      <div className="flex min-h-screen flex-col px-5 pt-6 pb-2">
         {!isMemberOnlyAllowed && (
           <div className="flex flex-1 flex-col items-center justify-center">
             <p className="typo-body2 text-center text-(--gray-deep)">
@@ -78,7 +78,7 @@ function AlarmsPage() {
 
         {isMemberOnlyAllowed && isError && (
           <div className="flex flex-1 flex-col items-center justify-center">
-            <div className="rounded-lg border border-red-200 bg-red-50 p-4 typo-body2 text-center text-red-700">
+            <div className="rounded-lg border border-red-200 bg-red-50 p-1 typo-body2 text-center text-red-700">
               {error instanceof Error ? error.message : "알림 목록을 불러오지 못했습니다."}
             </div>
           </div>
@@ -93,7 +93,7 @@ function AlarmsPage() {
         {isMemberOnlyAllowed && !isLoading && !isError && alarms && alarms.length > 0 && (
           <>
             {unreadCount > 0 && (
-              <div className="mb-4 flex justify-end">
+              <div className="mb-1 flex justify-end">
                 <button
                   type="button"
                   onClick={() => readAllMutation.mutate()}
@@ -104,7 +104,7 @@ function AlarmsPage() {
                 </button>
               </div>
             )}
-            <ul className="flex flex-col gap-4">
+            <ul className="flex flex-col gap-1">
               {alarms.map((item) => (
                 <AlarmCard
                   key={item.alarmId}
@@ -136,18 +136,18 @@ interface AlarmCardProps {
 function AlarmCard({ item, onRead, onDelete, isReadPending, isDeletePending }: AlarmCardProps) {
   return (
     <li
-      className={`rounded-lg border p-4 ${
+      className={`rounded-lg border p-1 ${
         item.isRead ? "border-neutral-200 bg-neutral-50" : "border-neutral-300 bg-white"
       }`}
     >
-      <div className="flex flex-col gap-2">
-        <div className="flex items-start justify-between gap-2">
+      <div className="flex flex-col gap-0.5">
+        <div className="flex items-start justify-between gap-0.5">
           <h2
             className={`typo-subtitle3 flex-1 ${item.isRead ? "text-gray-medium" : "text-dice-black font-medium"}`}
           >
             {item.title}
           </h2>
-          <div className="flex shrink-0 gap-2">
+          <div className="flex shrink-0 gap-0.5">
             {!item.isRead && (
               <button
                 type="button"

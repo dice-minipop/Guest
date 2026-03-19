@@ -14,7 +14,7 @@ export interface CarouselProps {
   /** 슬라이드 간 간격 (px) */
   spaceBetween?: number;
   /** 페이지네이션 표시 */
-  pagination?: boolean;
+  pagination?: SwiperOptions["pagination"];
   /** 좌우 네비게이션 버튼 표시 */
   navigation?: boolean;
   /** 루프 여부 */
@@ -28,6 +28,8 @@ export interface CarouselProps {
   onSlideChange?: (index: number) => void;
   /** 슬라이드용 추가 className */
   slideClassName?: string;
+  /** Swiper 컨테이너 추가 className */
+  className?: string;
 }
 
 export function Carousel({
@@ -40,6 +42,7 @@ export function Carousel({
   swiperOptions,
   onSlideChange,
   slideClassName,
+  className,
 }: CarouselProps) {
   const modules = useMemo(() => {
     const m = [];
@@ -50,12 +53,12 @@ export function Carousel({
 
   return (
     <Swiper
-      className={pagination ? "pb-10!" : undefined}
+      className={[pagination && "pb-10!", className].filter(Boolean).join(" ") || undefined}
       modules={modules}
       slidesPerView={slidesPerView}
       spaceBetween={spaceBetween}
       loop={loop}
-      pagination={pagination ? { clickable: true } : false}
+      pagination={pagination === true ? { clickable: true } : pagination || false}
       navigation={navigation}
       onSlideChange={(swiper: { realIndex: number }) => onSlideChange?.(swiper.realIndex)}
       {...swiperOptions}

@@ -6,8 +6,8 @@ import { createBrand } from "@/api";
 import type { CreateBrandRequest } from "@/api";
 import { uploadImageList } from "@/api/s3";
 import {
-  pickImageFromNativeGallery,
-  pickImageFromNativeCamera,
+  pickImageFromNative,
+  pickImageFromNativeWithPrompt,
   isNativeImagePickerAvailable,
 } from "@/utils/nativeImagePicker";
 import RightArrowIcon from "@/assets/icons/Arrow/right.svg?react";
@@ -35,7 +35,7 @@ const TARGET_AGE_GROUPS = [
 ] as const;
 
 const inputBase =
-  "typo-body2 w-full appearance-none rounded-lg border border-(--gray-light) bg-white px-16 py-3 text-[16px] text-(--gray-dark) placeholder:text-(--gray-light) focus:border-(--dice-black) focus:outline-none focus:ring-1 focus:ring-(--dice-black)";
+  "typo-body2 w-full appearance-none rounded-lg border border-(--gray-light) bg-white px-4 py-3 text-[16px] text-(--gray-dark) placeholder:text-(--gray-light) focus:border-(--dice-black) focus:outline-none focus:ring-1 focus:ring-(--dice-black)";
 
 function BrandProfilePage() {
   const navigate = useNavigate();
@@ -67,16 +67,24 @@ function BrandProfilePage() {
     e.target.value = "";
   };
 
-  const handleAddImage = async (source: "gallery" | "camera" = "gallery") => {
-    if (imageFiles.length + imagePreviewUrls.length >= 10) return;
-    const fromNative =
-      source === "gallery" ? await pickImageFromNativeGallery() : await pickImageFromNativeCamera();
+  const handleAddImage = async (source?: "gallery" | "camera") => {
+    if (imageFiles.length >= 10) return;
+
+    const fromNative = source
+      ? await pickImageFromNative(source)
+      : isNativeImagePickerAvailable()
+        ? await pickImageFromNativeWithPrompt()
+        : null;
+
     if (fromNative) {
       setImageFiles((prev) => [...prev, fromNative].slice(0, 10));
       setImagePreviewUrls((prev) => [...prev, URL.createObjectURL(fromNative)].slice(0, 10));
       return;
     }
-    fileInputRef.current?.click();
+
+    if (!source && !isNativeImagePickerAvailable()) {
+      fileInputRef.current?.click();
+    }
   };
 
   const removeImage = (index: number) => {
@@ -90,7 +98,7 @@ function BrandProfilePage() {
       await createBrand(data);
     },
     onSuccess: () => {
-      navigate({ to: "/login" });
+      navigate({ to: "/login", search: { fromGuestBrowse: false } });
     },
   });
 
@@ -143,50 +151,60 @@ function BrandProfilePage() {
   const isFormValid = targetGender.length > 0 && targetAgeGroup.length > 0;
 
   return (
-    <div className="relative mx-auto max-w-sm">
+    <div className="relative mx-auto">
       <div className="h-screen overflow-y-auto">
-        <div className="flex min-h-screen flex-col pb-[72px]">
-          <header className="relative flex shrink-0 items-center justify-between py-12">
+        <div className="flex min-h-screen flex-col pb-[72px] pt-[48px]">
+          <header className="fixed left-0 right-0 top-0 z-20 mx-auto flex w-full max-w-(--common-max-width) shrink-0 items-center justify-between bg-white">
             <button
               type="button"
-              onClick={() => navigate({ to: "/signup", state: { transitionDirection: "back" } })}
+              onClick={() =>
+                navigate({
+                  to: "/signup",
+                  search: { fromGuestBrowse: false },
+                  state: { transitionDirection: "back" },
+                })
+              }
               className="flex h-[48px] w-[48px] items-center justify-center rounded-full text-(--dice-black) transition-colors hover:bg-neutral-100"
               aria-label="뒤로가기"
             >
-              <RightArrowIcon className="h-24 w-24" aria-hidden />
+              <RightArrowIcon className="h-6 w-6" aria-hidden />
             </button>
 
             <h1 className="typo-subtitle3 absolute left-0 right-0 text-center text-(--dice-black) pointer-events-none">
-              브랜드 프로필
+              회원가입
             </h1>
             <div className="h-10 w-10 shrink-0" aria-hidden />
           </header>
 
-          <div className="flex flex-1 flex-col justify-center bg-white px-5 pt-0">
-            <h2 className="typo-h2 mb-24 text-(--dice-black)">브랜드 프로필을 등록해주세요</h2>
+          <div className="flex flex-1 flex-col bg-white px-5 pt-8">
+            <div className="space-y-2 mb-8">
+              <h2 className="typo-h2 text-dice-black">브랜드 프로필을 등록해주세요</h2>
+              <p className="typo-subtitle3 text-gray-deep">
+                선택한 브랜드 타겟에 맞는 팝업 공간을 추천드려요
+              </p>
+            </div>
 
             <form onSubmit={handleSubmit} className="flex flex-col">
-              <div className="mb-24 flex flex-col gap-24">
+              <div className="mb-6 flex flex-col gap-6">
                 {/* 1. 브랜드 타겟 성별 */}
-                <div className="flex flex-col gap-8">
-                  <label className="typo-caption1 text-(--gray-dark)">
-                    브랜드 타겟 성별{""}
-                    <span className="text-(--gray-semilight)">(중복 선택 가능)</span>
-                    <span className="text-(--system-red)">*</span>
+                <div className="flex flex-col gap-2">
+                  <label className="typo-caption1 text-gray-dark">
+                    브랜드 타겟 성별 <span className="text-gray-semilight">(중복 선택 가능)</span>
+                    <span className="text-system-red">*</span>
                   </label>
-                  <div className="flex flex-wrap gap-8">
+                  <div className="flex flex-wrap gap-1.5">
                     {TARGET_GENDERS.map(({ value, label, Icon }) => (
                       <button
                         key={value}
                         type="button"
                         onClick={() => toggleChip(targetGender, value, setTargetGender)}
-                        className={`flex items-center gap-2 rounded-full border px-12 py-4 typo-button1 transition-colors ${
+                        className={`flex items-center gap-0.5 rounded-full border px-3 py-1 typo-button1 transition-colors ${
                           targetGender.includes(value)
-                            ? "border-(--system-purple) bg-white text-(--system-purple)"
-                            : "border-(--gray-light) bg-white text-(--gray-dark) hover:border-(--gray-deep)"
+                            ? "border-system-purple bg-white text-system-purple"
+                            : "border-stroke-eee bg-white text-gray-deep"
                         }`}
                       >
-                        <Icon className="size-24 shrink-0" aria-hidden />
+                        <Icon className="size-6 shrink-0" aria-hidden />
                         {label}
                       </button>
                     ))}
@@ -194,13 +212,13 @@ function BrandProfilePage() {
                 </div>
 
                 {/* 2. 브랜드 타겟 연령대 */}
-                <div className="flex flex-col gap-8">
+                <div className="flex flex-col gap-2">
                   <label className="typo-caption1 text-(--gray-dark)">
-                    브랜드 타겟 연령대{""}
+                    브랜드 타겟 연령대{" "}
                     <span className="text-(--gray-semilight)">(중복 선택 가능)</span>
                     <span className="text-(--system-red)">*</span>
                   </label>
-                  <div className="flex flex-wrap gap-4">
+                  <div className="flex flex-wrap gap-1">
                     {TARGET_AGE_GROUPS.map(({ value, label }) => (
                       <button
                         key={value}
@@ -208,8 +226,8 @@ function BrandProfilePage() {
                         onClick={() => toggleChip(targetAgeGroup, value, setTargetAgeGroup)}
                         className={`rounded border px-2.5 py-[9px] typo-button2 transition-colors ${
                           targetAgeGroup.includes(value)
-                            ? "border-(--system-purple) bg-white text-(--system-purple)"
-                            : "border-(--gray-light) bg-white text-(--gray-dark) hover:border-(--gray-deep)"
+                            ? "border-system-purple bg-white text-system-purple"
+                            : "border-stroke-eee bg-white text-gray-deep"
                         }`}
                       >
                         {label}
@@ -219,7 +237,7 @@ function BrandProfilePage() {
                 </div>
 
                 {/* 3. 내 브랜드 이름 */}
-                <div className="flex flex-col gap-8">
+                <div className="flex flex-col gap-2">
                   <label htmlFor="brand-name" className="typo-caption1 text-(--gray-dark)">
                     내 브랜드 이름 <span className="text-(--gray-semilight)">(선택)</span>
                   </label>
@@ -230,7 +248,7 @@ function BrandProfilePage() {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="브랜드 이름을 입력해주세요"
-                      className={`${inputBase} pr-32`}
+                      className={`${inputBase} pr-8`}
                       required
                       disabled={mutation.isPending}
                     />
@@ -238,7 +256,7 @@ function BrandProfilePage() {
                       <button
                         type="button"
                         onClick={() => setName("")}
-                        className="absolute right-12 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700"
+                        className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700"
                         aria-label="지우기"
                       >
                         <XIcon className="h-[18px] w-[18px]" />
@@ -248,7 +266,7 @@ function BrandProfilePage() {
                 </div>
 
                 {/* 4. 짧은 브랜드 소개 */}
-                <div className="flex flex-col gap-8">
+                <div className="flex flex-col gap-2">
                   <label htmlFor="brand-description" className="typo-caption1 text-(--gray-dark)">
                     짧은 브랜드 소개 <span className="text-(--gray-semilight)">(선택)</span>
                   </label>
@@ -257,7 +275,7 @@ function BrandProfilePage() {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="팝업 공간을 대여해주는 호스트와 신뢰할 수 있는 거래를 위해 브랜드를 1~2문장으로 짧게 설명해주세요"
-                    className={`${inputBase} min-h-[100px] resize-y p-16`}
+                    className={`${inputBase} min-h-[100px] resize-none p-4`}
                     required
                     disabled={mutation.isPending}
                     rows={3}
@@ -265,10 +283,10 @@ function BrandProfilePage() {
                 </div>
 
                 {/* 5. 브랜드, 상품 관련 이미지 */}
-                <div className="flex flex-col gap-8">
-                  <label className="typo-caption1 text-(--gray-dark)">
-                    브랜드, 상품 관련 이미지{""}
-                    <span className="text-(--gray-semilight)">(최대 10장/선택)</span>
+                <div className="flex flex-col gap-2">
+                  <label className="typo-caption1 text-gray-dark">
+                    브랜드, 상품 관련 이미지{" "}
+                    <span className="text-gray-semilight">(최대 10장/선택)</span>
                   </label>
                   <input
                     ref={fileInputRef}
@@ -278,46 +296,35 @@ function BrandProfilePage() {
                     className="hidden"
                     onChange={handleFileChange}
                   />
-                  <div className="flex flex-wrap items-center gap-12">
+                  <div className="flex flex-wrap items-center gap-3">
                     {imagePreviewUrls.length < 10 && (
                       <>
                         <button
                           type="button"
-                          onClick={() => handleAddImage("gallery")}
-                          className="flex h-20 w-20 shrink-0 flex-col items-center justify-center gap-2 rounded-[12px] border border-(--gray-light) transition-colors hover:border-(--gray-deep)"
+                          onClick={() => handleAddImage()}
+                          className="flex h-20 w-20 shrink-0 flex-col items-center justify-center gap-0.5 rounded-xl border border-gray-light"
+                          aria-label="이미지 추가"
                         >
-                          <PlusIcon className="h-24 w-24 shrink-0" />
+                          <PlusIcon className="h-6 w-6 shrink-0" />
                           <span className="typo-caption2 text-(--gray-medium)">
-                            <span className="text-(--system-purple)">
-                              {imagePreviewUrls.length}
-                            </span>
+                            <span className="text-system-purple">{imagePreviewUrls.length}</span>
                             {" / 10"}
                           </span>
                         </button>
-                        {isNativeImagePickerAvailable() && (
-                          <button
-                            type="button"
-                            onClick={() => handleAddImage("camera")}
-                            className="flex h-20 w-20 shrink-0 flex-col items-center justify-center gap-2 rounded-[12px] border border-(--gray-light) transition-colors hover:border-(--gray-deep)"
-                            aria-label="카메라로 촬영"
-                          >
-                            <span className="typo-caption2 text-(--gray-medium)">카메라</span>
-                          </button>
-                        )}
                       </>
                     )}
                     {imagePreviewUrls.map((url, index) => (
                       <div
                         key={`${url}-${index}`}
-                        className="relative h-20 w-20 shrink-0 rounded-[12px] bg-(--gray-light)"
+                        className="relative h-20 w-20 shrink-0 rounded-xl bg-gray-light"
                       >
-                        <div className="h-full w-full overflow-hidden rounded-[12px]">
+                        <div className="h-full w-full overflow-hidden rounded-xl border border-gray-light">
                           <img src={url} alt="" className="h-full w-full object-cover" />
                         </div>
                         <button
                           type="button"
                           onClick={() => removeImage(index)}
-                          className="absolute -right-[5px] -top-[5px] flex h-[18px] w-[18px] items-center justify-center rounded-full bg-(--dim-basic) text-white transition-opacity hover:opacity-90"
+                          className="absolute -right-[5px] -top-[5px] flex h-[18px] w-[18px] items-center justify-center text-white"
                           aria-label="이미지 제거"
                         >
                           <XIcon className="h-[18px] w-[18px]" />
@@ -329,7 +336,7 @@ function BrandProfilePage() {
               </div>
 
               {(errorMessage || uploadError) && (
-                <p className="mb-12 typo-caption2 text-system-red">{uploadError ?? errorMessage}</p>
+                <p className="mb-3 typo-caption2 text-system-red">{uploadError ?? errorMessage}</p>
               )}
             </form>
           </div>
@@ -337,15 +344,13 @@ function BrandProfilePage() {
       </div>
 
       <div
-        className="fixed bottom-0 left-0 right-0 z-10 mx-auto max-w-sm bg-white px-5 pt-4"
-        style={{
-          paddingBottom: "max(20px, env(safe-area-inset-bottom))",
-        }}
+        className="fixed bottom-0 left-0 right-0 z-10 mx-auto w-full max-w-(--common-max-width) bg-white px-5 pt-1"
+        style={{ paddingBottom: "max(20px, env(safe-area-inset-bottom))" }}
       >
         <button
           type="submit"
           disabled={mutation.isPending || !isFormValid}
-          className="w-full rounded-lg bg-dice-black px-16 py-[15.5px] typo-button1 text-dice-white transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+          className="w-full rounded-lg bg-dice-black px-4 py-[15.5px] typo-button1 text-dice-white transition-colors disabled:cursor-not-allowed disabled:opacity-50"
         >
           {mutation.isPending ? "등록 중..." : "회원가입"}
         </button>

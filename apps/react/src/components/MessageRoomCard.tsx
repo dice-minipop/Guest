@@ -41,7 +41,7 @@ export function MessageRoomCard({ item }: MessageRoomCardProps) {
         to="/messages/$roomId"
         params={{ roomId: String(item.id) }}
         state={{ transitionDirection: "forward" }}
-        className="flex items-center w-full gap-12 py-8"
+        className="flex items-center w-full gap-3 py-2"
       >
         {/* 공간 이미지 */}
         <div className="relative size-14 shrink-0 overflow-hidden rounded-lg bg-neutral-200">
@@ -49,19 +49,19 @@ export function MessageRoomCard({ item }: MessageRoomCardProps) {
         </div>
 
         {/* 공간명+마지막 메시지 | 시간+안읽은 개수 (간격 4px) */}
-        <div className="flex min-w-0 flex-1 flex-row gap-4">
+        <div className="flex min-w-0 flex-1 flex-row gap-1">
           <div className="min-w-0 flex-1 flex flex-col">
             <span className="typo-subtitle3 truncate block text-gray-dark">
               {item.spaceName || "알 수 없는 공간"}
             </span>
             <p className="typo-body2 line-clamp-2 text-gray-medium">{lastMessage}</p>
           </div>
-          <div className="flex shrink-0 flex-col items-end gap-8">
+          <div className="flex shrink-0 flex-col items-end gap-2">
             {timeText ? (
               <span className="typo-caption2 whitespace-nowrap text-gray-light">{timeText}</span>
             ) : null}
             {item.unreadCount > 0 ? (
-              <span className="typo-caption2 flex min-h-24 min-w-24 items-center justify-center rounded-full bg-system-red px-2 py-0.5 text-white">
+              <span className="typo-caption2 flex min-h-6 min-w-6 items-center justify-center rounded-full bg-system-red px-0.5 py-0.5 text-white">
                 {item.unreadCount}
               </span>
             ) : null}

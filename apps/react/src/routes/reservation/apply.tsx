@@ -61,50 +61,50 @@ function ReservationApplyPage() {
   return (
     <div className="min-h-screen bg-dice-white">
       <BackHeader title="예약 신청" onBack={handleBack} />
-      <div className="px-(--spacing-screen-x) pt-20">
+      <div className="px-5 pt-5">
         {isLoading && (
-          <p className="py-8 text-center typo-body2 text-gray-medium">
+          <p className="py-2 text-center typo-body2 text-gray-medium">
             브랜드 정보를 불러오는 중...
           </p>
         )}
 
         {!isLoading && !brand && (
-          <p className="py-8 text-center typo-body2 text-gray-medium">
+          <p className="py-2 text-center typo-body2 text-gray-medium">
             등록된 브랜드 프로필이 없어요.
           </p>
         )}
 
         {!isLoading && brand && (
-          <div className="space-y-32">
-            <section className="space-y-8">
+          <div className="space-y-8">
+            <section className="space-y-2">
               <h2 className="typo-subtitle2 text-(--dice-black)">브랜드 프로필을 확인해주세요</h2>
               <p className="typo-body1 text-gray-medium">
                 해당 브랜드 프로필로 공간 예약이 신청되어요
               </p>
             </section>
 
-            <section className="space-y-8">
+            <section className="space-y-2">
               <h3 className="typo-caption1 text-(--dice-black)">브랜드 이름</h3>
               <p className="typo-body2 text-(--gray-dark)">{brand.name}</p>
             </section>
 
-            <section className="space-y-8">
+            <section className="space-y-2">
               <h3 className="typo-caption1 text-(--dice-black)">브랜드 소개</h3>
               <p className="typo-body2 whitespace-pre-line text-(--gray-dark)">
                 {brand.description || "-"}
               </p>
             </section>
 
-            <section className="space-y-8">
+            <section className="space-y-2">
               <h3 className="typo-caption1 text-(--dice-black)">브랜드, 상품 관련 이미지</h3>
-              <div className="flex gap-12 overflow-x-auto overflow-y-hidden pb-4 scrollbar-none">
+              <div className="flex gap-3 overflow-x-auto overflow-y-hidden pb-1 scrollbar-none">
                 {imageUrls.length > 0 ? (
                   imageUrls.map((url, i) => (
                     <img
                       key={i}
                       src={url}
                       alt=""
-                      className="h-20 w-20 shrink-0 rounded-lg object-cover"
+                      className="h-5 w-5 shrink-0 rounded-lg object-cover"
                     />
                   ))
                 ) : (
@@ -119,13 +119,13 @@ function ReservationApplyPage() {
       </div>
 
       <div
-        className="fixed bottom-0 left-0 right-0 z-10 mx-auto w-full max-w-(--common-max-width) bg-dice-white px-(--spacing-screen-x) pt-16"
+        className="fixed bottom-0 left-0 right-0 z-10 mx-auto w-full max-w-(--common-max-width) bg-dice-white px-5 pt-4"
         style={{ paddingBottom: "max(20px, env(safe-area-inset-bottom))" }}
       >
         <button
           type="button"
           onClick={handleNext}
-          className="w-full rounded-lg bg-dice-black px-16 py-[15.5px] typo-button1 text-dice-white transition-colors hover:opacity-90"
+          className="w-full rounded-lg bg-dice-black px-4 py-[15.5px] typo-button1 text-dice-white transition-colors hover:opacity-90"
         >
           다음
         </button>
