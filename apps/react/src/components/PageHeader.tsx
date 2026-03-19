@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import type { ComponentType, ReactNode } from "react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import ChatGray from "@/assets/icons/PageHeader/chat-gray.svg?react";
 import ChatWhite from "@/assets/icons/PageHeader/chat-white.svg?react";
@@ -10,7 +10,7 @@ import NotificationGray from "@/assets/icons/PageHeader/notification-gray.svg?re
 import NotificationWhite from "@/assets/icons/PageHeader/notification-white.svg?react";
 import SearchIcon from "@/assets/icons/PageHeader/search.svg?react";
 import { canUseMemberOnlyApi } from "@/api/axios";
-import { LoginRequiredModal } from "@/components/LoginRequiredModal";
+import { useLoginRequiredModal } from "@/hooks/useLoginRequiredModal";
 
 const MY_PAGE_LIKED = "/liked";
 const MY_PAGE_ALARMS = "/alarms";
@@ -117,7 +117,49 @@ export function PageHeader({
 }: PageHeaderProps) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const icons = variant ? VARIANT_ICONS[variant] : [];
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [stickyRowHeight, setStickyRowHeight] = useState(0);
+  const [isSearchHidden, setIsSearchHidden] = useState(false);
+  const stickyRowRef = useRef<HTMLDivElement>(null);
+  const searchLinkRef = useRef<HTMLAnchorElement>(null);
+  const { openLoginRequiredModal, loginRequiredModal } = useLoginRequiredModal();
+
+  useEffect(() => {
+    const stickyRow = stickyRowRef.current;
+    if (!stickyRow) return;
+
+    const updateStickyRowHeight = () => {
+      setStickyRowHeight(stickyRow.getBoundingClientRect().height);
+    };
+
+    updateStickyRowHeight();
+
+    const resizeObserver = new ResizeObserver(() => {
+      updateStickyRowHeight();
+    });
+
+    resizeObserver.observe(stickyRow);
+
+    return () => resizeObserver.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const searchLink = searchLinkRef.current;
+    if (searchTo == null || searchLink == null) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsSearchHidden(!entry?.isIntersecting);
+      },
+      {
+        threshold: 0,
+        rootMargin: `-${stickyRowHeight}px 0px 0px 0px`,
+      }
+    );
+
+    observer.observe(searchLink);
+
+    return () => observer.disconnect();
+  }, [searchTo, stickyRowHeight]);
 
   const handleMemberOnlyIconClick = (e: React.MouseEvent, to: string) => {
     const memberOnlyTargets = [MY_PAGE_LIKED, MY_PAGE_ALARMS, MY_PAGE_MESSAGES];
@@ -125,24 +167,39 @@ export function PageHeader({
     if (canUseMemberOnlyApi()) return;
 
     e.preventDefault();
-    setIsLoginModalOpen(true);
+    openLoginRequiredModal();
   };
 
   return (
     <>
-      <header
-        className="sticky top-0 z-10 border-b border-neutral-200 bg-black"
+      <div
+        ref={stickyRowRef}
+        className={`sticky top-0 z-20 bg-black ${searchTo == null && children == null ? "border-b border-neutral-200" : ""}`}
         style={{
-          paddingTop: "max(var(--spacing-12), env(safe-area-inset-top, 0px))",
-          paddingBottom: "var(--spacing-20)",
-          paddingLeft: "max(var(--spacing-screen-x), env(safe-area-inset-left, 0px))",
-          paddingRight: "max(var(--spacing-screen-x), env(safe-area-inset-right, 0px))",
+          paddingLeft: "max(20px, env(safe-area-inset-left, 0px))",
+          paddingRight: "max(20px, env(safe-area-inset-right, 0px))",
         }}
       >
-        <div className="flex items-center justify-between gap-2 py-4">
+        <div className="flex items-center justify-between gap-0.5 py-1">
           <h1 className="typo-subtitle1 text-white">{title}</h1>
-          {icons.length > 0 ? (
+          {icons.length > 0 || searchTo != null ? (
             <div className="flex items-center">
+              {searchTo != null ? (
+                <Link
+                  to={searchTo}
+                  state={{ transitionDirection: "forward" }}
+                  className={`rounded-full p-3 transition-opacity duration-200 ${
+                    isSearchHidden
+                      ? "opacity-100 hover:opacity-80 active:opacity-70"
+                      : "pointer-events-none opacity-0"
+                  }`}
+                  aria-label="검색 페이지로 이동"
+                  aria-hidden={!isSearchHidden}
+                  tabIndex={isSearchHidden ? 0 : -1}
+                >
+                  <SearchIcon className="h-6 w-6 shrink-0" aria-hidden />
+                </Link>
+              ) : null}
               {icons.map(({ to, ariaLabel, IconGray, IconWhite }) => {
                 const isActive = pathname === to;
                 const Icon = isActive ? IconWhite : IconGray;
@@ -154,37 +211,44 @@ export function PageHeader({
                     onClick={(e: React.MouseEvent<HTMLAnchorElement>) =>
                       handleMemberOnlyIconClick(e, to)
                     }
-                    className="rounded-full p-12 transition-opacity hover:opacity-80 active:opacity-70"
+                    className="rounded-full p-3 transition-opacity hover:opacity-80 active:opacity-70"
                     aria-label={ariaLabel}
                   >
-                    <Icon className="h-24 w-24 shrink-0" aria-hidden />
+                    <Icon className="h-6 w-6 shrink-0" aria-hidden />
                   </Link>
                 );
               })}
             </div>
           ) : null}
         </div>
-        {searchTo != null ? (
-          <Link
-            to={searchTo}
-            state={{ transitionDirection: "forward" }}
-            className="flex items-center gap-2 rounded-lg border border-neutral-300 bg-neutral-50 p-12 text-sm font-medium text-neutral-500 transition-colors hover:bg-neutral-100"
-          >
-            <SearchIcon className="h-5 w-5 shrink-0" aria-hidden />
-            <span>{searchPlaceholder}</span>
-          </Link>
-        ) : null}
-        {children != null ? <div className="mt-3">{children}</div> : null}
-      </header>
+      </div>
 
-      <LoginRequiredModal
-        open={isLoginModalOpen}
-        onClose={() => setIsLoginModalOpen(false)}
-        onLogin={() => {
-          setIsLoginModalOpen(false);
-          window.location.href = "/login";
-        }}
-      />
+      {searchTo != null || children != null ? (
+        <div
+          className="relative z-10 border-b border-neutral-200 bg-black pb-5"
+          style={{
+            paddingLeft: "max(20px, env(safe-area-inset-left, 0px))",
+            paddingRight: "max(20px, env(safe-area-inset-right, 0px))",
+          }}
+        >
+          {searchTo != null ? (
+            <Link
+              ref={searchLinkRef}
+              to={searchTo}
+              state={{ transitionDirection: "forward" }}
+              className="flex items-center gap-0.5 rounded-lg border border-neutral-300 bg-neutral-50 p-3 text-sm font-medium text-neutral-500 transition-colors hover:bg-neutral-100"
+            >
+              <SearchIcon className="h-5 w-5 shrink-0" aria-hidden />
+              <span>{searchPlaceholder}</span>
+            </Link>
+          ) : null}
+          {children != null ? (
+            <div className={searchTo != null ? "mt-3" : "pt-1"}>{children}</div>
+          ) : null}
+        </div>
+      ) : null}
+
+      {loginRequiredModal}
     </>
   );
 }

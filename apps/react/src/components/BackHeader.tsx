@@ -39,8 +39,6 @@ export const BackHeader = forwardRef<HTMLElement, BackHeaderProps>(
         ref={ref}
         className={`fixed top-0 left-1/2 z-10 w-full max-w-(--common-max-width) -translate-x-1/2 grid grid-cols-3 items-center bg-dice-white ${className ?? ""}`}
         style={{
-          paddingTop: "max(var(--spacing-12), env(safe-area-inset-top, 0px))",
-          paddingBottom: "var(--spacing-12)",
           paddingLeft: "3px",
           paddingRight: "3px",
           ...style,
@@ -54,18 +52,18 @@ export const BackHeader = forwardRef<HTMLElement, BackHeaderProps>(
             onClick={onBack}
             className="flex h-[48px] w-[48px] shrink-0 items-center justify-center typo-subtitle1 text-dice-black transition-opacity hover:opacity-80 active:opacity-70"
           >
-            <ArrowRightIcon className="size-24" aria-hidden />
+            <ArrowRightIcon className="size-6" aria-hidden />
           </button>
         </div>
-        <div className="flex min-w-0 flex-1 items-center justify-center px-2">
+        <div className="flex min-w-0 flex-1 items-center justify-center px-0.5">
           {centerSlot ?? (
-            <h1 className="typo-subtitle3 truncate text-center text-dice-black pointer-events-none">
+            <h1 className="typo-subtitle3 whitespace-nowrap text-center text-dice-black pointer-events-none">
               {title ?? ""}
             </h1>
           )}
         </div>
         <div className="flex min-w-0 items-center justify-end">
-          {rightSlot ?? <div className="h-12 w-12 shrink-0" aria-hidden />}
+          {rightSlot ?? <div className="h-3 w-3 shrink-0" aria-hidden />}
         </div>
       </header>
     );

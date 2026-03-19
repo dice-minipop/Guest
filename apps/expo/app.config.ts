@@ -24,6 +24,7 @@ const defineConfig: ExpoConfig = {
   },
   ios: {
     supportsTablet: false,
+    icon: "./assets/images/icon.png",
     bundleIdentifier: "com.minipop.dice2",
     buildNumber: "1",
     entitlements: {

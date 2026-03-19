@@ -11,6 +11,8 @@ export interface PickedImage {
   fileName?: string;
 }
 
+export type ImagePickSource = "gallery" | "camera";
+
 export interface AppBridgeMethods extends Bridge {
   getMessage(): Promise<string>;
   sum(a: number, b: number): Promise<number>;
@@ -23,6 +25,8 @@ export interface AppBridgeMethods extends Bridge {
   setAccessToken(accessToken: string): Promise<void>;
   /** AccessToken 삭제 (로그아웃 시 웹에서 호출) */
   clearAccessToken(): Promise<void>;
+  /** 이미지 소스 선택 시트 노출. 취소 시 null */
+  selectImageSource(): Promise<ImagePickSource | null>;
   /** 갤러리에서 이미지 선택 (권한 요청 포함). 취소 시 null */
   pickImageFromGallery(): Promise<PickedImage | null>;
   /** 카메라로 촬영 (권한 요청 포함). 취소 시 null */

@@ -1,5 +1,5 @@
 /** 정렬 섹션과 동일한 디자인: 제목+값 리스트, 단일 선택 */
-const itemBaseClass = "w-full rounded-lg p-16 typo-subtitle2 text-left transition-colors";
+const itemBaseClass = "w-full rounded-lg p-4 typo-subtitle2 text-left transition-colors";
 
 function itemClass(selected: boolean) {
   return selected ? "bg-bg-light-gray text-dice-black" : "bg-white text-gray-medium";
@@ -17,7 +17,7 @@ export function OptionListFilterSection({
   onChange,
 }: OptionListFilterSectionProps) {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-0.5">
       {options.map((opt) => (
         <button
           key={opt.value}

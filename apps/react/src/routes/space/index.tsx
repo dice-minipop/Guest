@@ -181,7 +181,7 @@ function SpacePage() {
       className="h-full overflow-y-auto overflow-x-hidden bg-white"
       style={{ overscrollBehaviorY: "none" }}
     >
-      <div className="pb-64">
+      <div className="pb-16">
         <PageHeader
           variant="space"
           title="팝업 공간"
@@ -189,41 +189,39 @@ function SpacePage() {
           searchPlaceholder="찾는 지역이나 지하철역으로 검색해보세요"
         />
 
-        <div className="py-12">
-          <div className="px-(--spacing-screen-x)">
-            <h2 className="typo-subtitle2 mb-16 text-dice-black">다이스 추천 팝업 공간</h2>
+        <div className="py-3">
+          <div className="px-5">
+            <h2 className="typo-subtitle2 mb-4 text-dice-black">다이스 추천 팝업 공간</h2>
           </div>
-          <div className="pl-(--spacing-screen-x)">
+          <div className="pl-5">
             <SpaceFilterChips filterSummary={filterSummary} onOpenFilter={openFilterSheet} />
           </div>
 
-          <div className="px-(--spacing-screen-x)">
+          <div className="px-5">
             {isLoading && (
-              <div className="py-12 text-center text-sm text-neutral-500">
-                목록을 불러오는 중...
-              </div>
+              <div className="py-3 text-center text-sm text-neutral-500">목록을 불러오는 중...</div>
             )}
 
             {isError && (
-              <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+              <div className="rounded-lg border border-red-200 bg-red-50 p-1 text-sm text-red-700">
                 {error instanceof Error ? error.message : "목록을 불러오지 못했습니다."}
               </div>
             )}
 
             {!isLoading && !isError && content.length === 0 && (
-              <div className="py-12 text-center text-sm text-neutral-500">
+              <div className="py-3 text-center text-sm text-neutral-500">
                 조회된 공간이 없습니다.
               </div>
             )}
 
             {!isLoading && !isError && content.length > 0 && (
-              <div className="py-2">
-                <ul className="flex flex-col gap-16">
+              <div className="py-0.5">
+                <ul className="flex flex-col gap-4">
                   {content.map((item) => (
                     <SpaceCard key={item.id} item={item} />
                   ))}
                 </ul>
-                <div ref={loadMoreRef} className="h-8 py-4" aria-hidden>
+                <div ref={loadMoreRef} className="h-2 py-1" aria-hidden>
                   {isFetchingNextPage && (
                     <p className="text-center text-sm text-neutral-500">더 불러오는 중...</p>
                   )}

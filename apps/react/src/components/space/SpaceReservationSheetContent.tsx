@@ -158,7 +158,7 @@ export function SpaceReservationSheetContent({
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      <div className="flex shrink-0 items-center justify-between border-b border-neutral-200 px-5 pt-12">
+      <div className="flex shrink-0 items-center justify-between border-b border-neutral-200 px-5 pt-3">
         <p className="typo-h2 text-dice-black">희망 대여 기간 선택</p>
         <button
           type="button"
@@ -166,21 +166,21 @@ export function SpaceReservationSheetContent({
           aria-label="닫기"
           className="flex h-[48px] w-[48px] shrink-0 items-center justify-center rounded-full text-(--gray-deep) transition-colors hover:bg-neutral-100 hover:text-(--dice-black)"
         >
-          <XIcon className="size-24" aria-hidden />
+          <XIcon className="size-6" aria-hidden />
         </button>
       </div>
 
-      <div className="min-h-0 flex-1 overflow-y-auto px-5 py-16">
+      <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
         {monthsToRender.map(({ year: y, month: m }) => {
           const calendarDays = getCalendarDays(y, m);
           return (
-            <section key={`${y}-${m}`} className="py-12" aria-label={`${y}년 ${m + 1}월`}>
+            <section key={`${y}-${m}`} className="py-3" aria-label={`${y}년 ${m + 1}월`}>
               <h3 className="typo-body1 mb-3 font-medium text-dice-black">
                 {y}년 {m + 1}월
               </h3>
               <div className="grid grid-cols-7 gap-1">
                 {WEEKDAYS.map((wd) => (
-                  <div key={wd} className="py-2 text-center text-xs font-medium text-neutral-500">
+                  <div key={wd} className="py-0.5 text-center text-xs font-medium text-neutral-500">
                     {wd}
                   </div>
                 ))}
@@ -263,7 +263,7 @@ export function SpaceReservationSheetContent({
       </div>
 
       {startDate !== "" && endDate !== "" && (
-        <div className="shrink-0 bg-(--system-purple) px-5 py-12 text-center">
+        <div className="shrink-0 bg-(--system-purple) px-5 py-3 text-center">
           <p className="typo-subtitle2 text-white">
             {formatDisplayDate(startDate)} ~ {formatDisplayDate(endDate)} /{""}
             {formatPrice(selectedTotalPrice)}
@@ -271,19 +271,19 @@ export function SpaceReservationSheetContent({
         </div>
       )}
 
-      <div className="flex shrink-0 gap-12 border-t border-neutral-200 px-5 py-16">
-        <div className="flex flex-1 gap-12">
+      <div className="flex shrink-0 gap-3 border-t border-neutral-200 px-5 py-4">
+        <div className="flex flex-1 gap-3">
           <button
             type="button"
             onClick={clearDate}
-            className="rounded-lg border border-neutral-300 p-16 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-50"
+            className="rounded-lg border border-neutral-300 p-4 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-50"
           >
             날짜 초기화
           </button>
           <button
             type="button"
             onClick={handleReservation}
-            className="flex-1 rounded-lg bg-black p-16 text-sm font-medium text-white transition-colors hover:opacity-90 disabled:opacity-40"
+            className="flex-1 rounded-lg bg-black p-4 text-sm font-medium text-white transition-colors hover:opacity-90 disabled:opacity-40"
             disabled={startDate === "" || endDate === ""}
           >
             예약 신청

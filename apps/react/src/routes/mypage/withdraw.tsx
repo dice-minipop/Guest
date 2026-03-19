@@ -39,12 +39,12 @@ function MypageWithdrawPage() {
   return (
     <div className="min-h-screen bg-dice-white">
       <BackHeader title="탈퇴하기" onBack={handleBack} />
-      <div aria-hidden style={{ minHeight: 72 }} />
+      <div aria-hidden style={{ minHeight: 48 }} />
       <div
-        className="px-(--spacing-screen-x) pt-32 space-y-32"
+        className="px-5 pt-8 space-y-8"
         style={{ paddingBottom: "calc(100px + env(safe-area-inset-bottom))" }}
       >
-        <section className="space-y-8">
+        <section className="space-y-2">
           <h2 className="typo-subtitle2 whitespace-pre-line text-(--dice-black)">
             OO님과 이별한다니{"\n"}너무 아쉽습니다
           </h2>
@@ -54,7 +54,7 @@ function MypageWithdrawPage() {
           </p>
         </section>
 
-        <section className="space-y-8">
+        <section className="space-y-2">
           <h2 className="typo-subtitle2 text-(--dice-black)">탈퇴 전 확인 부탁드립니다</h2>
           <p className="typo-body1 text-gray-medium">
             계정을 삭제하시면 예약, 프로필, 찜, 쪽지 등 모든 활동 정보가 삭제됩니다. 계정 삭제 후
@@ -62,19 +62,19 @@ function MypageWithdrawPage() {
           </p>
         </section>
 
-        <section className="space-y-8">
+        <section className="space-y-2">
           <h2 className="typo-subtitle3 whitespace-pre-line text-(--dice-black)">
             더 나은 다이스가 될 수 있도록{"\n"}탈퇴하시는 이유를 알려주시면 감사하겠습니다
           </h2>
           <button
             type="button"
             onClick={() => setReasonSheetOpen(true)}
-            className="flex w-full items-center justify-between rounded-lg border border-gray-light bg-dice-white py-12 px-16 text-left typo-body2 text-(--dice-black) transition-colors hover:bg-neutral-100"
+            className="flex w-full items-center justify-between rounded-lg border border-gray-light bg-dice-white py-3 px-4 text-left typo-body2 text-(--dice-black) transition-colors hover:bg-neutral-100"
           >
             <span className={selectedReason ? "text-gray-dark" : "text-gray-medium"}>
               {selectedReason ?? "탈퇴하시는 이유가 무엇인가요?"}
             </span>
-            <ArrowDownIcon className="h-24 w-24 shrink-0 text-neutral-400" aria-hidden />
+            <ArrowDownIcon className="h-6 w-6 shrink-0 text-neutral-400" aria-hidden />
           </button>
         </section>
       </div>
@@ -85,9 +85,9 @@ function MypageWithdrawPage() {
         sheetTitle="탈퇴 사유 선택"
         sheetDescription="회원 탈퇴 사유를 선택해 주세요"
         content={
-          <div className="overflow-y-auto py-24 px-5 pb-20">
+          <div className="overflow-y-auto py-6 px-5 pb-5">
             <h3 className="typo-caption1 mb-3 text-gray-dark">탈퇴 사유</h3>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-0.5">
               {WITHDRAWAL_REASONS.map((reason) => {
                 const selected = selectedReason === reason;
                 return (
@@ -98,7 +98,7 @@ function MypageWithdrawPage() {
                       setSelectedReason(reason);
                       setReasonSheetOpen(false);
                     }}
-                    className={`w-full rounded-lg p-16 text-left typo-subtitle3 transition-colors ${
+                    className={`w-full rounded-lg p-4 text-left typo-subtitle3 transition-colors ${
                       selected ? "bg-bg-light-gray text-dice-black" : "bg-white text-gray-medium"
                     }`}
                   >
@@ -113,21 +113,21 @@ function MypageWithdrawPage() {
 
       {/* 하단 고정 버튼 */}
       <div
-        className="fixed bottom-0 left-0 right-0 z-10 mx-auto max-w-sm gap-12 bg-dice-white px-(--spacing-screen-x) pt-16"
+        className="fixed bottom-0 left-0 right-0 z-10 mx-auto max-w-sm gap-3 bg-dice-white px-5 pt-4"
         style={{ paddingBottom: "max(20px, env(safe-area-inset-bottom))" }}
       >
-        <div className="flex gap-12">
+        <div className="flex gap-3">
           <button
             type="button"
             onClick={handleBack}
-            className="min-w-0 flex-1 rounded-lg border border-neutral-300 px-16 py-[15.5px] typo-button1 text-(--dice-black) transition-colors hover:bg-neutral-50"
+            className="min-w-0 flex-1 rounded-lg border border-neutral-300 px-4 py-[15.5px] typo-button1 text-(--dice-black) transition-colors hover:bg-neutral-50"
           >
             취소
           </button>
           <button
             type="button"
             onClick={handleSubmit}
-            className="min-w-0 flex-1 rounded-lg bg-dice-black px-16 py-[15.5px] typo-button1 text-dice-white transition-colors hover:opacity-90"
+            className="min-w-0 flex-1 rounded-lg bg-dice-black px-4 py-[15.5px] typo-button1 text-dice-white transition-colors hover:opacity-90"
           >
             제출
           </button>

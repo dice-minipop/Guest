@@ -154,24 +154,21 @@ function LikedPage() {
       />
       <div aria-hidden style={{ minHeight: headerHeight || 56 }} />
 
-      <div
-        className="px-(--spacing-screen-x) py-6"
-        style={{ paddingBottom: "var(--spacing-scroll-end, 24px)" }}
-      >
+      <div className="px-5 pt-1.5 pb-16">
         {tab === "space" && (
           <>
             {!isMemberOnlyAllowed && (
-              <div className="py-12 text-center typo-body2 text-(--gray-deep)">
+              <div className="py-3 text-center typo-body2 text-(--gray-deep)">
                 회원 전용 기능입니다. 로그인 후 이용해 주세요.
               </div>
             )}
             {isSpaceLoading && (
-              <div className="py-12 text-center typo-body2 text-(--gray-deep)">
+              <div className="py-3 text-center typo-body2 text-(--gray-deep)">
                 목록을 불러오는 중...
               </div>
             )}
             {isSpaceError && (
-              <div className="rounded-lg border border-red-200 bg-red-50 p-4 typo-body2 text-red-700">
+              <div className="rounded-lg border border-red-200 bg-red-50 p-1 typo-body2 text-red-700">
                 {likedSpaces.error instanceof Error
                   ? likedSpaces.error.message
                   : "찜한 공간 목록을 불러오지 못했습니다."}
@@ -181,19 +178,19 @@ function LikedPage() {
               !isSpaceLoading &&
               !isSpaceError &&
               spaceContent.length === 0 && (
-                <div className="py-12 text-center typo-body2 text-(--gray-deep)">
+                <div className="py-3 text-center typo-body2 text-(--gray-deep)">
                   찜한 공간이 없습니다.
                 </div>
               )}
             {isMemberOnlyAllowed && !isSpaceLoading && !isSpaceError && spaceContent.length > 0 && (
-              <ul className="flex flex-col gap-4">
+              <ul className="flex flex-col gap-1">
                 {spaceContent.map((item) => (
                   <SpaceCard key={item.id} item={item} />
                 ))}
               </ul>
             )}
             {isMemberOnlyAllowed && tab === "space" && spaceContent.length > 0 && (
-              <div ref={loadMoreSpaceRef} className="h-8 py-4" aria-hidden>
+              <div ref={loadMoreSpaceRef} className="h-2 py-1" aria-hidden>
                 {isFetchingNextSpaces && (
                   <p className="text-center typo-body2 text-(--gray-deep)">더 불러오는 중...</p>
                 )}
@@ -205,17 +202,17 @@ function LikedPage() {
         {tab === "announcement" && (
           <>
             {!isMemberOnlyAllowed && (
-              <div className="py-12 text-center typo-body2 text-(--gray-deep)">
+              <div className="py-3 text-center typo-body2 text-(--gray-deep)">
                 회원 전용 기능입니다. 로그인 후 이용해 주세요.
               </div>
             )}
             {isAnnouncementLoading && (
-              <div className="py-12 text-center typo-body2 text-(--gray-deep)">
+              <div className="py-3 text-center typo-body2 text-(--gray-deep)">
                 목록을 불러오는 중...
               </div>
             )}
             {isAnnouncementError && (
-              <div className="rounded-lg border border-red-200 bg-red-50 p-4 typo-body2 text-red-700">
+              <div className="rounded-lg border border-red-200 bg-red-50 p-1 typo-body2 text-red-700">
                 {likedAnnouncements.error instanceof Error
                   ? likedAnnouncements.error.message
                   : "찜한 공고 목록을 불러오지 못했습니다."}
@@ -225,7 +222,7 @@ function LikedPage() {
               !isAnnouncementLoading &&
               !isAnnouncementError &&
               announcementContent.length === 0 && (
-                <div className="py-12 text-center typo-body2 text-(--gray-deep)">
+                <div className="py-3 text-center typo-body2 text-(--gray-deep)">
                   찜한 공고가 없습니다.
                 </div>
               )}
@@ -240,7 +237,7 @@ function LikedPage() {
                 </ul>
               )}
             {isMemberOnlyAllowed && tab === "announcement" && announcementContent.length > 0 && (
-              <div ref={loadMoreAnnouncementRef} className="h-8 py-4" aria-hidden>
+              <div ref={loadMoreAnnouncementRef} className="h-2 py-1" aria-hidden>
                 {isFetchingNextAnnouncements && (
                   <p className="text-center typo-body2 text-(--gray-deep)">더 불러오는 중...</p>
                 )}

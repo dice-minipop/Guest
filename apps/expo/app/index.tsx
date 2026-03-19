@@ -7,7 +7,7 @@ import { WebView } from "@/bridge";
 import { getTopSafeAreaColor, subscribeTopSafeAreaColor } from "../topSafeAreaColorStore";
 import type { BridgeWebView } from "@webview-bridge/react-native";
 
-const WEB_URI = "https://dice-guest-react.vercel.app";
+const WEB_URI = process.env.EXPO_PUBLIC_WEB_URI ?? "https://dice-guest-react.vercel.app";
 
 export default function Index() {
   const insets = useSafeAreaInsets();

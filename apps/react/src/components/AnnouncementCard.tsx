@@ -72,7 +72,7 @@ export function AnnouncementCard({ item }: AnnouncementCardProps) {
         to="/announcement/$id"
         params={{ id: String(item.id) }}
         state={{ transitionDirection: "forward" }}
-        className="block w-full rounded-xl border space-y-8 border-neutral-200 bg-white p-16 shadow-sm transition-shadow hover:shadow-md"
+        className="block w-full rounded-xl border space-y-2 border-neutral-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md"
       >
         {/* 위치·제목 섹션 | 좋아요 버튼 좌우 정렬 */}
         <div className="flex items-start justify-between gap-3">
@@ -97,11 +97,7 @@ export function AnnouncementCard({ item }: AnnouncementCardProps) {
               aria-label={isLiked ? "좋아요 취소" : "좋아요"}
               disabled={likeMutation.isPending}
             >
-              {isLiked ? (
-                <LikePurple className="h-24 w-24" />
-              ) : (
-                <LikeLightgray className="h-24 w-24" />
-              )}
+              {isLiked ? <LikePurple className="h-6 w-6" /> : <LikeLightgray className="h-6 w-6" />}
             </button>
             <span
               className={
@@ -114,13 +110,13 @@ export function AnnouncementCard({ item }: AnnouncementCardProps) {
         </div>
 
         {/* 대상 | 날짜 + D-day 배지 */}
-        <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 typo-caption2 text-gray-light">
+        <div className="mt-0.5 flex flex-wrap items-center gap-x-1 gap-y-1 typo-caption2 text-gray-light">
           <span>{item.target || "대상 미정"} 대상</span>
           <span>|</span>
           <span>{dateRange}</span>
           {dday.label && (
             <span
-              className={`inline-flex shrink-0 rounded-full px-6 py-2 typo-caption2 ${ddayBgClass}`}
+              className={`inline-flex shrink-0 rounded-full px-1.5 py-0.5 typo-caption2 ${ddayBgClass}`}
             >
               {dday.label}
             </span>

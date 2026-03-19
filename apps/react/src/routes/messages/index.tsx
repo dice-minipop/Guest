@@ -54,13 +54,13 @@ function MessagesPage() {
   return (
     <div className="min-h-screen bg-dice-white">
       <BackHeader onBack={handleBack} />
-      <div aria-hidden style={{ minHeight: 72 }} />
-      <h1 className="flex items-center gap-8 typo-h1 text-dice-black px-(--spacing-screen-x) pt-20 pb-24 border-b border-(--stroke-eee)">
+      <div aria-hidden style={{ minHeight: 48 }} />
+      <h1 className="flex items-center gap-2 typo-h1 text-dice-black px-5 pt-8 pb-6 border-b border-(--stroke-eee)">
         호스트와의 쪽지함
         <MessageIcon />
       </h1>
 
-      <div className="px-(--spacing-screen-x) py-24">
+      <div className="px-5 py-6">
         {!isMemberOnlyAllowed ? (
           <p className="typo-body2 text-gray-deep">
             회원 전용 기능입니다. 로그인 후 이용해 주세요.
@@ -70,7 +70,7 @@ function MessagesPage() {
         ) : !rooms?.length ? (
           <p className="typo-body2 text-gray-deep">아직 쪽지방이 없습니다.</p>
         ) : (
-          <ul className="flex flex-col gap-12">
+          <ul className="flex flex-col gap-3">
             {rooms.map((room) => (
               <MessageRoomCard key={room.id} item={room} />
             ))}

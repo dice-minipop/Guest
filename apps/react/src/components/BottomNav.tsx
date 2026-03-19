@@ -52,11 +52,11 @@ export function BottomNav() {
             key={to}
             to={to}
             replace
-            className={`flex flex-1 flex-col items-center justify-center gap-8 py-8 no-underline transition-colors ${
+            className={`flex flex-1 flex-col items-center justify-center gap-2 py-2 no-underline transition-colors ${
               isActive ? "text-gray-dark" : "text-gray-medium"
             } hover:text-gray-dark`}
           >
-            <Icon className="size-24 shrink-0" aria-hidden />
+            <Icon className="size-6 shrink-0" aria-hidden />
             <span className="typo-button2">{label}</span>
           </Link>
         );

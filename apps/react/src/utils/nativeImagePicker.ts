@@ -1,4 +1,5 @@
 import { bridge } from "@/bridge";
+import type { ImagePickSource } from "@dice-v2/bridge";
 
 /**
  * base64 데이터를 웹에서 사용할 File 객체로 변환합니다.
@@ -22,6 +23,20 @@ export function isNativeImagePickerAvailable(): boolean {
     (bridge.isNativeMethodAvailable("pickImageFromGallery") ||
       bridge.isNativeMethodAvailable("pickImageFromCamera"))
   );
+}
+
+/**
+ * 앱 환경이면 네이티브 선택 시트를 띄워 이미지 소스를 반환합니다. 취소 시 null 반환
+ */
+export async function selectNativeImageSource(): Promise<ImagePickSource | null> {
+  if (
+    typeof bridge?.isNativeMethodAvailable !== "function" ||
+    !bridge.isNativeMethodAvailable("selectImageSource")
+  ) {
+    return null;
+  }
+
+  return bridge.selectImageSource();
 }
 
 /**
@@ -60,4 +75,14 @@ export async function pickImageFromNativeCamera(): Promise<File | null> {
  */
 export async function pickImageFromNative(source: "gallery" | "camera"): Promise<File | null> {
   return source === "gallery" ? pickImageFromNativeGallery() : pickImageFromNativeCamera();
+}
+
+/**
+ * 앱이면 네이티브 선택 시트에서 소스를 먼저 고른 뒤 이미지 1장을 선택합니다.
+ */
+export async function pickImageFromNativeWithPrompt(): Promise<File | null> {
+  const source = await selectNativeImageSource();
+  if (!source) return null;
+
+  return pickImageFromNative(source);
 }

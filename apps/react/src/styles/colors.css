@@ -1,0 +1,50 @@
+:root {
+  /* Primary Color */
+  --dice-black: #000000;
+  --dice-white: #ffffff;
+
+  /* Gray Scale */
+  --gray-dark: #333333;
+  --gray-deep: #666666;
+  --gray-medium: #999999;
+  --gray-semilight: #aaaaaa;
+  --gray-light: #cccccc;
+
+  /* System Color */
+  --system-purple: #5b4ff4;
+  --system-green: #50c878;
+  --system-yellow: #ffd90c;
+  --system-red: #ff357f;
+
+  /* Background Color */
+  --bg-white: #ffffff;
+  --bg-light-gray: #f4f4f4;
+
+  /* Stroke Color */
+  --stroke-eee: #eeeeee;
+  --stroke-light-gray: #cccccc;
+  --stroke-dice-black: #000000;
+
+  /* Dim Color */
+  --dim-basic: rgba(0, 0, 0, 0.5);
+  --dim-light: rgba(0, 0, 0, 0.2);
+}
+
+@theme {
+  --color-dice-black: var(--dice-black);
+  --color-dice-white: var(--dice-white);
+  --color-gray-dark: var(--gray-dark);
+  --color-gray-deep: var(--gray-deep);
+  --color-gray-medium: var(--gray-medium);
+  --color-gray-semilight: var(--gray-semilight);
+  --color-gray-light: var(--gray-light);
+  --color-system-purple: var(--system-purple);
+  --color-system-green: var(--system-green);
+  --color-system-yellow: var(--system-yellow);
+  --color-system-red: var(--system-red);
+  --color-bg-white: var(--bg-white);
+  --color-bg-light-gray: var(--bg-light-gray);
+  --color-stroke-eee: var(--stroke-eee);
+  --color-stroke-light-gray: var(--stroke-light-gray);
+  --color-stroke-dice-black: var(--stroke-dice-black);
+}

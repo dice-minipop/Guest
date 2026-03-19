@@ -37,8 +37,8 @@ export function SizeFilterSection({ value, onChange }: SizeFilterSectionProps) {
   const maxM2 = pyeongToM2(maxPyeong);
 
   return (
-    <div className="flex flex-col gap-24">
-      <div className="flex flex-col gap-32">
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-8">
         <div className="typo-subtitle1 text-(--gray-deep)">
           <span className="text-(--system-purple)">{minPyeong}</span>
           <span className="text-(--dice-black)">평</span>
@@ -62,14 +62,14 @@ export function SizeFilterSection({ value, onChange }: SizeFilterSectionProps) {
             step={SIZE_STEP}
             minStepsBetweenThumbs={1}
           >
-            <Slider.Track className="relative h-2 w-full grow rounded-full bg-(--gray-light)">
+            <Slider.Track className="relative h-0.5 w-full grow rounded-full bg-(--gray-light)">
               <Slider.Range className="absolute h-full rounded-full bg-(--dice-black)" />
             </Slider.Track>
             <Slider.Thumb className="block size-5 rounded-full border-2 border-(--dice-black) bg-white shadow-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-(--system-purple) focus-visible:ring-offset-2 disabled:pointer-events-none" />
             <Slider.Thumb className="block size-5 rounded-full border-2 border-(--dice-black) bg-white shadow-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-(--system-purple) focus-visible:ring-offset-2 disabled:pointer-events-none" />
           </Slider.Root>
           {/* 트랙 0% / 50% / 100%에 맞춰 라벨 배치 */}
-          <div className="relative mt-12 h-5 w-full typo-caption1 text-(--gray-light)">
+          <div className="relative mt-3 h-5 w-full typo-caption1 text-(--gray-light)">
             <span className="absolute left-0 top-0">0평</span>
             <span className="absolute left-1/2 top-0 -translate-x-1/2">75평</span>
             <span className="absolute right-0 top-0">150평 이상</span>
@@ -77,7 +77,7 @@ export function SizeFilterSection({ value, onChange }: SizeFilterSectionProps) {
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-x-4 gap-y-8">
+      <div className="flex flex-wrap gap-x-1 gap-y-2">
         {sizeItems.map((item, index) => (
           <button
             key={`${item.min}-${item.max}`}

@@ -34,11 +34,11 @@ export function PopulationFilterSection({
   const { targetGender, targetAgeGroup, busyDays, purposes } = filterState;
 
   return (
-    <div className="flex flex-col gap-32">
+    <div className="flex flex-col gap-8">
       {/* 1. 브랜드 타겟 성별 */}
-      <div className="flex flex-col gap-12">
+      <div className="flex flex-col gap-3">
         <label className="typo-subtitle2 text-(--dice-black)">브랜드 타겟 성별</label>
-        <div className="flex flex-wrap gap-8">
+        <div className="flex flex-wrap gap-2">
           {TARGET_GENDERS.map(({ value, label, Icon }) => (
             <button
               key={value}
@@ -49,13 +49,13 @@ export function PopulationFilterSection({
                   targetGender: toggleChip(targetGender, value),
                 })
               }
-              className={`flex items-center gap-2 rounded-full border px-12 py-4 typo-button1 transition-colors ${
+              className={`flex items-center gap-0.5 rounded-full border px-3 py-1 typo-button1 transition-colors ${
                 targetGender.includes(value)
                   ? "border-(--system-purple) bg-white text-(--system-purple)"
                   : "border-(--gray-light) bg-white text-(--gray-dark) hover:border-(--gray-deep)"
               }`}
             >
-              <Icon className="size-24 shrink-0" aria-hidden />
+              <Icon className="size-6 shrink-0" aria-hidden />
               {label}
             </button>
           ))}
@@ -63,9 +63,9 @@ export function PopulationFilterSection({
       </div>
 
       {/* 2. 브랜드 타겟 연령대 */}
-      <div className="flex flex-col gap-12">
+      <div className="flex flex-col gap-3">
         <label className="typo-subtitle2 text-(--dice-black)">브랜드 타겟 연령대</label>
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap gap-1">
           {TARGET_AGE_GROUPS.map(({ value, label }) => (
             <button
               key={value}
@@ -89,9 +89,9 @@ export function PopulationFilterSection({
       </div>
 
       {/* 3. 유동인구가 많은 요일 */}
-      <div className="flex flex-col gap-12">
+      <div className="flex flex-col gap-3">
         <label className="typo-subtitle2 text-(--dice-black)">유동인구가 많은 요일</label>
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap gap-1">
           {dayOfWeekItems.map(({ value, title }) => (
             <button
               key={value}
@@ -115,9 +115,9 @@ export function PopulationFilterSection({
       </div>
 
       {/* 4. 인기 방문 목적 */}
-      <div className="flex flex-col gap-12">
+      <div className="flex flex-col gap-3">
         <label className="typo-subtitle2 text-(--dice-black)">인기 방문 목적</label>
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap gap-1">
           {purposeItems.map(({ value, title }) => (
             <button
               key={value}

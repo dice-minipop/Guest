@@ -87,8 +87,8 @@ function HomePage() {
       >
         <Lottie animationData={path} loop className="h-full w-full" />
       </div>
-      <h2 className="mt-32 typo-subtitle1 text-dice-black">{title}</h2>
-      <p className="mt-8 whitespace-pre-line text-center typo-subtitle3 text-gray-medium">
+      <h2 className="mt-8 typo-subtitle1 text-dice-black">{title}</h2>
+      <p className="mt-2 whitespace-pre-line text-center typo-subtitle3 text-gray-medium">
         {subtitle}
       </p>
     </div>
@@ -101,22 +101,33 @@ function HomePage() {
           slides={slides}
           slidesPerView={1}
           spaceBetween={0}
-          pagination
+          pagination={{
+            clickable: true,
+            bulletClass: "home-carousel-bullet",
+            bulletActiveClass: "home-carousel-bullet-active",
+          }}
           loop
+          className="home-carousel"
           slideClassName="!h-auto"
         />
       </div>
-      <div className="shrink-0 px-5 pb-16 pt-4 space-y-12">
+      <div className="shrink-0 px-5 pb-4 pt-1 space-y-3">
         <Link
           to="/login"
-          className="flex items-center justify-center gap-8 w-full rounded-xl border border-stroke-eee py-3.5 text-center typo-button1 text-dice-black transition-opacity hover:opacity-90 active:opacity-80"
+          search={{ fromGuestBrowse: false }}
+          className="flex items-center justify-center gap-2 w-full rounded-xl border border-stroke-eee py-3.5 text-center typo-button1 text-dice-black transition-opacity hover:opacity-90 active:opacity-80"
         >
-          <DiceIcon className="w-24 h-24" />
+          <DiceIcon className="w-6 h-6" />
           <span>다이스 아이디로 로그인</span>
         </Link>
 
         <div className="flex items-center justify-center">
-          <Link to="/signup" className="typo-button1 text-gray-medium underline px-16 py-[13.5px]">
+          <Link
+            to="/signup"
+            search={{ fromGuestBrowse: false }}
+            state={{ transitionDirection: "forward" }}
+            className="typo-button1 text-gray-medium underline px-4 py-[13.5px]"
+          >
             회원으로 가입하기
           </Link>
 
@@ -126,7 +137,7 @@ function HomePage() {
             type="button"
             onClick={handleGuestBrowseClick}
             disabled={guestLoginMutation.isPending}
-            className="typo-button1 text-gray-medium underline px-16 py-[13.5px]"
+            className="typo-button1 text-gray-medium underline px-4 py-[13.5px]"
           >
             {guestLoginMutation.isPending ? "게스트 로그인 중..." : "게스트로 둘러보기"}
           </button>

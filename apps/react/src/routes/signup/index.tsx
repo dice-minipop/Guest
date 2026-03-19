@@ -23,6 +23,9 @@ import {
 import { backWithHistory } from "@/shared/navigation/back";
 
 export const Route = createFileRoute("/signup/")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    fromGuestBrowse: search.fromGuestBrowse === true || search.fromGuestBrowse === "true",
+  }),
   component: SignupLayout,
 });
 
@@ -41,6 +44,7 @@ type MessageColor = "text-gray-deep" | "text-system-green" | "text-system-red";
 function SignupPage() {
   const navigate = useNavigate();
   const router = useRouter();
+  const search = Route.useSearch();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -115,6 +119,10 @@ function SignupPage() {
     name.trim() && isEmailValid && isPasswordValid && isPasswordCheckValid && isPhoneValid;
 
   const handleBack = () => {
+    if (search.fromGuestBrowse) {
+      navigate({ to: "/", replace: true, state: { transitionDirection: "back" } });
+      return;
+    }
     if (window.history.length > 1) {
       backWithHistory(router);
     } else {
@@ -145,7 +153,7 @@ function SignupPage() {
   })();
 
   const inputBase =
-    "typo-body2 w-full appearance-none rounded-lg border bg-white px-16 py-3 text-[16px] text-(--gray-dark) placeholder:text-(--gray-light) focus:outline-none focus:ring-1";
+    "typo-body2 w-full appearance-none rounded-lg border bg-white px-4 py-3 text-[16px] text-(--gray-dark) placeholder:text-(--gray-light) focus:outline-none focus:ring-1";
 
   const getBorderByMessageColor = (messageColor: MessageColor) => {
     switch (messageColor) {
@@ -159,46 +167,46 @@ function SignupPage() {
   };
 
   const inputClass = (hasValue: boolean) =>
-    `${inputBase} pr-32 ${
+    `${inputBase} pr-8 ${
       hasValue
         ? "border-(--dice-black) focus:border-(--dice-black) focus:ring-(--dice-black)"
         : "border-(--gray-light) focus:border-(--dice-black) focus:ring-(--dice-black)"
     }`;
 
   const inputClassByMessageColor = (messageColor: MessageColor) =>
-    `${inputBase} pr-32 ${getBorderByMessageColor(messageColor)}`;
+    `${inputBase} pr-8 ${getBorderByMessageColor(messageColor)}`;
 
   const inputWithIconClassByMessageColor = (messageColor: MessageColor) =>
-    `${inputBase} pr-36 ${getBorderByMessageColor(messageColor)}`;
+    `${inputBase} pr-9 ${getBorderByMessageColor(messageColor)}`;
 
   return (
     <div className="relative w-full">
       <div className="h-screen overflow-y-auto">
-        <div className="flex min-h-screen flex-col pb-[72px]">
-          <header className="relative flex shrink-0 items-center justify-between py-12">
+        <div className="flex min-h-screen flex-col pb-[72px] pt-[48px]">
+          <header className="fixed left-0 right-0 top-0 z-20 mx-auto flex w-full max-w-(--common-max-width) shrink-0 items-center justify-between bg-white">
             <button
               type="button"
               onClick={handleBack}
-              className="flex h-[48px] w-[48px] items-center justify-center rounded-full text-(--dice-black) transition-colors hover:bg-neutral-100"
+              className="flex h-[48px] w-[48px] items-center justify-center rounded-full text-dice-black transition-colors hover:bg-neutral-100"
               aria-label="뒤로가기"
             >
-              <RightArrowIcon className="h-24 w-24" aria-hidden />
+              <RightArrowIcon className="h-6 w-6" aria-hidden />
             </button>
 
-            <h1 className="typo-subtitle3 absolute left-0 right-0 text-center text-(--dice-black) pointer-events-none">
+            <h1 className="typo-subtitle3 absolute left-0 right-0 text-center text-dice-black pointer-events-none">
               회원가입
             </h1>
             <div className="h-[48px] w-[48px] shrink-0" aria-hidden />
           </header>
 
-          <div className="flex flex-1 flex-col bg-white px-5 pt-32">
-            <h2 className="typo-h2 mb-24 text-(--dice-black)">회원 정보를 입력해주세요</h2>
+          <div className="flex flex-1 flex-col bg-white px-5 pt-8">
+            <h2 className="typo-h2 mb-6 text-dice-black">회원 정보를 입력해주세요</h2>
 
             <form id="signup-form" onSubmit={handleSubmit} className="flex flex-col">
-              <div className="mb-24 flex flex-col gap-24">
-                <div className="flex flex-col gap-8">
-                  <label htmlFor="signup-name" className="typo-caption1 text-(--gray-dark)">
-                    이름
+              <div className="mb-6 flex flex-col gap-6">
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="signup-name" className="typo-caption1 text-gray-dark">
+                    이름<span className="text-system-red">*</span>
                   </label>
                   <div className="relative">
                     <input
@@ -216,7 +224,7 @@ function SignupPage() {
                       <button
                         type="button"
                         onClick={() => setName("")}
-                        className="absolute right-12 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700"
+                        className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700"
                         aria-label="이름 지우기"
                       >
                         <XIcon className="h-[18px] w-[18px]" />
@@ -225,9 +233,9 @@ function SignupPage() {
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-8">
-                  <label htmlFor="signup-email" className="typo-caption1 text-(--gray-dark)">
-                    이메일
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="signup-email" className="typo-caption1 text-gray-dark">
+                    이메일<span className="text-system-red">*</span>
                   </label>
                   <div className="relative">
                     <input
@@ -245,7 +253,7 @@ function SignupPage() {
                       <button
                         type="button"
                         onClick={() => setEmail("")}
-                        className="absolute right-12 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700"
+                        className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700"
                         aria-label="이메일 지우기"
                       >
                         <XIcon className="h-[18px] w-[18px]" />
@@ -257,9 +265,9 @@ function SignupPage() {
                   )}
                 </div>
 
-                <div className="flex flex-col gap-8">
-                  <label htmlFor="signup-password" className="typo-caption1 text-(--gray-dark)">
-                    비밀번호
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="signup-password" className="typo-caption1 text-gray-dark">
+                    비밀번호<span className="text-system-red">*</span>
                   </label>
                   <div className="relative">
                     <input
@@ -274,7 +282,7 @@ function SignupPage() {
                       minLength={PASSWORD_MIN_LENGTH}
                       disabled={mutation.isPending}
                     />
-                    <div className="absolute right-12 top-1/2 flex -translate-y-1/2 items-center gap-4">
+                    <div className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center gap-1">
                       {password && (
                         <button
                           type="button"
@@ -304,12 +312,9 @@ function SignupPage() {
                   )}
                 </div>
 
-                <div className="flex flex-col gap-8">
-                  <label
-                    htmlFor="signup-password-confirm"
-                    className="typo-caption1 text-(--gray-dark)"
-                  >
-                    비밀번호 확인
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="signup-password-confirm" className="typo-caption1 text-gray-dark">
+                    비밀번호 확인<span className="text-system-red">*</span>
                   </label>
                   <div className="relative">
                     <input
@@ -323,7 +328,7 @@ function SignupPage() {
                       required
                       disabled={mutation.isPending}
                     />
-                    <div className="absolute right-12 top-1/2 flex -translate-y-1/2 items-center gap-4">
+                    <div className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center gap-1">
                       {passwordConfirm && (
                         <button
                           type="button"
@@ -355,9 +360,9 @@ function SignupPage() {
                   )}
                 </div>
 
-                <div className="flex flex-col gap-8">
-                  <label htmlFor="signup-phone" className="typo-caption1 text-(--gray-dark)">
-                    휴대폰
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="signup-phone" className="typo-caption1 text-gray-dark">
+                    휴대폰<span className="text-system-red">*</span>
                   </label>
                   <div className="relative">
                     <input
@@ -375,7 +380,7 @@ function SignupPage() {
                       <button
                         type="button"
                         onClick={() => setPhone("")}
-                        className="absolute right-12 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700"
+                        className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700"
                         aria-label="휴대폰 번호 지우기"
                       >
                         <XIcon className="h-[18px] w-[18px]" />
@@ -388,21 +393,21 @@ function SignupPage() {
                 </div>
               </div>
 
-              {errorMessage && <p className="mb-4 text-sm text-red-600">{errorMessage}</p>}
+              {errorMessage && <p className="mb-1 text-sm text-red-600">{errorMessage}</p>}
             </form>
           </div>
         </div>
       </div>
 
       <div
-        className="fixed bottom-0 left-0 right-0 z-10 mx-auto w-full max-w-(--common-max-width) bg-white px-5 pt-4"
+        className="fixed bottom-0 left-0 right-0 z-10 mx-auto w-full max-w-(--common-max-width) bg-white px-5 pt-1"
         style={{ paddingBottom: "max(20px, env(safe-area-inset-bottom))" }}
       >
         <button
           type="submit"
           form="signup-form"
           disabled={mutation.isPending || !isFormValid}
-          className="w-full rounded-lg bg-dice-black px-16 py-[15.5px] typo-button1 text-dice-white transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+          className="w-full rounded-lg bg-dice-black px-4 py-[15.5px] typo-button1 text-dice-white transition-colors disabled:cursor-not-allowed disabled:opacity-50"
         >
           {mutation.isPending ? "가입 중..." : "다음"}
         </button>

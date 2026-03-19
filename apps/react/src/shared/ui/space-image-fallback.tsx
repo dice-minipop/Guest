@@ -10,7 +10,7 @@ export interface SpaceImageFallbackProps {
 export function SpaceImageFallback({ className = "" }: SpaceImageFallbackProps) {
   return (
     <div className={`flex items-center justify-center bg-white ${className}`} aria-hidden>
-      <DiceIcon className="size-44 shrink-0 text-dice-black" />
+      <DiceIcon className="size-11 shrink-0 text-dice-black" />
     </div>
   );
 }

@@ -15,10 +15,10 @@ export const Route = createFileRoute("/reservation/apply/info")({
 });
 
 const inputBase =
-  "typo-body2 w-full appearance-none rounded-lg border border-(--gray-light) bg-white px-16 py-3 text-[16px] text-(--gray-dark) placeholder:text-(--gray-light) focus:border-(--dice-black) focus:outline-none focus:ring-1 focus:ring-(--dice-black)";
+  "typo-body2 w-full appearance-none rounded-lg border border-(--gray-light) bg-white px-4 py-3 text-[16px] text-(--gray-dark) placeholder:text-(--gray-light) focus:border-(--dice-black) focus:outline-none focus:ring-1 focus:ring-(--dice-black)";
 
 const textareaBase =
-  "typo-body2 w-full min-h-[120px] resize-none rounded-lg border border-(--gray-light) bg-white px-16 py-3 text-[16px] text-(--gray-dark) placeholder:text-(--gray-light) focus:border-(--dice-black) focus:outline-none focus:ring-1 focus:ring-(--dice-black)";
+  "typo-body2 w-full min-h-[120px] resize-none rounded-lg border border-(--gray-light) bg-white px-4 py-3 text-[16px] text-(--gray-dark) placeholder:text-(--gray-light) focus:border-(--dice-black) focus:outline-none focus:ring-1 focus:ring-(--dice-black)";
 
 function ReservationApplyInfoPage() {
   const navigate = useNavigate();
@@ -92,9 +92,9 @@ function ReservationApplyInfoPage() {
   return (
     <div className="min-h-screen bg-dice-white">
       <BackHeader title="예약 신청" onBack={handleBack} />
-      <div className="px-(--spacing-screen-x) pt-20">
-        <div className="space-y-24">
-          <section className="space-y-8">
+      <div className="px-5 pt-5">
+        <div className="space-y-6">
+          <section className="space-y-2">
             <h2 className="whitespace-pre-line typo-h2 text-(--dice-black)">
               {"진행할 팝업스토어에 대한\n정보를 입력해주세요"}
             </h2>
@@ -105,7 +105,7 @@ function ReservationApplyInfoPage() {
             </p>
           </section>
 
-          <section className="space-y-8">
+          <section className="space-y-2">
             <label htmlFor="event-name" className="block typo-caption1 text-(--gray-dark)">
               팝업스토어 행사 이름<span className="text-(--system-red)">*</span>
             </label>
@@ -119,7 +119,7 @@ function ReservationApplyInfoPage() {
             />
           </section>
 
-          <section className="space-y-8">
+          <section className="space-y-2">
             <label htmlFor="event-content" className="block typo-caption1 text-(--gray-dark)">
               행사 내용<span className="text-(--system-red)">*</span>
             </label>
@@ -132,18 +132,18 @@ function ReservationApplyInfoPage() {
             />
           </section>
 
-          <section className="space-y-8">
+          <section className="space-y-2">
             <span className="block typo-caption1 text-(--gray-dark)">행사 내용 관련 첨부 파일</span>
             <input
               ref={fileInputRef}
               type="file"
               multiple
               accept="image/*,.pdf"
-              className="typo-body2 text-(--gray-dark) file:mr-3 file:rounded-lg file:border-0 file:bg-neutral-100 file:px-16 file:py-2 file:typo-caption1 file:text-(--dice-black)"
+              className="typo-body2 text-(--gray-dark) file:mr-3 file:rounded-lg file:border-0 file:bg-neutral-100 file:px-4 file:py-0.5 file:typo-caption1 file:text-(--dice-black)"
             />
           </section>
 
-          <section className="space-y-8">
+          <section className="space-y-2">
             <label htmlFor="extra-request" className="block typo-caption1 text-(--gray-dark)">
               기타 요청사항 <span className="text-(--gray-semilight)">(선택)</span>
             </label>
@@ -161,14 +161,14 @@ function ReservationApplyInfoPage() {
       </div>
 
       <div
-        className="fixed bottom-0 left-0 right-0 z-10 mx-auto w-full max-w-(--common-max-width) bg-dice-white px-(--spacing-screen-x) pt-16"
+        className="fixed bottom-0 left-0 right-0 z-10 mx-auto w-full max-w-(--common-max-width) bg-dice-white px-5 pt-4"
         style={{ paddingBottom: "max(20px, env(safe-area-inset-bottom))" }}
       >
         <button
           type="button"
           onClick={handleSubmit}
           disabled={createMutation.isPending}
-          className="w-full rounded-lg bg-dice-black px-16 py-[15.5px] typo-button1 text-dice-white transition-colors hover:opacity-90 disabled:opacity-60"
+          className="w-full rounded-lg bg-dice-black px-4 py-[15.5px] typo-button1 text-dice-white transition-colors hover:opacity-90 disabled:opacity-60"
         >
           {createMutation.isPending ? "신청 중..." : "예약 신청"}
         </button>

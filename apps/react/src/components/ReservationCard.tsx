@@ -58,11 +58,11 @@ export function ReservationCard({ item, onCancelSuccess }: ReservationCardProps)
     <li className="w-full list-none">
       <article className="overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm">
         {/* 주소 | 사진, 공간 이름 | 사진, 사이즈 | 사진 */}
-        <div className="flex gap-12 p-16">
-          <div className="flex min-w-0 flex-1 flex-col gap-4 mt-8">
+        <div className="flex gap-3 p-4">
+          <div className="flex min-w-0 flex-1 flex-col gap-1 mt-2">
             <span className="typo-caption1 truncate text-gray-medium">{address}</span>
             <h2 className="typo-subtitle1 line-clamp-2 text-dice-black">{item.spaceName}</h2>
-            <p className="typo-caption2 text-gray-light mt-4">{sizeLabel}</p>
+            <p className="typo-caption2 text-gray-light mt-1">{sizeLabel}</p>
           </div>
           <div
             className="relative shrink-0 overflow-hidden rounded-lg bg-neutral-200"
@@ -73,7 +73,7 @@ export function ReservationCard({ item, onCancelSuccess }: ReservationCardProps)
         </div>
 
         {/* 희망 대여 기간 */}
-        <div className="flex items-center justify-between px-16 mb-4">
+        <div className="flex items-center justify-between px-4 mb-1">
           <span className="typo-caption1 text-gray-semilight">희망 대여 기간</span>
           <span className="typo-caption1">
             <span className="text-gray-deep">{dateRange}</span>
@@ -82,18 +82,18 @@ export function ReservationCard({ item, onCancelSuccess }: ReservationCardProps)
         </div>
 
         {/* 총 대여 금액 */}
-        <div className="flex items-center justify-between px-16">
+        <div className="flex items-center justify-between px-4">
           <span className="typo-caption1 text-gray-semilight">총 대여 금액</span>
           <span className="typo-subtitle1 text-dice-black">{formatPrice(item.totalPrice)}</span>
         </div>
 
         {/* 하단 버튼: 상태별 */}
-        <div className="flex gap-8 p-16">
+        <div className="flex gap-2 p-4">
           {isCanceled ? (
             <button
               type="button"
               disabled
-              className="flex flex-1 items-center justify-center rounded-lg border border-gray-light bg-gray-light py-12 typo-button1 text-white transition-colors hover:bg-neutral-50 disabled:opacity-50"
+              className="flex flex-1 items-center justify-center rounded-lg border border-gray-light bg-gray-light py-3 typo-button1 text-white transition-colors hover:bg-neutral-50 disabled:opacity-50"
             >
               예약 신청 취소됨
             </button>
@@ -105,13 +105,13 @@ export function ReservationCard({ item, onCancelSuccess }: ReservationCardProps)
                 state={{ transitionDirection: "forward" }}
                 className="flex items-center justify-center rounded-lg border border-stroke-eee bg-white p-3.5"
               >
-                <MessageIcon className="size-24" aria-hidden />
+                <MessageIcon className="size-6" aria-hidden />
               </Link>
               <button
                 type="button"
                 onClick={() => cancelMutation.mutate()}
                 disabled={cancelMutation.isPending}
-                className="flex flex-1 items-center justify-center rounded-lg border border-stroke-eee bg-white py-12 typo-button1 text-gray-medium transition-colors hover:bg-neutral-50 disabled:opacity-50"
+                className="flex flex-1 items-center justify-center rounded-lg border border-stroke-eee bg-white py-3 typo-button1 text-gray-medium transition-colors hover:bg-neutral-50 disabled:opacity-50"
               >
                 {cancelMutation.isPending ? "처리 중..." : "예약 신청 취소"}
               </button>

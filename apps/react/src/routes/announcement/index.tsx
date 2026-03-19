@@ -157,7 +157,7 @@ function AnnouncementPage() {
       className="h-full overflow-y-auto overflow-x-hidden bg-white"
       style={{ overscrollBehaviorY: "none" }}
     >
-      <div className="pb-64">
+      <div className="pb-16">
         <PageHeader
           variant="announcement"
           title="팝업 지원 공고"
@@ -165,23 +165,21 @@ function AnnouncementPage() {
           searchPlaceholder="원하시는 지역, 모집처, 지원 내용을 검색해보세요"
         />
 
-        <div className="px-(--spacing-screen-x) py-12">
+        <div className="px-5 py-3">
           <AnnouncementFilterChips filterSummary={filterSummary} onOpenFilter={openFilterSheet} />
 
           {isLoading && (
-            <div className="py-12 text-center text-sm text-neutral-500">목록을 불러오는 중...</div>
+            <div className="py-3 text-center text-sm text-neutral-500">목록을 불러오는 중...</div>
           )}
 
           {isError && (
-            <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+            <div className="rounded-lg border border-red-200 bg-red-50 p-1 text-sm text-red-700">
               {error instanceof Error ? error.message : "목록을 불러오지 못했습니다."}
             </div>
           )}
 
           {!isLoading && !isError && content.length === 0 && (
-            <div className="py-12 text-center text-sm text-neutral-500">
-              조회된 공고가 없습니다.
-            </div>
+            <div className="py-3 text-center text-sm text-neutral-500">조회된 공고가 없습니다.</div>
           )}
 
           {!isLoading && !isError && content.length > 0 && (
@@ -191,7 +189,7 @@ function AnnouncementPage() {
                   <AnnouncementCard key={item.id} item={item} />
                 ))}
               </ul>
-              <div ref={loadMoreRef} className="h-8 py-4" aria-hidden>
+              <div ref={loadMoreRef} className="h-2 py-1" aria-hidden>
                 {isFetchingNextPage && (
                   <p className="text-center text-sm text-neutral-500">더 불러오는 중...</p>
                 )}

@@ -46,7 +46,7 @@ type DetailData = NonNullable<
 function TitleWithLike({ data }: { data: DetailData }) {
   const [isLiked, setIsLiked] = useState(data.isLiked);
   return (
-    <div className="flex items-start justify-between gap-5 border-b border-stroke-eee pb-24">
+    <div className="flex items-start justify-between gap-5 border-b border-stroke-eee pb-6">
       <h1 className="typo-h2 min-w-0 flex-1 wrap-break-word text-dice-black">{data.title}</h1>
       <div className="flex shrink-0 flex-col items-center gap-0.5">
         <button
@@ -55,7 +55,7 @@ function TitleWithLike({ data }: { data: DetailData }) {
           className="rounded-full p-1 transition-colors hover:bg-neutral-100"
           aria-label={isLiked ? "좋아요 취소" : "좋아요"}
         >
-          {isLiked ? <LikePurple className="h-24 w-24" /> : <LikeLightgray className="h-24 w-24" />}
+          {isLiked ? <LikePurple className="h-6 w-6" /> : <LikeLightgray className="h-6 w-6" />}
         </button>
         <span
           className={
@@ -97,12 +97,12 @@ function AnnouncementDetailPage() {
 
   if (!Number.isInteger(announcementId) || announcementId <= 0) {
     return (
-      <div className="px-4 py-8">
+      <div className="px-1 py-2">
         <p className="text-neutral-500">잘못된 공고 ID입니다.</p>
         <Link
           to="/announcement"
           state={{ transitionDirection: "back" }}
-          className="mt-4 inline-block text-indigo-600 hover:underline"
+          className="mt-1 inline-block text-indigo-600 hover:underline"
         >
           목록으로
         </Link>
@@ -111,19 +111,19 @@ function AnnouncementDetailPage() {
   }
 
   if (isLoading) {
-    return <div className="px-4 py-12 text-center text-sm text-neutral-500">불러오는 중...</div>;
+    return <div className="px-1 py-3 text-center text-sm text-neutral-500">불러오는 중...</div>;
   }
 
   if (isError || !data) {
     return (
-      <div className="px-4 py-8">
+      <div className="px-1 py-2">
         <p className="text-red-600">
           {error instanceof Error ? error.message : "공고 정보를 불러오지 못했습니다."}
         </p>
         <Link
           to="/announcement"
           state={{ transitionDirection: "back" }}
-          className="mt-4 inline-block text-indigo-600 hover:underline"
+          className="mt-1 inline-block text-indigo-600 hover:underline"
         >
           목록으로
         </Link>
@@ -144,24 +144,24 @@ function AnnouncementDetailPage() {
     >
       {/* 헤더 */}
       <div className="shrink-0 bg-dice-black">
-        <button type="button" onClick={handleBackToList} className="p-12" aria-label="목록으로">
-          <ArrowRightWhiteIcon className="h-24 w-24" aria-hidden />
+        <button type="button" onClick={handleBackToList} className="p-3" aria-label="목록으로">
+          <ArrowRightWhiteIcon className="h-6 w-6" aria-hidden />
         </button>
       </div>
 
       {/* 스크롤 영역 */}
-      <div className="min-h-0 flex-1 overflow-y-auto pb-24">
+      <div className="min-h-0 flex-1 overflow-y-auto pb-6">
         {imageUrls.length > 0 && (
           <ImageCarousel imageUrls={imageUrls} aspectRatio="375/210" altPrefix="공고 이미지" />
         )}
 
-        <div className="py-6 pt-32">
-          <div className="px-(--spacing-screen-x) space-y-24">
+        <div className="py-1.5 pt-8">
+          <div className="px-5 space-y-6">
             {/* 제목(줄바꿈) | 좋아요 버튼 좌우 정렬 */}
             <TitleWithLike key={data.id} data={data} />
 
             {/* 라벨 | 값 2열 배치 */}
-            <dl className="mt-4 flex flex-col gap-8 typo-caption1 text-gray-deep">
+            <dl className="mt-1 flex flex-col gap-2 typo-caption1 text-gray-deep">
               <div className="flex gap-5">
                 <dt className="w-14 shrink-0">해당 지역</dt>
                 <dd className="min-w-0">{locationText}</dd>
@@ -185,10 +185,10 @@ function AnnouncementDetailPage() {
             </dl>
           </div>
 
-          <div className="h-8 bg-bg-light-gray my-24" />
+          <div className="h-2 bg-bg-light-gray my-6" />
 
           {data.details && (
-            <div className="px-(--spacing-screen-x) mt-6">
+            <div className="px-5 mt-1.5">
               <h2 className="typo-subtitle2 text-dice-black">지원 공고 소개</h2>
               <p className="mt-1 whitespace-pre-wrap typo-body1 text-gray-deep">{data.details}</p>
             </div>
@@ -198,19 +198,19 @@ function AnnouncementDetailPage() {
 
       {/* 하단 고정: 공고 페이지 바로가기 */}
       <div
-        className="shrink-0 border-t border-stroke-eee bg-dice-white px-(--spacing-screen-x)"
+        className="shrink-0 border-t border-stroke-eee bg-dice-white px-5"
         style={{
-          paddingTop: "var(--spacing-12)",
-          paddingBottom: "max(var(--spacing-12), env(safe-area-inset-bottom, 0px))",
+          paddingTop: "12px",
+          paddingBottom: "max(12px, env(safe-area-inset-bottom, 0px))",
         }}
       >
         <button
           type="button"
           onClick={() => hasAnnouncementPage && openExternal(announcementPageUrl)}
           disabled={!hasAnnouncementPage}
-          className="typo-button1 w-full flex flex-row justify-center items-center gap-8 rounded-lg bg-dice-black py-3.5 text-white transition-opacity hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="typo-button1 w-full flex flex-row justify-center items-center gap-2 rounded-lg bg-dice-black py-3.5 text-white transition-opacity hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <GlobeIcon className="h-24 w-24" aria-hidden />
+          <GlobeIcon className="h-6 w-6" aria-hidden />
           공고 페이지 바로가기
         </button>
       </div>
