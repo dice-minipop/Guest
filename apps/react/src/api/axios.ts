@@ -43,7 +43,11 @@ export function clearGuestMode(): void {
 }
 
 export function isGuestMode(): boolean {
-  return localStorage.getItem(AUTH_MODE_KEY) === AUTH_MODE.guest;
+  return (
+    getStoredAuthMode() === AUTH_MODE.guest ||
+    isGuestToken(getAccessToken()) ||
+    isGuestToken(getRefreshToken())
+  );
 }
 
 export function canUseMemberOnlyApi(): boolean {
@@ -54,9 +58,44 @@ function getRefreshToken(): string | null {
   return localStorage.getItem(TOKEN_KEYS.refresh);
 }
 
+function getStoredAuthMode(): string | null {
+  return localStorage.getItem(AUTH_MODE_KEY);
+}
+
+function decodeJwtPayload(token: string): Record<string, unknown> | null {
+  const payload = token.split(".")[1];
+  if (!payload) return null;
+
+  try {
+    const normalized = payload.replace(/-/g, "+").replace(/_/g, "/");
+    const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, "=");
+    const decoded = atob(padded);
+    return JSON.parse(decoded) as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+}
+
+function isGuestToken(token: string | null): boolean {
+  if (!token) return false;
+
+  const payload = decodeJwtPayload(token);
+  return payload?.sub === "guest";
+}
+
+function syncGuestModeFromTokens(accessToken: string | null, refreshToken: string | null): void {
+  if (isGuestToken(accessToken) || isGuestToken(refreshToken)) {
+    setGuestMode();
+    return;
+  }
+
+  clearGuestMode();
+}
+
 function setTokens(accessToken: string, refreshToken: string): void {
   localStorage.setItem(TOKEN_KEYS.access, accessToken);
   localStorage.setItem(TOKEN_KEYS.refresh, refreshToken);
+  syncGuestModeFromTokens(accessToken, refreshToken);
 }
 
 /** 액세스/리프레시 토큰 모두 삭제 (로그아웃·세션 만료 시) */
@@ -109,7 +148,13 @@ export function refreshTokensOnLoad(): Promise<boolean> {
   console.log("[auth] refreshTokensOnLoad: 시작", {
     hasRefresh: !!getRefreshToken(),
     hasAccess: !!getAccessToken(),
+    isGuest: isGuestMode(),
   });
+  if (isGuestMode()) {
+    console.log("[auth] refreshTokensOnLoad: 게스트 모드 → 자동 로그인 생략 후 토큰 정리");
+    clearTokens();
+    return Promise.resolve(false);
+  }
   if (!getRefreshToken()) {
     console.log("[auth] refreshTokensOnLoad: refreshToken 없음 → 스킵");
     return Promise.resolve(false);

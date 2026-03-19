@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { createRootRoute, useRouterState } from "@tanstack/react-router";
+import { Toaster } from "sonner";
 import { BottomNav } from "../components/BottomNav";
 import { bridge } from "@/bridge";
 import { getAccessToken } from "@/api/axios";
@@ -102,6 +103,7 @@ function RootComponent() {
         )}
         {showBottomNav && <BottomNav />}
       </div>
+      <Toaster position="bottom-center" richColors closeButton={false} />
     </div>
   );
 }

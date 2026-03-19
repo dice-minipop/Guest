@@ -4,7 +4,9 @@ import { useQuery } from "@tanstack/react-query";
 import { backWithHistory } from "@/shared/navigation/back";
 import { getAnnouncementDetailData, queryKeys } from "@/api";
 import { getDummyAnnouncementDetail } from "@/api/announcement/dummy";
+import { canUseMemberOnlyApi } from "@/api/axios";
 import { ImageCarousel } from "@/components/ImageCarousel";
+import { useLoginRequiredModal } from "@/hooks/useLoginRequiredModal";
 import { bridge } from "@/bridge";
 import ArrowRightWhiteIcon from "@/assets/icons/Arrow/right-white.svg?react";
 import LikeLightgray from "@/assets/icons/like/like-lightgray.svg?react";
@@ -45,13 +47,20 @@ type DetailData = NonNullable<
 
 function TitleWithLike({ data }: { data: DetailData }) {
   const [isLiked, setIsLiked] = useState(data.isLiked);
+  const { openLoginRequiredModal, loginRequiredModal } = useLoginRequiredModal();
   return (
     <div className="flex items-start justify-between gap-5 border-b border-stroke-eee pb-6">
       <h1 className="typo-h2 min-w-0 flex-1 wrap-break-word text-dice-black">{data.title}</h1>
       <div className="flex shrink-0 flex-col items-center gap-0.5">
         <button
           type="button"
-          onClick={() => setIsLiked((prev) => !prev)}
+          onClick={() => {
+            if (!canUseMemberOnlyApi()) {
+              openLoginRequiredModal();
+              return;
+            }
+            setIsLiked((prev) => !prev);
+          }}
           className="rounded-full p-1 transition-colors hover:bg-neutral-100"
           aria-label={isLiked ? "좋아요 취소" : "좋아요"}
         >
@@ -65,6 +74,7 @@ function TitleWithLike({ data }: { data: DetailData }) {
           {data.likeCount}
         </span>
       </div>
+      {loginRequiredModal}
     </div>
   );
 }

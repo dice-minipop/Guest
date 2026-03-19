@@ -1,4 +1,5 @@
 import { createWebView, bridge } from "@webview-bridge/react-native";
+import * as Clipboard from "expo-clipboard";
 import * as FileSystem from "expo-file-system/legacy";
 import * as ImagePicker from "expo-image-picker";
 import * as WebBrowser from "expo-web-browser";
@@ -67,6 +68,9 @@ export const appBridge = bridge({
   },
   async sum(a: number, b: number) {
     return a + b;
+  },
+  async copyTextToClipboard(text: string) {
+    await Clipboard.setStringAsync(text);
   },
   async openInAppBrowser(url: string) {
     await WebBrowser.openBrowserAsync(url);

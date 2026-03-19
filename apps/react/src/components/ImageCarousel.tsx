@@ -62,7 +62,7 @@ export function ImageCarousel({
         className="absolute right-3 bottom-3 z-10 rounded-full bg-black/50 px-2.5 py-1 text-xs font-medium text-white"
         aria-live="polite"
       >
-        {currentIndex + 1}/{imageUrls.length}
+        {currentIndex + 1} / {imageUrls.length}
       </div>
     </div>
   );

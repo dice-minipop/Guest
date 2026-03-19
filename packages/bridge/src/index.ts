@@ -16,6 +16,8 @@ export type ImagePickSource = "gallery" | "camera";
 export interface AppBridgeMethods extends Bridge {
   getMessage(): Promise<string>;
   sum(a: number, b: number): Promise<number>;
+  /** 네이티브 클립보드에 텍스트 복사 */
+  copyTextToClipboard(text: string): Promise<void>;
   openInAppBrowser(url: string): Promise<void>;
   openExternalUrl(primaryUrl: string, fallbackUrl?: string): Promise<void>;
   getBridgeVersion(): Promise<string>;
