@@ -6,18 +6,26 @@ config();
 const defineConfig: ExpoConfig = {
   owner: "minipop",
   name: "dice",
-  slug: "dice",
-  version: "2.0.0",
+  slug: "dice-tjqg4qqylrqtw3-cum4wq",
+  version: "1.0.0",
   orientation: "portrait",
   icon: "./assets/images/icon.png",
   scheme: "myapp",
   userInterfaceStyle: "light",
   newArchEnabled: true,
-  runtimeVersion: "2.0.0",
+  runtimeVersion: "1.0.0",
+  extra: {
+    eas: {
+      projectId: "340f0603-94f2-4db4-baa1-62900f23fe8d",
+    },
+  },
+  updates: {
+    url: "https://u.expo.dev/340f0603-94f2-4db4-baa1-62900f23fe8d",
+  },
   ios: {
-    supportsTablet: true,
-    bundleIdentifier: "com.cmc.dice.minipop.expo",
-    buildNumber: "2.0.0",
+    supportsTablet: false,
+    bundleIdentifier: "com.minipop.dice2",
+    buildNumber: "1",
     entitlements: {
       "aps-environment": "production",
     },
