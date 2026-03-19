@@ -44,7 +44,6 @@ type MessageColor = "text-gray-deep" | "text-system-green" | "text-system-red";
 function SignupPage() {
   const navigate = useNavigate();
   const router = useRouter();
-  const search = Route.useSearch();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -119,10 +118,6 @@ function SignupPage() {
     name.trim() && isEmailValid && isPasswordValid && isPasswordCheckValid && isPhoneValid;
 
   const handleBack = () => {
-    if (search.fromGuestBrowse) {
-      navigate({ to: "/", replace: true, state: { transitionDirection: "back" } });
-      return;
-    }
     if (window.history.length > 1) {
       backWithHistory(router);
     } else {

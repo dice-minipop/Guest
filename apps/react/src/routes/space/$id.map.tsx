@@ -158,6 +158,7 @@ function SpaceMapPage() {
             height={undefined}
             zoom={16}
             interactive={true}
+            markerStyle="custom"
           />
         ) : (
           <div className="flex h-full items-center justify-center typo-body1 text-gray-semilight">

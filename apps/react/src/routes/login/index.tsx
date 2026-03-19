@@ -32,16 +32,11 @@ const TOKEN_KEYS = {
 function LoginPage() {
   const navigate = useNavigate();
   const router = useRouter();
-  const search = Route.useSearch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   const handleBack = () => {
-    if (search.fromGuestBrowse) {
-      navigate({ to: "/", replace: true, state: { transitionDirection: "back" } });
-      return;
-    }
     if (window.history.length > 1) {
       backWithHistory(router);
     } else {

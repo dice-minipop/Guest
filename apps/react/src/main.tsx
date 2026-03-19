@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider } from "@tanstack/react-router";
 import { refreshTokensOnLoad } from "./api/axios";
+import loadingGif from "./assets/loading.gif";
 import "./main.css";
 import { router } from "./router";
 
@@ -33,8 +34,9 @@ export function App() {
 
   if (!authReady) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-(--bg-white)">
-        <p className="typo-body2 text-gray-deep">로딩 중...</p>
+      <div className="flex min-h-screen flex-col items-center justify-center bg-(--bg-white)">
+        <img src={loadingGif} alt="로딩 중" className="h-40 w-40 object-contain" />
+        <p className="-mt-6 typo-subtitle1 text-dice-black">로딩 중...</p>
       </div>
     );
   }

@@ -10,18 +10,33 @@ type UseTabScrollStorageOptions = {
   scrollContainerRef: RefObject<HTMLDivElement | null>;
   /** 스크롤 복원 시점. 데이터 로드 후 복원하려면 true가 되는 deps 전달 (예: isFetched) */
   restoreDeps?: unknown[];
+  /** true일 때만 저장된 스크롤을 복원 */
+  restoreEnabled?: boolean;
 };
 
 export function useTabScrollStorage({
   storageKey,
   scrollContainerRef,
   restoreDeps = [],
+  restoreEnabled = true,
 }: UseTabScrollStorageOptions) {
   const restoreTargetScrollTopRef = useRef<number | null>(null);
   const isRestoringScrollRef = useRef(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+    if (!restoreEnabled) {
+      const scrollContainerElement = scrollContainerRef.current;
+      const routeStackElement = getRouteStackView();
+      window.sessionStorage.removeItem(storageKey);
+      restoreTargetScrollTopRef.current = null;
+      isRestoringScrollRef.current = false;
+      requestAnimationFrame(() => {
+        scrollContainerElement?.scrollTo({ top: 0, behavior: "auto" });
+        routeStackElement?.scrollTo({ top: 0, behavior: "auto" });
+      });
+      return;
+    }
     const saved = window.sessionStorage.getItem(storageKey);
     if (saved == null) return;
     const nextScrollTop = Number(saved);
@@ -29,7 +44,7 @@ export function useTabScrollStorage({
       ? Math.max(0, nextScrollTop)
       : null;
     isRestoringScrollRef.current = restoreTargetScrollTopRef.current != null;
-  }, [storageKey]);
+  }, [storageKey, restoreEnabled]);
 
   useEffect(() => {
     const targetScrollTop = restoreTargetScrollTopRef.current;
