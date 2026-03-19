@@ -15,6 +15,7 @@ export interface AppBridgeMethods extends Bridge {
   getMessage(): Promise<string>;
   sum(a: number, b: number): Promise<number>;
   openInAppBrowser(url: string): Promise<void>;
+  openExternalUrl(primaryUrl: string, fallbackUrl?: string): Promise<void>;
   getBridgeVersion(): Promise<string>;
   /** 웹에서 현재 라우트에 따라 상단 SafeArea 배경색 전달 (#000000 | #FFFFFF) */
   setTopSafeAreaColor(color: string): Promise<void>;
