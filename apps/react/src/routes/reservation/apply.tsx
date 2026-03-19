@@ -1,4 +1,10 @@
-import { createFileRoute, useNavigate, Outlet, useRouter, useRouterState } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  useNavigate,
+  Outlet,
+  useRouter,
+  useRouterState,
+} from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { BackHeader } from "@/components/BackHeader";
 import { getMyBrandInfo, queryKeys } from "@/api";
