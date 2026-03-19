@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate, useRouter } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import ArrowRightIcon from "@/assets/icons/Arrow/right.svg?react";
+import { bridge } from "@/bridge";
 import { backWithHistory } from "@/shared/navigation/back";
 import { getSpaceDetailData, queryKeys } from "@/api";
 import { getDummySpaceDetail } from "@/api/space/dummy";
@@ -81,6 +82,40 @@ function SpaceMapPage() {
     Number.isFinite(data.latitude) &&
     Number.isFinite(data.longitude);
 
+  const browserUrl = hasCoords
+    ? `https://map.naver.com/v5/?c=${data.latitude},${data.longitude},17,0,0,0`
+    : data.address
+      ? `https://map.naver.com/v5/search/${encodeURIComponent(data.address)}`
+      : "";
+
+  const appName = encodeURIComponent(
+    typeof window !== "undefined" ? window.location.origin : "https://dice-guest-react.vercel.app"
+  );
+  const appUrl = hasCoords
+    ? `nmap://place?lat=${data.latitude}&lng=${data.longitude}&name=${encodeURIComponent(data.name)}&appname=${appName}`
+    : data.address
+      ? `nmap://search?query=${encodeURIComponent(data.address)}&appname=${appName}`
+      : "";
+
+  const handleOpenNaverMap = async () => {
+    if (!browserUrl) return;
+
+    const canUseExternalOpen =
+      typeof bridge?.isNativeMethodAvailable === "function" &&
+      bridge.isNativeMethodAvailable("openExternalUrl");
+
+    if (canUseExternalOpen && bridge?.openExternalUrl) {
+      try {
+        await bridge.openExternalUrl(appUrl || browserUrl, browserUrl);
+        return;
+      } catch {
+        // 브리지 실패 시 웹 fallback으로 새 탭을 연다.
+      }
+    }
+
+    window.open(browserUrl, "_blank", "noopener,noreferrer");
+  };
+
   return (
     <div
       className="fixed left-1/2 top-0 bottom-0 flex w-full max-w-(--common-max-width) -translate-x-1/2 flex-col overflow-hidden bg-dice-white"
@@ -134,21 +169,14 @@ function SpaceMapPage() {
       {/* 하단 주소 + 길찾기 */}
       <div className="shrink-0 border-t border-stroke-eee bg-white px-(--spacing-screen-x) py-4 space-y-3">
         {data.address && <p className="typo-body1 text-gray-deep">{data.address}</p>}
-        {(data.address || hasCoords) && (
-          <a
-            href={
-              hasCoords
-                ? `https://map.naver.com/v5/?c=${data.latitude},${data.longitude},17,0,0,0`
-                : data.address
-                  ? `https://map.naver.com/v5/search/${encodeURIComponent(data.address)}`
-                  : "#"
-            }
-            target="_blank"
-            rel="noopener noreferrer"
+        {browserUrl && (
+          <button
+            type="button"
+            onClick={handleOpenNaverMap}
             className="typo-button1 block w-full rounded-lg bg-dice-black py-3 text-center text-white transition-opacity hover:opacity-90"
           >
             네이버 지도에서 열기
-          </a>
+          </button>
         )}
       </div>
     </div>

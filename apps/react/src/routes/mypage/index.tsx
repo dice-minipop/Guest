@@ -58,7 +58,8 @@ function MypagePage() {
       clearTokens();
       clearScrollStorage();
       queryClient.clear();
-      navigate({ to: "/login" });
+      // 로그아웃 후에는 로그인 화면이 아니라 index로 스택을 초기화해 이동한다.
+      window.location.replace("/");
     },
   });
 

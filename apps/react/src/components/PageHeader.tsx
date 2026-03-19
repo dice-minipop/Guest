@@ -134,7 +134,7 @@ export function PageHeader({
         className="sticky top-0 z-10 border-b border-neutral-200 bg-black"
         style={{
           paddingTop: "max(var(--spacing-12), env(safe-area-inset-top, 0px))",
-          paddingBottom: "var(--spacing-12)",
+          paddingBottom: "var(--spacing-20)",
           paddingLeft: "max(var(--spacing-screen-x), env(safe-area-inset-left, 0px))",
           paddingRight: "max(var(--spacing-screen-x), env(safe-area-inset-right, 0px))",
         }}

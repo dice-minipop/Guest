@@ -1,8 +1,0 @@
-{
-  "android": {
-    "package": "com.j_jinhyeok.dicev2"
-  },
-  "ios": {
-    "bundleIdentifier": "com.j-jinhyeok.dicev2"
-  }
-}
