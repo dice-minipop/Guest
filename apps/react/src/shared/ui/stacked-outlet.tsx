@@ -17,7 +17,9 @@ function isTabRootPath(path: string) {
 export function StackedOutlet() {
   const location = useRouterState({ select: (state) => state.location });
   const pathname = location.pathname;
-  const locationState = location.state as { transitionDirection?: "forward" | "back" } | undefined;
+  const locationState = location.state as
+    | { transitionDirection?: "forward" | "back" | "none" }
+    | undefined;
   const lastClearedPathRef = useRef<string | null>(null);
 
   const rawSession =
@@ -38,7 +40,7 @@ export function StackedOutlet() {
       ? "route-enter-back"
       : effectiveTransitionDirection === "forward"
         ? "route-enter-forward"
-        : isTabRootPath(pathname)
+        : effectiveTransitionDirection === "none" || isTabRootPath(pathname)
           ? "route-enter-none"
           : "route-enter-forward";
 

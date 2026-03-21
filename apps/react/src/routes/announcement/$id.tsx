@@ -8,6 +8,7 @@ import { canUseMemberOnlyApi } from "@/api/axios";
 import { ImageCarousel } from "@/components/ImageCarousel";
 import { useLoginRequiredModal } from "@/hooks/useLoginRequiredModal";
 import { bridge } from "@/bridge";
+import { getBottomSafeAreaPadding, getTopSafeAreaInset } from "@/utils/safeArea";
 import ArrowRightWhiteIcon from "@/assets/icons/Arrow/right-white.svg?react";
 import LikeLightgray from "@/assets/icons/like/like-lightgray.svg?react";
 import LikePurple from "@/assets/icons/like/like-purple.svg?react";
@@ -146,11 +147,13 @@ function AnnouncementDetailPage() {
   const hasAnnouncementPage = announcementPageUrl.length > 0;
   const locationText = [data.city, data.district].filter(Boolean).join("") || "-";
   const dateRange = `${formatDate(data.recruitmentStartAt)} ~ ${formatDate(data.recruitmentEndAt)}`;
+  const topInset = getTopSafeAreaInset();
+  const bottomActionPadding = getBottomSafeAreaPadding("12px");
 
   return (
     <div
       className="fixed top-0 bottom-0 left-1/2 flex w-full max-w-(--common-max-width) -translate-x-1/2 flex-col overflow-hidden bg-white"
-      style={{ top: "env(safe-area-inset-top, 0px)" }}
+      style={{ top: topInset }}
     >
       {/* 헤더 */}
       <div className="shrink-0 bg-dice-black">
@@ -211,7 +214,7 @@ function AnnouncementDetailPage() {
         className="shrink-0 border-t border-stroke-eee bg-dice-white px-5"
         style={{
           paddingTop: "12px",
-          paddingBottom: "max(12px, env(safe-area-inset-bottom, 0px))",
+          paddingBottom: bottomActionPadding,
         }}
       >
         <button

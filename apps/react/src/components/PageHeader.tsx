@@ -174,6 +174,7 @@ export function PageHeader({
     <>
       <div
         ref={stickyRowRef}
+        data-page-header-sticky="true"
         className={`sticky top-0 z-20 bg-black ${searchTo == null && children == null ? "border-b border-neutral-200" : ""}`}
         style={{
           paddingLeft: "max(20px, env(safe-area-inset-left, 0px))",
@@ -203,6 +204,24 @@ export function PageHeader({
               {icons.map(({ to, ariaLabel, IconGray, IconWhite }) => {
                 const isActive = pathname === to;
                 const Icon = isActive ? IconWhite : IconGray;
+                if (to === MY_PAGE_ALARMS) {
+                  return (
+                    <Link
+                      key={to}
+                      to={to}
+                      search={{ from: pathname }}
+                      state={{ transitionDirection: "forward" }}
+                      onClick={(e: React.MouseEvent<HTMLAnchorElement>) =>
+                        handleMemberOnlyIconClick(e, to)
+                      }
+                      className="rounded-full p-3 transition-opacity hover:opacity-80 active:opacity-70"
+                      aria-label={ariaLabel}
+                    >
+                      <Icon className="h-6 w-6 shrink-0" aria-hidden />
+                    </Link>
+                  );
+                }
+
                 return (
                   <Link
                     key={to}
@@ -239,7 +258,7 @@ export function PageHeader({
               className="flex items-center gap-0.5 rounded-lg border border-neutral-300 bg-neutral-50 p-3 text-sm font-medium text-neutral-500 transition-colors hover:bg-neutral-100"
             >
               <SearchIcon className="h-5 w-5 shrink-0" aria-hidden />
-              <span>{searchPlaceholder}</span>
+              <span className="truncate">{searchPlaceholder}</span>
             </Link>
           ) : null}
           {children != null ? (

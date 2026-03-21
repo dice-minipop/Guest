@@ -45,6 +45,7 @@ function ReservationPage() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const [activeStatus, setActiveStatus] = useState<ReservationStatus>("PENDING");
+  const [pageHeaderHeight, setPageHeaderHeight] = useState(57);
   const isMemberOnlyAllowed = canUseMemberOnlyApi();
   const prefersReducedMotion = useReducedMotion() ?? false;
 
@@ -106,6 +107,25 @@ function ReservationPage() {
     return () => observer.disconnect();
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
+  useEffect(() => {
+    const header = scrollContainerRef.current?.querySelector<HTMLElement>("[data-page-header-sticky='true']");
+    if (!header) return;
+
+    const updatePageHeaderHeight = () => {
+      setPageHeaderHeight(header.getBoundingClientRect().height);
+    };
+
+    updatePageHeaderHeight();
+
+    const resizeObserver = new ResizeObserver(() => {
+      updatePageHeaderHeight();
+    });
+
+    resizeObserver.observe(header);
+
+    return () => resizeObserver.disconnect();
+  }, []);
+
   const content = (data?.pages.flatMap((p) => p.content) ?? []) as ReservationItem[];
   const emptyMessage = EMPTY_MESSAGE_BY_STATUS[activeStatus];
 
@@ -120,7 +140,10 @@ function ReservationPage() {
 
         {isMemberOnlyAllowed ? (
           <>
-            <div className="sticky top-[81px] z-10 flex border-b border-neutral-200 bg-bg-light-gray">
+            <div
+              className="sticky z-10 flex border-b border-neutral-200 bg-bg-light-gray"
+              style={{ top: `${pageHeaderHeight}px` }}
+            >
               {TAB_STATUSES.map(({ key, label }) => (
                 <button
                   key={key}

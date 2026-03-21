@@ -31,6 +31,7 @@ import {
 } from "@/lib/scrollStorage";
 import { useTabScrollStorage } from "@/hooks/useTabScrollStorage";
 import { m2ToPyeong } from "@/utils/sizeConversion";
+import { getBottomSafeAreaPadding, getTopSafeAreaInset } from "@/utils/safeArea";
 import PlaceIcon from "@/assets/place.svg?react";
 import MapIcon from "@/assets/map.svg?react";
 import DownArrowIcon from "@/assets/down-arrow.svg?react";
@@ -337,6 +338,8 @@ function SpaceDetailPage() {
   const facilityInfos = data.facilityInfos ?? [];
   const visibleFacilityInfos = facilitiesExpanded ? facilityInfos : facilityInfos.slice(0, 8);
   const tags = data.tags ?? [];
+  const topInset = getTopSafeAreaInset();
+  const bottomActionPadding = getBottomSafeAreaPadding("12px");
 
   const messageRoomId = data.messageRoomId;
   const reservationUnitPrice = data.discountRate > 0 ? data.discountPrice : data.pricePerDay;
@@ -347,14 +350,14 @@ function SpaceDetailPage() {
   return (
     <div
       className="no-bounce-scroll fixed left-1/2 bottom-0 flex w-full max-w-(--common-max-width) -translate-x-1/2 flex-col overflow-hidden bg-white"
-      style={{ top: "env(safe-area-inset-top, 0px)" }}
+      style={{ top: topInset }}
     >
       {/* 캐러셀 넘긴 뒤 보여줄 48px 상단 바 (레이아웃 영향 없이 fixed) */}
       <div
         className={`fixed top-0 left-1/2 z-20 flex h-[48px] w-full max-w-(--common-max-width) -translate-x-1/2 items-center bg-dice-black transition-opacity ${
           isPastCarousel ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
-        style={{ top: "env(safe-area-inset-top, 0px)" }}
+        style={{ top: topInset }}
       >
         <button
           type="button"
@@ -375,7 +378,7 @@ function SpaceDetailPage() {
         }`}
         style={{
           left: 14,
-          top: "calc(10px + env(safe-area-inset-top, 0px))",
+          top: `calc(10px + ${topInset})`,
         }}
         aria-label="목록으로"
       >
@@ -637,7 +640,7 @@ function SpaceDetailPage() {
         className="flex shrink-0 items-center gap-3 border-t border-stroke-eee bg-dice-white px-5"
         style={{
           paddingTop: "12px",
-          paddingBottom: "max(12px, env(safe-area-inset-bottom, 0px))",
+          paddingBottom: bottomActionPadding,
         }}
       >
         <Link

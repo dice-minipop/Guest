@@ -124,7 +124,7 @@ function MypagePage() {
                       />
                       {bgImage ? <div className="absolute inset-0 bg-(--dim-basic)" /> : null}
                       <div className="relative flex flex-col gap-3 p-1">
-                        <div className="block bg-black py-4 pl-5 space-y-4">
+                        <div className={`block py-4 pl-5 space-y-4 ${bgImage ? "bg-transparent" : "bg-black"}`}>
                           <p className="typo-h1 text-white">{primaryBrand.name}</p>
                           {primaryBrand.description ? (
                             <p className="typo-body2 text-gray-light line-clamp-2">

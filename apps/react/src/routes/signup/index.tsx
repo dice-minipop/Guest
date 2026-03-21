@@ -21,6 +21,7 @@ import {
   validatePhone,
 } from "@/lib/signupValidation";
 import { backWithHistory } from "@/shared/navigation/back";
+import { getBottomSafeAreaPadding } from "@/utils/safeArea";
 
 export const Route = createFileRoute("/signup/")({
   validateSearch: (search: Record<string, unknown>) => ({
@@ -149,6 +150,7 @@ function SignupPage() {
 
   const inputBase =
     "typo-body2 w-full appearance-none rounded-lg border bg-white px-4 py-3 text-[16px] text-(--gray-dark) placeholder:text-(--gray-light) focus:outline-none focus:ring-1";
+  const bottomActionPadding = getBottomSafeAreaPadding("20px");
 
   const getBorderByMessageColor = (messageColor: MessageColor) => {
     switch (messageColor) {
@@ -396,7 +398,7 @@ function SignupPage() {
 
       <div
         className="fixed bottom-0 left-0 right-0 z-10 mx-auto w-full max-w-(--common-max-width) bg-white px-5 pt-1"
-        style={{ paddingBottom: "max(20px, env(safe-area-inset-bottom))" }}
+        style={{ paddingBottom: bottomActionPadding }}
       >
         <button
           type="submit"

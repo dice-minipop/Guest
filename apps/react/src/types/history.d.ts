@@ -1,5 +1,5 @@
 declare module "@tanstack/history" {
   interface HistoryState {
-    transitionDirection?: "forward" | "back";
+    transitionDirection?: "forward" | "back" | "none";
   }
 }

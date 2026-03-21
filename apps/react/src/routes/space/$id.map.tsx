@@ -6,6 +6,7 @@ import { backWithHistory } from "@/shared/navigation/back";
 import { getSpaceDetailData, queryKeys } from "@/api";
 import { getDummySpaceDetail } from "@/api/space/dummy";
 import { NaverMap } from "@/components/NaverMap";
+import { getBottomSafeAreaInset, getTopSafeAreaInset } from "@/utils/safeArea";
 
 export const Route = createFileRoute("/space/$id/map")({
   component: SpaceMapPage,
@@ -96,6 +97,8 @@ function SpaceMapPage() {
     : data.address
       ? `nmap://search?query=${encodeURIComponent(data.address)}&appname=${appName}`
       : "";
+  const safeTopPadding = getTopSafeAreaInset();
+  const safeBottomPadding = getBottomSafeAreaInset();
 
   const handleOpenNaverMap = async () => {
     if (!browserUrl) return;
@@ -120,8 +123,8 @@ function SpaceMapPage() {
     <div
       className="fixed left-1/2 top-0 bottom-0 flex w-full max-w-(--common-max-width) -translate-x-1/2 flex-col overflow-hidden bg-dice-white"
       style={{
-        paddingTop: "env(safe-area-inset-top, 0px)",
-        paddingBottom: "env(safe-area-inset-bottom, 0px)",
+        paddingTop: safeTopPadding,
+        paddingBottom: safeBottomPadding,
       }}
     >
       {/* 상단 바 */}

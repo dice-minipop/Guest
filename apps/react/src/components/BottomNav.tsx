@@ -36,13 +36,17 @@ const TAB_ROUTES = [
   },
 ] as const;
 
-export function BottomNav() {
+interface BottomNavProps {
+  bottomPadding: string;
+}
+
+export function BottomNav({ bottomPadding }: BottomNavProps) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   return (
     <nav
       className="fixed bottom-0 left-1/2 z-100 flex min-h-(--bottom-nav-h) w-full max-w-(--common-max-width) -translate-x-1/2 items-center justify-around gap-1 border-t border-neutral-200 bg-white"
-      style={{ paddingBottom: "max(12px, env(safe-area-inset-bottom))" }}
+      style={{ paddingBottom: bottomPadding }}
     >
       {TAB_ROUTES.map(({ to, label, IconActive, IconInactive }) => {
         const isActive = pathname === to;
@@ -52,6 +56,7 @@ export function BottomNav() {
             key={to}
             to={to}
             replace
+            state={{ transitionDirection: "none" }}
             className={`flex flex-1 flex-col items-center justify-center gap-2 py-2 no-underline transition-colors ${
               isActive ? "text-gray-dark" : "text-gray-medium"
             } hover:text-gray-dark`}
