@@ -29,6 +29,7 @@ import { Route as MypageBrandProfileRouteImport } from './routes/mypage/brand-pr
 import { Route as MessagesRoomIdRouteImport } from './routes/messages/$roomId'
 import { Route as AnnouncementSearchRouteImport } from './routes/announcement/search'
 import { Route as AnnouncementIdRouteImport } from './routes/announcement/$id'
+import { Route as SpaceIdPopulationRouteImport } from './routes/space/$id.population'
 import { Route as SpaceIdMapRouteImport } from './routes/space/$id.map'
 import { Route as ReservationApplyInfoRouteImport } from './routes/reservation/apply.info'
 
@@ -132,6 +133,11 @@ const AnnouncementIdRoute = AnnouncementIdRouteImport.update({
   path: '/announcement/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SpaceIdPopulationRoute = SpaceIdPopulationRouteImport.update({
+  id: '/population',
+  path: '/population',
+  getParentRoute: () => SpaceIdRoute,
+} as any)
 const SpaceIdMapRoute = SpaceIdMapRouteImport.update({
   id: '/map',
   path: '/map',
@@ -166,6 +172,7 @@ export interface FileRoutesByFullPath {
   '/space/': typeof SpaceIndexRoute
   '/reservation/apply/info': typeof ReservationApplyInfoRoute
   '/space/$id/map': typeof SpaceIdMapRoute
+  '/space/$id/population': typeof SpaceIdPopulationRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -190,6 +197,7 @@ export interface FileRoutesByTo {
   '/space': typeof SpaceIndexRoute
   '/reservation/apply/info': typeof ReservationApplyInfoRoute
   '/space/$id/map': typeof SpaceIdMapRoute
+  '/space/$id/population': typeof SpaceIdPopulationRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -215,6 +223,7 @@ export interface FileRoutesById {
   '/space/': typeof SpaceIndexRoute
   '/reservation/apply/info': typeof ReservationApplyInfoRoute
   '/space/$id/map': typeof SpaceIdMapRoute
+  '/space/$id/population': typeof SpaceIdPopulationRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -241,6 +250,7 @@ export interface FileRouteTypes {
     | '/space/'
     | '/reservation/apply/info'
     | '/space/$id/map'
+    | '/space/$id/population'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -265,6 +275,7 @@ export interface FileRouteTypes {
     | '/space'
     | '/reservation/apply/info'
     | '/space/$id/map'
+    | '/space/$id/population'
   id:
     | '__root__'
     | '/'
@@ -289,6 +300,7 @@ export interface FileRouteTypes {
     | '/space/'
     | '/reservation/apply/info'
     | '/space/$id/map'
+    | '/space/$id/population'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -456,6 +468,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AnnouncementIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/space/$id/population': {
+      id: '/space/$id/population'
+      path: '/population'
+      fullPath: '/space/$id/population'
+      preLoaderRoute: typeof SpaceIdPopulationRouteImport
+      parentRoute: typeof SpaceIdRoute
+    }
     '/space/$id/map': {
       id: '/space/$id/map'
       path: '/map'
@@ -486,10 +505,12 @@ const ReservationApplyRouteWithChildren =
 
 interface SpaceIdRouteChildren {
   SpaceIdMapRoute: typeof SpaceIdMapRoute
+  SpaceIdPopulationRoute: typeof SpaceIdPopulationRoute
 }
 
 const SpaceIdRouteChildren: SpaceIdRouteChildren = {
   SpaceIdMapRoute: SpaceIdMapRoute,
+  SpaceIdPopulationRoute: SpaceIdPopulationRoute,
 }
 
 const SpaceIdRouteWithChildren =

@@ -1,5 +1,5 @@
 import type { SpaceDetailItem, SpaceItem } from "../../types/space";
-import type { GetSpaceListsResponse } from "./response";
+import type { GetSpaceListsResponse, SpacePopulationAnalysisResponse } from "./response";
 
 const IMG = "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=450&fit=crop";
 
@@ -65,6 +65,20 @@ export const DUMMY_SPACE_LIST: GetSpaceListsResponse = {
   first: true,
   last: true,
   empty: false,
+};
+
+export const DUMMY_SPACE_POPULATION_ANALYSIS: SpacePopulationAnalysisResponse = {
+  title: "전국 20대 여성 유동인구 상위 5%",
+  description: "주로 사진 촬영 목적 방문이 많아요.",
+  date: "2026-01-01",
+  location: "성수 2동",
+  locationCount: 120000,
+  areaCount: 80000,
+  nationalCount: 30000,
+  targets: ["20대", "30대", "여성"],
+  ageGroupsCountMan: [100, 150, 200, 250, 300, 350],
+  ageGroupsCountWoman: [100, 150, 200, 250, 300, 350],
+  dayOfWeekCount: [120, 130, 140, 150, 160, 170, 180],
 };
 
 /** 백엔드 미연동 시 공간 상세 UI 확인용 더미 데이터 */
