@@ -17,6 +17,8 @@ const TOP_SAFE_AREA_BLACK_EXACT = ["/mypage", "/reservation"];
 
 /** 검정 제외 경로 (prefix 매칭 후 여기 있으면 흰색) */
 const TOP_SAFE_AREA_BLACK_EXCLUDE_PREFIXES = ["/space/search", "/announcement/search"];
+/** 검정 제외 suffix 경로 (동적 상세 하위 페이지 등) */
+const TOP_SAFE_AREA_WHITE_SUFFIXES = ["/population"];
 
 function isTopSafeAreaBlack(pathname: string): boolean {
   if (TOP_SAFE_AREA_BLACK_EXACT.includes(pathname)) return true;
@@ -24,6 +26,7 @@ function isTopSafeAreaBlack(pathname: string): boolean {
     (p) => pathname === p || pathname.startsWith(p + "/")
   );
   if (!matched) return false;
+  if (TOP_SAFE_AREA_WHITE_SUFFIXES.some((suffix) => pathname.endsWith(suffix))) return false;
   return !TOP_SAFE_AREA_BLACK_EXCLUDE_PREFIXES.some(
     (ex) => pathname === ex || pathname.startsWith(ex + "/")
   );

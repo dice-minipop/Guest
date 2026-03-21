@@ -15,7 +15,7 @@ import LikeLightgray from "@/assets/icons/like/like-lightgray.svg?react";
 import LikePurple from "@/assets/icons/like/like-purple.svg?react";
 import { backWithHistory } from "@/shared/navigation/back";
 import { getSpaceDetailData, queryKeys } from "@/api";
-import { getDummySpaceDetail } from "@/api/space/dummy";
+import { DUMMY_SPACE_POPULATION_ANALYSIS, getDummySpaceDetail } from "@/api/space/dummy";
 import { BottomSheet } from "@/components/BottomSheet";
 import { FacilityInfoRow } from "@/components/FacilityInfoRow";
 import { ImageCarousel } from "@/components/ImageCarousel";
@@ -42,9 +42,10 @@ export const Route = createFileRoute("/space/$id")({
 
 function SpaceLayout() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const isMapPage = pathname.endsWith("/map");
+  const { id } = Route.useParams();
+  const isDetailRoot = pathname === `/space/${id}`;
 
-  if (isMapPage) {
+  if (!isDetailRoot) {
     return <Outlet />;
   }
 
@@ -329,6 +330,10 @@ function SpaceDetailPage() {
   const imageUrls = data.imageUrls ?? [];
   const logoUrl = data.logoUrl;
   const details = data.details ?? "";
+  const populationAnalysisPreview =
+    data.analysis && (data.analysis.title || data.analysis.description)
+      ? data.analysis
+      : DUMMY_SPACE_POPULATION_ANALYSIS;
   const facilityInfos = data.facilityInfos ?? [];
   const visibleFacilityInfos = facilitiesExpanded ? facilityInfos : facilityInfos.slice(0, 8);
   const tags = data.tags ?? [];
@@ -426,15 +431,23 @@ function SpaceDetailPage() {
           </div>
 
           <div className="px-5">
-            <button className="w-full p-4 flex flex-col items-center justify-center border border-stroke-eee rounded-lg">
+            <Link
+              to="/space/$id/population"
+              params={{ id: String(spaceId) }}
+              state={{ transitionDirection: "forward" }}
+              onClick={() => markSpaceDetailScrollRestore(spaceId)}
+              className="flex w-full flex-col items-center justify-center rounded-lg border border-stroke-eee p-4"
+            >
               <p className="typo-caption2 text-gray-medium mb-2">유동인구 핵심 분석</p>
-              {data.analysis && (data.analysis.title || data.analysis.description) ? (
+              {populationAnalysisPreview.title || populationAnalysisPreview.description ? (
                 <div className="flex flex-col gap-1">
-                  {data.analysis.title && (
-                    <p className="typo-subtitle2 text-system-purple">{data.analysis.title}</p>
+                  {populationAnalysisPreview.title && (
+                    <p className="typo-subtitle2 text-system-purple">{populationAnalysisPreview.title}</p>
                   )}
-                  {data.analysis.description && (
-                    <p className="typo-body1 text-gray-dark">{data.analysis.description}</p>
+                  {populationAnalysisPreview.description && (
+                    <p className="typo-body1 text-gray-dark">
+                      {populationAnalysisPreview.description}
+                    </p>
                   )}
                 </div>
               ) : (
@@ -443,12 +456,12 @@ function SpaceDetailPage() {
                 </p>
               )}
 
-              {data.analysis && (data.analysis.title || data.analysis.description) && (
+              {(populationAnalysisPreview.title || populationAnalysisPreview.description) && (
                 <p className="w-full typo-caption1 text-gray-semilight border-t border-stroke-eee pt-4">
                   선택한 모든 브랜드 타겟 유동인구 더보기
                 </p>
               )}
-            </button>
+            </Link>
           </div>
 
           <dl className="mx-5 mt-1 flex flex-col gap-2 typo-caption1 text-gray-deep border-b border-stroke-eee pb-5">
