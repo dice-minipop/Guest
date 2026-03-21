@@ -15,6 +15,7 @@ import PlusIcon from "@/assets/icons/Plus/plus.svg?react";
 import XIcon from "@/assets/icons/Onboarding/round-x.svg?react";
 import FemaleIcon from "@/assets/icons/Target/female.svg?react";
 import MaleIcon from "@/assets/icons/Target/male.svg?react";
+import { getBottomSafeAreaPadding } from "@/utils/safeArea";
 
 export const Route = createFileRoute("/signup/brand-profile")({
   component: BrandProfilePage,
@@ -149,6 +150,7 @@ function BrandProfilePage() {
   })();
 
   const isFormValid = targetGender.length > 0 && targetAgeGroup.length > 0;
+  const bottomActionPadding = getBottomSafeAreaPadding("20px");
 
   return (
     <div className="relative mx-auto">
@@ -345,7 +347,7 @@ function BrandProfilePage() {
 
       <div
         className="fixed bottom-0 left-0 right-0 z-10 mx-auto w-full max-w-(--common-max-width) bg-white px-5 pt-1"
-        style={{ paddingBottom: "max(20px, env(safe-area-inset-bottom))" }}
+        style={{ paddingBottom: bottomActionPadding }}
       >
         <button
           type="submit"

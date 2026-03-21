@@ -4,6 +4,7 @@ import ArrowDownIcon from "@/assets/icons/Arrow/down.svg?react";
 import { BackHeader } from "@/components/BackHeader";
 import { BottomSheet } from "@/components/BottomSheet";
 import { backWithHistory } from "@/shared/navigation/back";
+import { getBottomSafeAreaPadding, getBottomSafeAreaSpacer } from "@/utils/safeArea";
 
 const WITHDRAWAL_REASONS = [
   "앱 방문을 잘 하지 않아요",
@@ -23,6 +24,8 @@ function MypageWithdrawPage() {
   const router = useRouter();
   const [reasonSheetOpen, setReasonSheetOpen] = useState(false);
   const [selectedReason, setSelectedReason] = useState<string | null>(null);
+  const bottomActionSpacer = getBottomSafeAreaSpacer("100px");
+  const bottomActionPadding = getBottomSafeAreaPadding("20px");
 
   const handleBack = () => {
     if (window.history.length > 1) {
@@ -42,7 +45,7 @@ function MypageWithdrawPage() {
       <div aria-hidden style={{ minHeight: 48 }} />
       <div
         className="px-5 pt-8 space-y-8"
-        style={{ paddingBottom: "calc(100px + env(safe-area-inset-bottom))" }}
+        style={{ paddingBottom: bottomActionSpacer }}
       >
         <section className="space-y-2">
           <h2 className="typo-subtitle2 whitespace-pre-line text-(--dice-black)">
@@ -114,7 +117,7 @@ function MypageWithdrawPage() {
       {/* 하단 고정 버튼 */}
       <div
         className="fixed bottom-0 left-0 right-0 z-10 mx-auto max-w-sm gap-3 bg-dice-white px-5 pt-4"
-        style={{ paddingBottom: "max(20px, env(safe-area-inset-bottom))" }}
+        style={{ paddingBottom: bottomActionPadding }}
       >
         <div className="flex gap-3">
           <button

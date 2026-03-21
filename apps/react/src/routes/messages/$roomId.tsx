@@ -15,6 +15,7 @@ import { canUseMemberOnlyApi } from "@/api/axios";
 import { getDummyMessageDetail, DUMMY_MESSAGE_ROOMS } from "@/api/message/dummy";
 import type { MessageData } from "@/api";
 import { backWithHistory } from "@/shared/navigation/back";
+import { getBottomSafeAreaPadding, getTopSafeAreaPadding } from "@/utils/safeArea";
 
 const REPORT_REASONS = [
   "스팸/광고",
@@ -90,6 +91,8 @@ function MessageRoomPage() {
   const [reportSheetOpen, setReportSheetOpen] = useState(false);
   const [selectedReportReason, setSelectedReportReason] = useState<string | null>(null);
   const [reporting, setReporting] = useState(false);
+  const messageListTopPadding = `calc(${getTopSafeAreaPadding("12px")} + 48px + 12px + 12px)`;
+  const messageInputBottomPadding = getBottomSafeAreaPadding("12px");
 
   const { data: rooms } = useQuery({
     queryKey: queryKeys.message.list,
@@ -243,7 +246,7 @@ function MessageRoomPage() {
       <div
         className="px-5 pb-1"
         style={{
-          paddingTop: "calc(max(12px, env(safe-area-inset-top, 0px)) + 48px + 12px + 12px)",
+          paddingTop: messageListTopPadding,
         }}
       >
         <p className="typo-caption1 rounded-lg p-4 bg-bg-white mb-6 text-center leading-relaxed text-gray-deep">
@@ -291,7 +294,7 @@ function MessageRoomPage() {
       <div
         className="fixed bottom-0 left-1/2 z-10 w-full max-w-(--common-max-width) -translate-x-1/2 border-t border-neutral-200 bg-dice-white"
         style={{
-          paddingBottom: "max(12px, env(safe-area-inset-bottom, 0px))",
+          paddingBottom: messageInputBottomPadding,
           paddingLeft: "20px",
           paddingRight: "20px",
           paddingTop: "12px",

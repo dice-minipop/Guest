@@ -7,12 +7,20 @@ import type { AlarmItem } from "@/api";
 import { backWithHistory } from "@/shared/navigation/back";
 
 export const Route = createFileRoute("/alarms/")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    from: typeof search.from === "string" ? search.from : undefined,
+  }),
   component: AlarmsPage,
 });
+
+function isAlarmEntryPath(path: string): path is "/space" | "/announcement" | "/reservation" | "/mypage" {
+  return path === "/space" || path === "/announcement" || path === "/reservation" || path === "/mypage";
+}
 
 function AlarmsPage() {
   const navigate = useNavigate();
   const router = useRouter();
+  const search = Route.useSearch();
   const queryClient = useQueryClient();
   const isMemberOnlyAllowed = canUseMemberOnlyApi();
 
@@ -52,7 +60,8 @@ function AlarmsPage() {
     if (window.history.length > 1) {
       backWithHistory(router);
     } else {
-      navigate({ to: "/mypage", state: { transitionDirection: "back" } });
+      const fallbackTo = isAlarmEntryPath(search.from ?? "") ? search.from : "/mypage";
+      navigate({ to: fallbackTo, state: { transitionDirection: "back" } });
     }
   };
 

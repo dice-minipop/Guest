@@ -9,6 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { BackHeader } from "@/components/BackHeader";
 import { getMyBrandInfo, queryKeys } from "@/api";
 import { backWithHistory } from "@/shared/navigation/back";
+import { getBottomSafeAreaPadding, getBottomSafeAreaSpacer } from "@/utils/safeArea";
 
 export const Route = createFileRoute("/reservation/apply")({
   validateSearch: (search: Record<string, unknown>) => ({
@@ -57,6 +58,8 @@ function ReservationApplyPage() {
   };
 
   const imageUrls = brand ? [brand.logoUrl, ...(brand.imageUrls ?? [])].filter(Boolean) : [];
+  const bottomActionSpacer = getBottomSafeAreaSpacer("100px");
+  const bottomActionPadding = getBottomSafeAreaPadding("20px");
 
   return (
     <div className="min-h-screen bg-dice-white">
@@ -115,12 +118,12 @@ function ReservationApplyPage() {
           </div>
         )}
         {/* 하단 고정 버튼에 가리지 않도록 스크롤 여백 */}
-        <div aria-hidden style={{ minHeight: "calc(100px + env(safe-area-inset-bottom))" }} />
+        <div aria-hidden style={{ minHeight: bottomActionSpacer }} />
       </div>
 
       <div
         className="fixed bottom-0 left-0 right-0 z-10 mx-auto w-full max-w-(--common-max-width) bg-dice-white px-5 pt-4"
-        style={{ paddingBottom: "max(20px, env(safe-area-inset-bottom))" }}
+        style={{ paddingBottom: bottomActionPadding }}
       >
         <button
           type="button"

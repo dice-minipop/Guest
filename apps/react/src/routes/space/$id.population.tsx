@@ -4,6 +4,7 @@ import ArrowRightIcon from "@/assets/icons/Arrow/right.svg?react";
 import { getSpaceDetailData, queryKeys } from "@/api";
 import { DUMMY_SPACE_POPULATION_ANALYSIS, getDummySpaceDetail } from "@/api/space/dummy";
 import { backWithHistory } from "@/shared/navigation/back";
+import { getBottomSafeAreaInset, getTopSafeAreaInset } from "@/utils/safeArea";
 
 export const Route = createFileRoute("/space/$id/population")({
   component: SpacePopulationPage,
@@ -110,6 +111,8 @@ function SpacePopulationPage() {
   const analysisSummary = detailData.analysis;
   const data = populationData;
   const hasPopulationData = data != null;
+  const topSafeAreaInset = getTopSafeAreaInset();
+  const bottomSafeAreaInset = getBottomSafeAreaInset();
 
   const menCounts = getSafeCounts(data?.ageGroupsCountMan, AGE_LABELS.length);
   const womenCounts = getSafeCounts(data?.ageGroupsCountWoman, AGE_LABELS.length);
@@ -143,8 +146,8 @@ function SpacePopulationPage() {
     <div
       className="fixed left-1/2 top-0 bottom-0 flex w-full max-w-(--common-max-width) -translate-x-1/2 flex-col overflow-hidden bg-dice-white"
       style={{
-        paddingTop: "env(safe-area-inset-top, 0px)",
-        paddingBottom: "env(safe-area-inset-bottom, 0px)",
+        paddingTop: topSafeAreaInset,
+        paddingBottom: bottomSafeAreaInset,
       }}
     >
       <header

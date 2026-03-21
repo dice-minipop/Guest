@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { BackHeader } from "@/components/BackHeader";
 import { createReservation, queryKeys, uploadImageList } from "@/api";
 import { backWithHistory } from "@/shared/navigation/back";
+import { getBottomSafeAreaPadding, getBottomSafeAreaSpacer } from "@/utils/safeArea";
 
 export const Route = createFileRoute("/reservation/apply/info")({
   validateSearch: (search: Record<string, unknown>) => ({
@@ -30,6 +31,8 @@ function ReservationApplyInfoPage() {
   const [eventName, setEventName] = useState("");
   const [eventContent, setEventContent] = useState("");
   const [extraRequest, setExtraRequest] = useState("");
+  const bottomActionSpacer = getBottomSafeAreaSpacer("100px");
+  const bottomActionPadding = getBottomSafeAreaPadding("20px");
 
   const createMutation = useMutation({
     mutationFn: createReservation,
@@ -157,12 +160,12 @@ function ReservationApplyInfoPage() {
           </section>
         </div>
         {/* 하단 고정 버튼에 가리지 않도록 스크롤 여백 */}
-        <div aria-hidden style={{ minHeight: "calc(100px + env(safe-area-inset-bottom))" }} />
+        <div aria-hidden style={{ minHeight: bottomActionSpacer }} />
       </div>
 
       <div
         className="fixed bottom-0 left-0 right-0 z-10 mx-auto w-full max-w-(--common-max-width) bg-dice-white px-5 pt-4"
-        style={{ paddingBottom: "max(20px, env(safe-area-inset-bottom))" }}
+        style={{ paddingBottom: bottomActionPadding }}
       >
         <button
           type="button"
