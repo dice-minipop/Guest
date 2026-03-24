@@ -94,14 +94,16 @@ function MypagePage() {
         {/* 내 브랜드 정보: EditIcon + 브랜드 콘텐츠 하나의 섹션 */}
         <section className="mb-1.5">
           <div className="flex flex-col">
-            <Link
-              to="/mypage/brand-profile"
-              state={{ transitionDirection: "forward" }}
-              onClick={handleMemberOnlyButtonClick}
-              className="flex justify-end bg-dice-black p-3"
-            >
-              <EditIcon className="size-6" aria-hidden />
-            </Link>
+            <div className="flex justify-end bg-dice-black p-3">
+              <Link
+                to="/mypage/brand-profile"
+                state={{ transitionDirection: "forward" }}
+                onClick={handleMemberOnlyButtonClick}
+                className="inline-flex"
+              >
+                <EditIcon className="size-6" aria-hidden />
+              </Link>
+            </div>
             {primaryBrand ? (
               <ul className="flex flex-col gap-1">
                 {(() => {
@@ -116,7 +118,7 @@ function MypagePage() {
                   return (
                     <li
                       key={primaryBrand.id}
-                      className="relative overflow-hidden bg-(--gray-light)"
+                      className="relative min-h-[211px] overflow-hidden bg-(--gray-light)"
                     >
                       <div
                         className="absolute inset-0 bg-cover bg-center"
@@ -124,7 +126,9 @@ function MypagePage() {
                       />
                       {bgImage ? <div className="absolute inset-0 bg-(--dim-basic)" /> : null}
                       <div className="relative flex flex-col gap-3 p-1">
-                        <div className={`block py-4 pl-5 space-y-4 ${bgImage ? "bg-transparent" : "bg-black"}`}>
+                        <div
+                          className={`block py-4 pl-5 space-y-4 ${bgImage ? "bg-transparent" : "bg-black"}`}
+                        >
                           <p className="typo-h1 text-white">{primaryBrand.name}</p>
                           {primaryBrand.description ? (
                             <p className="typo-body2 text-gray-light line-clamp-2">
@@ -159,7 +163,7 @@ function MypagePage() {
                 })()}
               </ul>
             ) : (
-              <div className="block bg-black py-4 pl-5 space-y-4">
+              <div className="block min-h-[211px] bg-black py-4 pl-5 space-y-4">
                 <p className="typo-h1 text-white pr-5">브랜드 프로필을 작성해주세요</p>
                 <p className="typo-body2 text-gray-light pr-5">
                   팝업 공간을 대여해주는 호스트와 신뢰할 수 있는 거래를 위해 브랜드를 1~2문장으로

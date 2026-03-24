@@ -1,4 +1,4 @@
-import axios, { type AxiosError, type InternalAxiosRequestConfig } from "axios";
+import axios, { AxiosHeaders, type AxiosError, type InternalAxiosRequestConfig } from "axios";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "/api";
 
@@ -16,9 +16,6 @@ const createBaseClient = () =>
   axios.create({
     baseURL: BASE_URL,
     timeout: 15_000,
-    headers: {
-      "Content-Type": "application/json",
-    },
   });
 
 /** 인증 필요 요청용 (Authorization 헤더 자동 첨부) */
@@ -26,6 +23,23 @@ export const apiClient = createBaseClient();
 
 /** 비인증 요청용 (로그인, 회원가입, 이메일/휴대폰 검증 등) */
 export const guestApiClient = createBaseClient();
+
+function normalizeRequestContentType(
+  config: InternalAxiosRequestConfig
+): InternalAxiosRequestConfig {
+  const headers =
+    config.headers instanceof AxiosHeaders ? config.headers : new AxiosHeaders(config.headers);
+
+  if (config.data instanceof FormData) {
+    // FormData는 브라우저/웹뷰가 boundary 포함 Content-Type을 자동 설정해야 함
+    headers.delete("Content-Type");
+  } else if (!headers.getContentType()) {
+    headers.setContentType("application/json");
+  }
+
+  config.headers = headers;
+  return config;
+}
 
 // 토큰 헬퍼 (웹→앱 브릿지 동기화 등에서 사용)
 export function getAccessToken(): string | null {
@@ -179,12 +193,18 @@ let refreshPromise: Promise<string> | null = null;
 // apiClient: 요청 인터셉터 — 토큰 첨부
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
+    normalizeRequestContentType(config);
     const token = getAccessToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
+  (error) => Promise.reject(error)
+);
+
+guestApiClient.interceptors.request.use(
+  (config: InternalAxiosRequestConfig) => normalizeRequestContentType(config),
   (error) => Promise.reject(error)
 );
 
