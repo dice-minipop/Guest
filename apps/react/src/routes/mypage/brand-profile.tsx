@@ -2,8 +2,8 @@ import { isAxiosError } from "axios";
 import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { forwardRef, useEffect, useRef, useState } from "react";
-import { getMyBrandInfo, updateBrand, queryKeys, uploadImageList } from "@/api";
-import type { UpdateBrandRequest } from "@/api";
+import { createBrand, getMyBrandInfo, updateBrand, queryKeys, uploadImageList } from "@/api";
+import type { CreateBrandRequest, UpdateBrandRequest } from "@/api";
 import type { BrandInfo } from "@/api";
 import {
   pickImageFromNative,
@@ -22,20 +22,14 @@ export const Route = createFileRoute("/mypage/brand-profile")({
   component: MypageBrandProfilePage,
 });
 
-/** 백엔드 미동작 시 사용하는 더미 브랜드 데이터 */
-const DUMMY_BRAND: BrandInfo = {
-  id: -1,
-  name: "나의 브랜드",
-  description: "트렌디한 라이프스타일을 제안하는 브랜드입니다.",
-  logoUrl: "https://picsum.photos/seed/brand1/400/400",
-  imageUrls: [
-    "https://picsum.photos/seed/brand2/400/400",
-    "https://picsum.photos/seed/brand3/400/400",
-    "https://picsum.photos/seed/brand4/400/400",
-    "https://picsum.photos/seed/brand5/400/400",
-  ],
-  targetGender: ["여성"],
-  targetAgeGroup: ["20대", "30대"],
+const EMPTY_BRAND: BrandInfo = {
+  id: 0,
+  name: "",
+  description: "",
+  logoUrl: "",
+  imageUrls: [],
+  targetGender: [],
+  targetAgeGroup: [],
 };
 
 const TARGET_GENDERS = [
@@ -176,11 +170,21 @@ const BrandProfileForm = forwardRef<
     setGalleryImageItems((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const isDummy = brand.id === DUMMY_BRAND.id;
+  const isExistingBrand = brand.id > 0;
 
   const mutation = useMutation({
-    mutationFn: async ({ brandId, data }: { brandId: number; data: UpdateBrandRequest }) => {
-      await updateBrand(brandId, data);
+    mutationFn: async ({
+      brandId,
+      data,
+    }: {
+      brandId: number | null;
+      data: CreateBrandRequest | UpdateBrandRequest;
+    }) => {
+      if (brandId) {
+        await updateBrand(brandId, data);
+        return;
+      }
+      await createBrand(data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.brand.myInfo });
@@ -193,21 +197,16 @@ const BrandProfileForm = forwardRef<
     if (isAxiosError(mutation.error)) {
       const msg =
         (mutation.error.response?.data as { message?: string })?.message ?? mutation.error.message;
-      return msg || "브랜드 프로필 수정에 실패했습니다.";
+      return msg || `브랜드 프로필 ${isExistingBrand ? "수정" : "등록"}에 실패했습니다.`;
     }
     return mutation.error instanceof Error
       ? mutation.error.message
-      : "브랜드 프로필 수정에 실패했습니다.";
+      : `브랜드 프로필 ${isExistingBrand ? "수정" : "등록"}에 실패했습니다.`;
   })();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!brand || mutation.isPending || !isFormValid) return;
-
-    if (isDummy) {
-      navigate({ to: "/mypage", state: { transitionDirection: "back" } });
-      return;
-    }
 
     let logoUrl = mainImageItem?.url ?? "";
     if (mainImageItem?.kind === "new") {
@@ -255,7 +254,7 @@ const BrandProfileForm = forwardRef<
       })
       .filter(Boolean);
 
-    const payload: UpdateBrandRequest = {
+    const payload: CreateBrandRequest | UpdateBrandRequest = {
       name: name.trim(),
       description: description.trim(),
       logoUrl,
@@ -265,7 +264,7 @@ const BrandProfileForm = forwardRef<
       ...(targetAgeGroup.length > 0 && { targetAgeGroup }),
     };
 
-    mutation.mutate({ brandId: brand.id, data: payload });
+    mutation.mutate({ brandId: isExistingBrand ? brand.id : null, data: payload });
   };
 
   const isFormValid = targetGender.length > 0 && targetAgeGroup.length > 0;
@@ -280,7 +279,9 @@ const BrandProfileForm = forwardRef<
     !areStringArraysEqual(targetAgeGroup, brand.targetAgeGroup ?? []) ||
     mainPreviewUrl !== initialMainImageUrl ||
     !areStringArraysEqual(galleryPreviewUrls, initialGalleryImageUrls);
-  const canSubmit = isFormValid && hasChanges && !mutation.isPending;
+  const canSubmit = isExistingBrand
+    ? isFormValid && hasChanges && !mutation.isPending
+    : isFormValid && !mutation.isPending;
 
   useEffect(() => {
     onCanSubmitChange?.(canSubmit);
@@ -313,14 +314,16 @@ const BrandProfileForm = forwardRef<
               {mainPreviewUrl ? (
                 <>
                   <img src={mainPreviewUrl} alt="" className="h-full w-full object-contain" />
-                  <span
-                    className="absolute inset-0 flex items-center justify-center bg-(--dim-basic)"
-                    aria-hidden
-                  >
-                    <CameraIcon className="h-8 w-8 text-white" />
-                  </span>
                 </>
               ) : null}
+              <span
+                className={`absolute inset-0 flex items-center justify-center ${
+                  mainPreviewUrl ? "bg-(--dim-basic)" : ""
+                }`}
+                aria-hidden
+              >
+                <CameraIcon className="h-8 w-8 text-white" />
+              </span>
             </button>
           </div>
 
@@ -473,7 +476,8 @@ function MypageBrandProfilePage() {
   });
 
   const brandList = Array.isArray(brands) ? brands : [];
-  const brand = brandList[0] ?? DUMMY_BRAND;
+  const brand = brandList[0] ?? EMPTY_BRAND;
+  const hasBrand = brandList.length > 0;
 
   const handleBack = () => {
     if (window.history.length > 1) {
@@ -499,7 +503,7 @@ function MypageBrandProfilePage() {
   return (
     <div className="min-h-screen bg-dice-white">
       <BackHeader
-        title="나의 브랜드 프로필 편집"
+        title={hasBrand ? "나의 브랜드 프로필 편집" : "나의 브랜드 프로필 등록"}
         onBack={handleBack}
         rightSlot={
           <button
