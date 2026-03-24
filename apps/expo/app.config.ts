@@ -10,7 +10,7 @@ const defineConfig: ExpoConfig = {
   version: "1.0.0",
   orientation: "portrait",
   icon: "./assets/images/icon.png",
-  scheme: "myapp",
+  scheme: "dice",
   userInterfaceStyle: "light",
   newArchEnabled: true,
   runtimeVersion: "1.0.0",
@@ -50,15 +50,15 @@ const defineConfig: ExpoConfig = {
     googleServicesFile: process.env.GOOGLE_SERVICES_INFO_PLIST ?? "./GoogleService-Info.plist",
   },
   android: {
-    package: "com.cmc.dice.minipop.expo",
-    versionCode: 2,
+    package: "com.minipop.dice2",
+    versionCode: 1,
     adaptiveIcon: {
       foregroundImage: "./assets/images/android_logo.png",
       backgroundColor: "#000000",
     },
     edgeToEdgeEnabled: true,
     predictiveBackGestureEnabled: false,
-    permissions: [],
+    permissions: ["POST_NOTIFICATIONS"],
     googleServicesFile: process.env.GOOGLE_SERVICES_JSON ?? "./google-services.json",
   },
   web: {
